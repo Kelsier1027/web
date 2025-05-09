@@ -1,0 +1,109 @@
+<section class="action-col" style="top:0" [ngStyle]="{'position': scrollToHide?'fixed':'static'}">
+  <div class="wrapper">
+    <ul class="col">
+      <li class="link-item" *ngIf="thisOrgId === '83'">
+        <a href="{{ urljingho }}" target="_blank"> 精豪電腦 </a>
+      </li>
+      <li class="link-item" *ngIf="thisOrgId === '151'">
+        <a href="{{ urldchain }}" target="_blank"> 精技電腦 </a>
+      </li>
+      <li class="link-item">
+        <a href="https://www.unitech.com.tw/join-member.aspx" target="_blank">
+          線上報修
+        </a>
+      </li>
+      <!-- <li class="link-item" *ngIf="thisOrgId === '83'">
+        <a
+          href="https://service.unitech.com.tw/Default.aspx"
+          target="_blank"
+        >
+        經銷商專區
+        </a>
+      </li> -->
+    </ul>
+
+    <ul class="col">
+      <li class="link-item" *ngIf="!this.isSales()" [routerLink]="['/Member/Order']" [queryParams]="{ dealerView: this.getDealerView() }">
+        <a>訂單查詢</a>
+      </li>
+      <li class="link-item" *ngIf="!this.isSales()" [routerLink]="['/Member/Bill']" [queryParams]="{ dealerView: this.getDealerView() }">
+        <a>帳單查詢</a>
+      </li>
+      <li class="link-item" *ngIf="!this.isSales()" [routerLink]="['/Member/StockNotice']">
+        <a>貨到通知</a>
+      </li>
+      <button
+        mat-button
+        [matMenuTriggerFor]="menu"
+        class="profile"
+        mat-icon-button
+      >
+        <span class="account-icon">
+          <app-icon [iconName]="'account'"></app-icon>
+        </span>
+        {{ companyNo }}
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" overlapTrigger="true">
+        <div class="userInfo">
+          <div class="photo">
+            <img lass="img" src="https://fakeimg.pl/32x32/" alt="" />
+          </div>
+          <div class="text">
+            <h3>{{ customerName }}</h3>
+            <span>{{ email }}</span>
+          </div>
+        </div>
+        <div class="border-top border-bottom py-10px">
+          <button mat-menu-item [routerLink]="['/Member/Member']" *ngIf="!this.isSales()">
+            <mat-icon>account_circle_outline</mat-icon>
+            會員中心
+          </button>
+          <button mat-menu-item [routerLink]="['/Member/Account']">
+            <mat-icon>credit_card_outline</mat-icon>
+            公司帳戶
+          </button>
+          <button mat-menu-item [routerLink]="['/Member/Manage']" *ngIf="authService.isAdmin" >
+            <mat-icon>group_outline</mat-icon>
+            帳號管理
+          </button>
+          <button
+            mat-menu-item
+            [routerLink]="['/CustomerService/CommonProblom']"
+          >
+            <mat-icon>help_outline</mat-icon>
+            客服中心
+          </button>
+        </div>
+        <div class="py-10px">
+          <span style="color: #a2a9b1">價格設定</span>
+          <br />
+          <div class="tax">
+            <div class="tax-button-wrapper">
+              <button
+                (click)="unitPriceChange(true)"
+                [ngClass]="{ active: isUnitPrice }"
+                class="tax-button active"
+              >
+                未稅價
+              </button>
+              <button
+                (click)="unitPriceChange(false)"
+                [ngClass]="{ active: !isUnitPrice }"
+                class="tax-button"
+              >
+                含稅價
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="border-top py-10px">
+          <button (click)="logout()" mat-menu-item>
+            <mat-icon>logout</mat-icon>
+            登出
+          </button>
+        </div>
+      </mat-menu>
+    </ul>
+  </div>
+</section>

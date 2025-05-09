@@ -1,0 +1,23 @@
+<section class="section">
+  <div class="nav-wrapper">
+    <nav class='nav' #nav [ngClass]="{ sticky: this.stickyService.sticky }">
+      <button [ngClass]="{ active: activeIndex === 0 }" (click)="activeIndex = 0; onClick('promo')" class='nav-button active'>促銷總覽</button>
+      <button [ngClass]="{ active: activeIndex === 1 }" (click)="activeIndex = 1; onClick('spec')" class="nav-button">商品介紹</button>
+      <button [ngClass]="{ active: activeIndex === 2 }" (click)="activeIndex = 2; onClick('warranty')" class="nav-button">保固說明</button>
+    </nav>
+  </div>
+
+  <main>
+    <div id="promo" (active)="active($event)">
+      <ng-content select="[one]"></ng-content>
+    </div>
+
+    <div id="spec" (active)="active($event)">
+      <ng-content select="[two]"></ng-content>
+    </div>
+
+    <div id="warranty" (active)="active($event)">
+      <ng-content select="[three]"></ng-content>
+    </div>
+  </main>
+</section>

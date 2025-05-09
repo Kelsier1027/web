@@ -1,0 +1,29 @@
+<app-loading-mask [showIf]="isLoading"></app-loading-mask>
+<app-header-inline-close-layout [data]="data">
+  <p class="account-hint">
+    資料同步完成後，系統將會寄發帳號、密碼通知信，此帳號即可登入iOrder採購！
+  </p>
+  <form class="account-form" [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+    <ul class="account-input-layout">
+      <!-- authorization -->
+      <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+        <app-prompt [hint]="error.errorMessage"></app-prompt>
+      </div>
+      <ng-container
+        *ngFor="let field of formConfigs"
+        appDynamicField
+        [field]="field"
+        [group]="accountForm"
+      >
+      </ng-container>
+    </ul>
+    <footer class="dialog-footer">
+      <section class="footer-wrapper">
+        <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+        <button type="submit" class="button" mat-raised-button color="primary">
+          確認
+        </button>
+      </section>
+    </footer>
+  </form>
+</app-header-inline-close-layout>

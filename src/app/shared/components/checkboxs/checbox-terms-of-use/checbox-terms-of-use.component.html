@@ -1,0 +1,27 @@
+<div class='label-checkbox' [ngStyle]="{ padding: field.stylePadding, margin: field.styleMargin }">
+  <div class="action-bar" [ngClass]="field['class']" [ngStyle]="{ 'justify-content': field.styleAlign }">
+    <mat-checkbox [formControlName]="field['name']" [name]="field['name']" color="primary" matInput [ngClass]="{
+        error:
+          field.validations.hasErrorMessage &&
+          group.get(field.name)?.invalid &&
+          group.get(field.name)?.touched
+      }" (change)="onChange($event)">
+      {{ field["label"] }}
+    </mat-checkbox>
+    <p class="link-bar">
+      <span *ngIf="field.prefix">{{ field["prefix"] }}</span>
+        <a class="link" (click)="popModel()">{{ field.modelName }}</a>
+      <span *ngIf="field.suffix">{{ field["suffix"] }}</span>
+    </p>
+  </div>
+  <ng-container *ngFor="let valids of field.validations.errorMessage">
+    <div *ngIf="
+        field.validations.hasErrorMessage &&
+        group.get(field.name)?.invalid &&
+        group.get(field.name)?.touched
+      ">
+      <mat-error class="error message" *ngIf="group.get(field['name'])?.hasError(valids['type'])">
+        {{ valids["message"] }}</mat-error>
+    </div>
+  </ng-container>
+</div>

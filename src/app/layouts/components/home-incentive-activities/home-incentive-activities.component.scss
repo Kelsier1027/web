@@ -1,0 +1,140 @@
+@import "/src/styles/responsive";
+
+.slide-card {
+    position: relative;
+
+    .slide-for-desktop {
+        display: none;
+        position: relative;
+
+        .slideButton {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 99;
+            background: #fff;
+            border-radius: 50%;
+            border: 1px solid #EBEBEB;
+            width: 48px;
+            height: 48px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+            &.left {
+                left: 0;
+            }
+
+            &.right {
+                right: 0;
+            }
+        }
+
+        @include pad {
+            display: block;
+        }
+    }
+
+    .box {
+        background: #fff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+        min-height: 325px;
+        margin: 3px;
+        border-radius: 10px;
+        border: 1px solid #d5d5d5;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-self: stretch;
+
+        .inner {
+            padding: 18px;
+
+            .points {
+                font-weight: 600;
+                background-color: #0972E3;
+                background-image: linear-gradient(180deg, #0972E3, #5BAAFF);
+                background-size: 100%;
+                -webkit-background-clip: text;
+                -moz-background-clip: text;
+                -webkit-text-fill-color: transparent; 
+                -moz-text-fill-color: transparent;
+
+                .unit {
+                    font-size: 14px;
+                }
+            }
+
+            .type {
+                border-radius: 20px;
+                display: inline-block;
+                background: #E3EEFF;
+                color: #0972E3;
+                padding: 5px 10px;
+            }
+
+            .progressBar {
+                display: flex;
+                align-content: center;
+                align-items: center;
+                height: 60px;
+                position: relative;
+
+                .mat-progress-bar {
+                    height: 30px;
+                    border-radius: 20px;
+                    border: 1px solid #D6D6D6;
+
+                    ::ng-deep .mat-progress-bar-buffer {
+                        background-color: #fff;
+                    }
+                }
+
+                .conditionText {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(to right, white 0%, #0972e3 100%); // 使用 linear-gradient 設定漸層文字顏色
+                    -webkit-background-clip: text; // 使用 -webkit-background-clip: text; 讓文字只在背景範圍內可見
+                    color: transparent; // 設定文字顏色為透明
+                    width: calc(100%);
+                }
+
+
+            }
+
+            &:first-child {
+                flex-grow: 1;
+            }
+        }
+
+        .divide {
+            border: 1px dashed #D6D6D6;
+        }
+
+        .gray {
+            color: #858585;
+        }
+
+        .description {
+            height: 60px;
+        }
+    }
+
+
+    .slide-for-mobile {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        overflow-x: scroll;
+        overflow-y: hidden;
+
+        .box {
+            width: 224px;
+            min-height: 320px;
+            min-width: 224px;
+        }
+
+        @include pad {
+            display: none;
+        }
+    }
+}

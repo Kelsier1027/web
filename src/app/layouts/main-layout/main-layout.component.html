@@ -1,0 +1,47 @@
+<div class="layout">
+  <main class="main">
+    <section class="content">
+      <app-login-header *ngIf="nowPage != 'resetPassword'"></app-login-header>
+
+      <div class="slideshow" *ngIf="nowPage != 'resetPassword'">
+        <swiper
+          #swiper
+          [config]="swiperOptions"
+          (slideChange)="onSlideChange($event[0])"
+        >
+          <ng-container *ngFor="let slide of slides; index as i">
+            <ng-template swiperSlide class="swiper-slide">
+              <img
+                class="swiper-slide-img"
+                [src]="slide.imagePath"
+                [alt]="slide"
+                [ngStyle]="{ cursor: slide.relatedUrl && 'pointer' }"
+                (click)="slide.relatedUrl ? pathUrl(slide) : null"
+              />
+            </ng-template>
+          </ng-container>
+        </swiper>
+        <div class="action">
+          <span>{{ currentIndex + 1  }}</span>
+          <span>/</span>
+          <span>{{ slides?.length || 1  }}</span>
+          <div class="buttons">
+            <button class="prev-button" (click)="onPrevSlide()">
+              <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            <button class="next-button" (click)="onNextSlide()">
+              <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+          </div>
+        </div>
+        <ng-content select="[web]"></ng-content>
+      </div>
+      <div class="emptybackground" *ngIf="nowPage == 'resetPassword'">
+        <div class="logo"><img src="../../../assets/images/Logo_iOrder.svg" alt=""></div>
+      </div>
+      <ng-content select="[mobile]"></ng-content>
+      <app-login-guide-row></app-login-guide-row>
+      <app-login-footer></app-login-footer>
+    </section>
+  </main>
+</div>

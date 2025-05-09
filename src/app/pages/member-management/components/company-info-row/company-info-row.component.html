@@ -1,0 +1,92 @@
+<section class="company-info">
+  <div class="info-left">
+    <div class="company">
+      <span class="company-name">{{ account.customerName }}</span>
+      <div class="level">
+        <app-icon class="icon" [iconName]="'gold'"></app-icon>
+        <span class="level-text">{{ account.customerLevel }}</span>
+      </div>
+    </div>
+    <p class="company-id">#{{ account.taxReference }}</p>
+    <ul class="credit">
+      <li class="credit-item">
+        <p class="credit-title">登入者</p>
+        <p class="credit-text">{{ account.userName }}</p>
+      </li>
+      <li class="credit-item">
+        <p class="credit-title">信用額度</p>
+        <p class="credit-text">${{ account.creditAmount | number }}</p>
+      </li>
+      <li class="credit-item">
+        <p class="credit-title">信用餘額</p>
+        <p class="credit-text">${{ account.creditBalanceAmount | number }}</p>
+      </li>
+    </ul>
+  </div>
+  <div class="info-middle">
+    <div class="sales">
+      <p class="my-sales">我的業務</p>
+      <p class="sales-name">{{ account.contact.contactName }}</p>
+    </div>
+    <ul class="sales-info">
+      <li class="sales-info-item">
+        <app-icon class="icon" [iconName]="'company_phone'"></app-icon>{{ account.contact.tel }}
+        &nbsp;&nbsp;&nbsp;分機{{account.contact.ext}} <!-- Add by Tako At 2024/11/06 For 2024023106 -->
+      </li>
+      <li class="sales-info-item">
+        <app-icon class="icon" [iconName]="'company_skype'"></app-icon>{{ account.contact.skypeId }}
+      </li>
+      <li class="sales-info-item">
+        <app-icon class="icon" [iconName]="'company_line'"></app-icon>{{ account.contact.lineId }}
+      </li>
+      <li class="sales-info-item email">
+        <app-icon class="icon" [iconName]="'company_email'"></app-icon>{{ account.contact.email }}
+      </li>
+    </ul>
+  </div>
+  <!-- Add by Tako At 2024/11/07 For 2024023106 Start-->
+  <mat-accordion class="info-right">
+    <mat-expansion-panel *ngIf="account.opContact[0].opName" (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <div class="op-info" *ngIf="!panelOpenState && account.opContact[0].opName">
+          <div class="op">
+            <p class="my-op">業務助理</p>
+            <p class="op-name">{{ account.opContact[0].opName }}</p>
+          </div>
+          <ul class="op-info-item">
+            <li>
+              <app-icon class="icon" [iconName]="'company_phone'"></app-icon>{{ account.opContact[0].tel}}&nbsp;&nbsp;
+              <span *ngIf="account.opContact[0].ext">分機 {{account.opContact[0].ext}}</span>
+            </li>
+            <li>
+              <app-icon class="icon" [iconName]="'company_skype'"></app-icon>{{ account.opContact[0].skypeId }}
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel-header>
+
+      <!-- 展開後顯示所有資料 -->
+      <div class="info-expand" *ngIf="panelOpenState">
+        <ng-container *ngFor="let op of account.opContact">
+          <div class="op-info" *ngIf="op.opName">
+            <div class="op">
+              <p class="my-op">業務助理</p>
+              <p class="op-name">{{ op.opName }}</p>
+            </div>
+            <ul class="op-info-item">
+              <li>
+                <app-icon class="icon" [iconName]="'company_phone'"></app-icon>{{ op.tel }}&nbsp;&nbsp;
+                <span *ngIf="op.ext">分機 {{op.ext}}</span>
+              </li>
+              <li>
+                <app-icon class="icon" [iconName]="'company_skype'"></app-icon>{{ op.skypeId }}
+              </li>
+            </ul>
+          </div>
+        </ng-container>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- Add by Tako At 2024/11/07 For 2024023106 End-->
+</section>

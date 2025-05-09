@@ -1,0 +1,31 @@
+%tag {
+  margin-right: 4px;
+  padding: 1px 5px;
+  border-radius: 20px;
+  font-size: 13px;
+  padding: 4px 13px;
+  white-space: nowrap;
+}
+
+.yellow {
+  background: #FFF5D7;
+  @extend %tag;
+}
+
+.green {
+  background: #C9E6DB;
+  color: #007B55;
+  @extend %tag;
+}
+
+.grey {
+  background: #EFF2F4;
+  color: #A2A9B1;
+  @extend %tag;
+}
+
+.red {
+  background: #FBD2D3;
+  color: #DD060E;
+  @extend %tag;
+}

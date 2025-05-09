@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="category">
+    <button class="category-button" (click)="contactProductListFilterMobileDialog()">
+      <span class="icon-wrapper">
+        <app-icon class="type-grid-icon" iconName="sort"></app-icon>
+      </span>
+      {{this.isActiveType}}
+    </button>
+    <button class="category-button" (click)="toggle.emit()">
+      <span class="icon-wrapper">
+        <app-icon class="type-grid-icon" iconName="filter"></app-icon>
+      </span>
+      篩選
+    </button>
+    <button class="category-button" (click)="unitPriceChange()">
+      <span class="icon-wrapper">
+        <app-icon class="type-grid-icon" iconName="price_type"></app-icon>
+      </span>
+      {{ (isUnitPrice$ | async) ? "未稅" : "含稅" }}
+    </button>
+  </div>
+
+  <div class="layout">
+    <div class="type-wrapper">
+      <button
+        class="type"
+        [ngClass]="{ active: type === 1 }"
+        (click)="change.emit(1)"
+      >
+        <span class="icon-wrapper">
+          <app-icon class="type-grid-icon" iconName="type_grid"></app-icon>
+        </span>
+      </button>
+    </div>
+
+    <div class="type-wrapper">
+      <button
+        class="type"
+        [ngClass]="{ active: type === 2 }"
+        (click)="change.emit(2)"
+      >
+        <span class="icon-wrapper">
+          <app-icon class="type-list-icon" iconName="type_list"></app-icon>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>

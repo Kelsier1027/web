@@ -1,0 +1,14 @@
+%tag {
+  margin-right: 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 1px 6px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.blue {
+  background: #CEE3F9;
+  color: #0972E3;
+  @extend %tag;
+}

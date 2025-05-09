@@ -1,0 +1,107 @@
+@import "responsive";
+
+::ng-deep .breadcrumb {
+  background-color: #FFFFFF;
+  padding-left: 40px !important;
+}
+
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+}
+
+app-status-filter > .filter {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  @include pad {
+    display: block;
+    margin-bottom: 16px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  background-color: #eff2f4;
+  padding-bottom: 8px;
+  @include pad {
+    background-color: #fff;
+  }
+
+  .product {
+    display: inline-flex;
+  }
+
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+}
+
+.prize-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px 16px 12px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
+  border-bottom: 1px solid #ebebeb;
+  @include pad {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 12px;
+    border-bottom: none;
+    .expand-icon {
+      display: none;
+    }
+  }
+}
+
+.prize-tab {
+  @include pad {
+    margin-top: 16px;
+  }
+}
+
+.mobile-table-container {
+  margin-bottom: 8px;
+}
+
+.no-data-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  gap: 16px;
+  background: #ffffff;
+  margin-bottom: 10px;
+}
+
+.paginate {
+  display: none;
+  height: 26px;
+  @include pad {
+    display: initial;
+  }
+}
+.pagination {
+  display: none;
+  @include pad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0 2rem 0;
+  }
+}

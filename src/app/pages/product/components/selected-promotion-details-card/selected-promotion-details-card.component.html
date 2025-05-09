@@ -1,0 +1,91 @@
+<div class="wrapper" [ngClass]="{ sticky: stickyService.sticky && action }">
+  <div class='selected-promotion-details-card' #selectedPromotion [ngClass]="{ action }">
+    <header class='selected-promotion-header'>{{title}}</header>
+    <div class='wrapper'>
+      <ng-content select="[main]"></ng-content>
+      <div class="default-content">
+        <p class='empty'>尚未選擇促銷方案，請選擇促銷方案。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-buttons" *ngIf="action">
+
+
+
+    <button *ngIf="action && !buttonQtyType && buttonStatus === 'addToCart' && canOrder"
+      [disabled]="buttonDisabled"
+      (click)="submit.emit($event)"
+      type="button"
+      class="add-cart-button full mb-12"
+      mat-raised-button
+      color="primary"
+    >
+      加入購物車
+    </button>
+    <button
+      *ngIf="action && !buttonQtyType && buttonStatus === 'preOrder' && canOrder"
+      [disabled]="buttonDisabled"
+      (click)="preorderAddToCart.emit($event)"
+      type="button"
+      class="add-cart-button full mb-12"
+      mat-raised-button
+      color="primary"
+    >
+      前往預購
+    </button>
+    <button
+      *ngIf="action && !buttonQtyType && buttonStatus === 'groupBuy' && canOrder"
+      [disabled]="buttonDisabled"
+      (click)="submit.emit($event)"
+      type="button"
+      class="add-cart-button full mb-12"
+      mat-raised-button
+      color="primary"
+    >
+      前往團購
+    </button>
+
+    <button
+      type="button"
+      class="add-cart-button red"
+      mat-raised-button
+      (click)="arrivalNoticeDialog.emit($event)"
+      *ngIf="action && buttonQtyType && buttonStatus === 'notifyMeOnDelivery' && canOrder"
+      [disabled]="!canOrder"
+    >
+      貨到通知我
+    </button>
+
+    <button
+      type="button"
+      class="compare-button half"
+      mat-raised-button
+      color="primary"
+      (click)="clickOnCompare.emit()"
+    >
+      <app-icon class="icon" [iconName]="'ic_compare'"></app-icon>
+      {{this.comparsionText}}
+    </button>
+    <button
+      type="button"
+      class="track-button half"
+      mat-raised-button
+      (click)="clickAddToWishList.emit()"
+      color="primary"
+    >
+      <app-icon
+        [class]="
+          detail.isTracedByUser || isWish ? 'icon-red' : 'icon'
+        "
+        [iconName]="
+          detail.isTracedByUser || isWish
+            ? 'heart_red'
+            : 'member_center_favorite'
+        "
+      ></app-icon>
+      追蹤
+    </button>
+  </div>
+
+</div>

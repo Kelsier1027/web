@@ -1,0 +1,16 @@
+@import "/src/styles/responsive";
+
+.product-card-sub-title-wrapper {
+  font-weight: 400;
+  color: #858585;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+   height: 40px;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+  font-size: 13px;
+  @include pad {
+    font-size: 14px;
+  }
+}

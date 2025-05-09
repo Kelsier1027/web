@@ -1,0 +1,73 @@
+<li class="input-wrapper">
+  <div class="input-box">
+    <mat-label class="label_top" [ngStyle]="field.labelStyles">
+      {{ field.label }}
+      <div
+        *ngIf="!!field.iconOption"
+        class="account-permissions"
+        (mouseup)="this.accountPermissionsModal()"
+      >
+        <app-icon
+          class="icon-wrapper"
+          [iconName]="'info'"
+          [ngStyle]="field.iconOption.iconStyle"
+        ></app-icon>
+      </div>
+    </mat-label>
+    <mat-form-field
+      *ngIf="isBindForm; else pure"
+      appearance="outline"
+      class="input no-wrapper"
+      [formGroup]="group"
+    >
+      <mat-select
+        class="select"
+        (valueChange)="change($event)"
+        [formControlName]="field.name"
+        [placeholder]="field.placeholder"
+        [disabled]="disabled"
+      >
+        <mat-option *ngIf="hasNone && field.value">{{noneText}}</mat-option>
+        <mat-option *ngFor="let option of field.options" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <ng-template #pure>
+      <mat-form-field appearance="outline" class="input no-wrapper">
+        <mat-select
+          class="select"
+          [value]="field.value"
+          (valueChange)="change($event)"
+          [placeholder]="field.placeholder"
+          [disabled]="disabled"
+        >
+          <mat-option *ngIf="hasNone && field.value">{{noneText}}</mat-option>
+          <mat-option
+            *ngFor="let option of field.options"
+            [value]="option.value"
+          >
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-template>
+
+    <ng-container *ngFor="let valids of field.validations?.errorMessage">
+      <div
+        *ngIf="
+          field.validations?.hasErrorMessage &&
+          group.get(field.name)?.invalid &&
+          group.get(field.name)?.touched
+        "
+      >
+        <mat-error
+          class="error"
+          *ngIf="group.get(field['name'])?.hasError(valids['type'])"
+        >
+          {{ valids["message"] }}</mat-error
+        >
+      </div>
+    </ng-container>
+  </div>
+</li>

@@ -1,0 +1,55 @@
+#all stages
+stages:
+  - build
+  - deploy
+
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+  - node_modules/
+  #- .npm/
+
+dev-iorder-deploy:
+  stage: deploy
+  only:
+    - develop
+  script:
+    - echo "npm run build:dev"
+    - echo "$CI_PROJECT_DIR"
+    - npm i --no-audit
+    - npm run build:dev
+    - Copy-Item $CI_PROJECT_DIR\dist\\browser\* -Destination C:\inetpub\www\iOrder\DEV\Web -Force -Recurse
+  tags:
+    - Win2019-iOrder
+
+#build stage
+dev-jingho-build:
+  stage: build
+  only:
+    - /^dev_jingho_.*$/
+  script:
+    - echo "npm run build:jingho:dev"
+    - echo "$CI_PROJECT_DIR"
+    - npm install
+    - npm run build:jingho:dev
+  tags:
+    - Win2019-iOrder
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR
+#deploy stage#
+dev-jingho-deploy:
+  stage: deploy
+  only:
+    - /^dev_jingho_.*$/
+  script:
+    - echo "deploy"
+    - echo "$CI_PROJECT_DIR"
+    #- NET STOP w3svc
+    #publish
+    - Copy-Item $CI_PROJECT_DIR\dist\jingho-web\browser\* -Destination C:\inetpub\www\Jingho\DEV\Web -Force -Recurse
+    #- NET START w3svc
+  tags:
+    - Win2019-iOrder

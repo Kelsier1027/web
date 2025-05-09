@@ -1,0 +1,39 @@
+<app-header-inline-close-layout [data]="data">
+  <section class="content">
+    <p class="text" [innerHTML]="data.text"></p>
+  </section>
+  <form class="account-form" [formGroup]="serialForm" (ngSubmit)="onSubmit()">
+    <ul class="account-input-layout">
+      <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+        <app-prompt [hint]="error.errorMessage"></app-prompt>
+      </div>
+      <form [formGroup]="serialForm">
+        <app-password-input
+          [field]="{
+            type: 'password',
+            label: '密碼',
+            labelPosition: 'top',
+            inputType: 'password',
+            name: 'password',
+            placeholder: '請輸入密碼',
+            hint: '',
+            class: '',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [{ type: 'required', message: '必填欄位' }]
+            }
+          }"
+        >
+        </app-password-input>
+      </form>
+    </ul>
+    <footer class="dialog-footer">
+      <section class="footer-wrapper">
+        <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+        <button type="submit" class="button" mat-raised-button color="primary">
+          確認
+        </button>
+      </section>
+    </footer>
+  </form>
+</app-header-inline-close-layout>

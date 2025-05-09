@@ -1,0 +1,113 @@
+@import "responsive";
+
+.mt20 {
+  @include pad {
+    margin-top: 20px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  background-color: #eff2f4;
+  @include pad {
+    background-color: #ffffff;
+  }
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+}
+
+.address-title {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 16px 16px 0px 16px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
+  background-color: #ffffff;
+  @include pad {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 12px;
+    border-bottom: none;
+    justify-content: space-between;
+    .expand-icon {
+      display: none;
+    }
+  }
+}
+
+.operate {
+  font-size: 13px;
+  height: 19px;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+  }
+  .link {
+    display: inline-block;
+    line-height: 13px;
+    cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  :first-child {
+    border-right: 1px solid #c2c2c2;
+    padding-right: 12px;
+    margin-right: 12px;
+  }
+}
+
+.search-bar {
+  padding: 16px;
+  background-color: white;
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  @include pad {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+.no-data-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  gap: 16px;
+  background: #ffffff;
+  margin-bottom: 10px;
+}
+
+.btn-select {
+  width: 58px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transform: none;
+}
+
+.cell-deliver-remark {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  width: 100%;
+}
+::ng-deep .mat-dialog-container{
+  overflow: auto !important;
+}

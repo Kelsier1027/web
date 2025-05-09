@@ -1,0 +1,28 @@
+@import "responsive";
+
+.filter {
+  border-bottom: 1px solid #ebebeb;
+  background: #fff;
+  display: flex;
+  @include pad {
+    display: inherit;
+    //border-bottom: none;
+  }
+}
+
+.tab {
+  font-size: 14px;
+  font-weight: 400;
+  color: #5c5c5c;
+  padding: 14px 16px;
+  width: 100%;
+  @include pad {
+    width: inherit;
+  }
+}
+
+.active {
+  font-weight: 500;
+  color: #0972e3;
+  border-bottom: 2px solid #0972e3;
+}

@@ -1,0 +1,9 @@
+.table-container {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #ebebeb;
+
+  &.topping {
+    border-radius: 0px 0px 6px 6px;
+  }
+}

@@ -1,0 +1,101 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+::ng-deep.mat-dialog-container {
+  position: relative;
+  padding: 16px 24px;
+  overflow: auto;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  //padding: 17px 17px 17px 28px;
+  margin: 0px 0px 12px;
+  .title {
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+  }
+  .close-button {
+    .close-icon {
+      font-size: 16px;
+      height: 16px;
+      width: 16px;
+      line-height: 16px;
+      transform: scale(1.5);
+      color: gray;
+    }
+  }
+}
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  //padding: 0px 17px 0px 28px;
+  .title {
+    margin-bottom: 0px;
+    text-align: left;
+    font-size: 22px;
+  }
+  .subtitle {
+    margin-bottom: 0px;
+    text-align: left;
+    font-size: 14px;
+    color: #5c5c5c;
+  }
+  .dialog-body {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+    flex-grow: 1;
+  }
+  .dialog-icon {
+    width: 48px;
+    height: 48px;
+    display: block;
+  }
+}
+
+.custom-button {
+  .mat-raised-button {
+    height: 44px;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+
+  .button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    width: auto;
+    height: 44px;
+    margin: 17px 28px 17px 0px;
+    &:first-child {
+      margin-right: 14px;
+    }
+
+    &.single {
+      margin: 0;
+    }
+  }
+
+  .footer-wrapper {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+  }
+}
+

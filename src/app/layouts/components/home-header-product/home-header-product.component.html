@@ -1,0 +1,70 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <section class="product-col" [ngClass]="{ 'all-type': isCategoryLayout && currentScreenSize === 'small' }" 
+    [ngStyle]="{'position': fixedProduct?'fixed':'relative','top': fixedProduct && currentScreenSize !== 'small'?'132px':'auto'}"
+  >
+  <div class="product" (mouseover)="handleCloseMenu($event)">
+    <div
+      class="product-list"
+      [ngClass]="{ 'all-type': isCategoryLayout }"
+    >
+      <ng-container *ngFor="let item of menu; index as index">
+        <div
+          *ngIf="!item.isWelfare"
+          [ngClass]="{
+            active: isShowTypeList && activeIndex === index,
+            'all-type': isCategoryLayout && currentScreenSize === 'small',
+            'last-child': index == menu.length - 1
+          }"
+          (click)="currentScreenSize === 'small'?toggleTypeList(true, index, item):''"
+          (mouseenter)="currentScreenSize === 'small'?'': handleDelayToggle(true, index, item)"
+          (mouseleave)="handleMouseLeave()"
+          (mouseover)="handleMouseOver(item)"
+          class="product-item"
+        >
+          {{ item.name }}
+        </div>
+        <a
+          *ngIf="item.isWelfare"
+          [ngClass]="{
+            active: isShowTypeList && activeIndex === index,
+            'all-type': isCategoryLayout && currentScreenSize === 'small',
+            'last-child': index == menu.length - 1
+          }"
+          routerLink="/ProductList"
+          [queryParams]="{ isWelfare: true }"
+          (mouseenter)="toggleTypeList(true, index, item)"
+          class="product-item"
+          >{{ item.name }}</a
+        >
+        </ng-container>
+      </div>
+      </div>
+      <app-home-header-type-list
+        class="type-list"
+        [ngClass]="{
+          'show-list': isShowTypeList,
+          hidden: currentScreenSize === 'small' || currentTypeId === 0
+        }"
+        [parentId]="currentTypeId"
+        (click)="toggleTypeList(false)"
+        (mouseleave)="toggleTypeList(false)"
+      ></app-home-header-type-list>
+
+      <!-- <button
+        *ngIf="isShowTypeList && !isCategoryLayout"
+        (click)="change()"
+        class="product-button"
+      >
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button> -->
+
+    <app-home-header-type-list
+      *ngIf="currentScreenSize === 'small'"
+      [isCategoryLayout]="isCategoryLayout"
+      [ngClass]="{ 'show-list': isShowTypeList }"
+      [parentId]="currentTypeId"
+      (mouseleave)="toggleTypeList(false)"
+      (clickProductList)="change()"
+    ></app-home-header-type-list>
+  </section>
+</ng-container>

@@ -1,0 +1,149 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+    <div class="member-wrapper">
+      <app-member-menu active="我的追蹤"></app-member-menu>
+      <main class="content">
+        <p class="title">我的追蹤</p>
+        <p class="hint">
+          <span class="hint-icon-wrapper">
+            <app-icon [iconName]="'info'"></app-icon> </span>目前僅提供過去90天的追蹤商品。
+        </p>
+        <app-table-container *ngIf="currentScreenSize !== 'small'">
+          <app-table [dataSource]="traceList | paginate : paginateArgs" [noDataCaption]="'查無您的追蹤商品。'">
+            <ng-template [column]="{ key: 'pordName', title: '商品', width: 670 }" let-value>
+              <app-product-card-row [imgWidth]="50" [gap]="24">
+                <img img class="img" [src]="value.row.prodImg" alt="" />
+                <app-product-card-title title>{{
+                  value.row.itemName
+                  }}</app-product-card-title>
+                <app-product-card-sub-title class="sub-title" subTitle>{{
+                  value.row.description
+                  }}</app-product-card-sub-title>
+              </app-product-card-row>
+            </ng-template>
+            <ng-template [column]="{
+                key: 'unitPrice',
+                width: 110,
+                title: '經銷價',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }" let-value>
+              <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+              <span *ngIf="value.row.unitPrice != 999999999" class="price">{{ value.cell | tax: true }}</span>
+              <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+              <span *ngIf="value.row.unitPrice == 999999999" class="price">暫不提供</span>
+            </ng-template>
+            <ng-template [column]="{
+                key: 'action',
+                width: 214,
+                title: '操作',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }" let-value>
+              <a *ngIf="value.row.productDisplayStatus === 0" class="cart-button" [routerLink]="['/Product']"
+                [queryParams]="{ itemId: value.row.itemId }">
+                <button mat-stroked-button class="add-button" *ngIf="value.row.productDisplayStatus === 0">
+                  我要訂購
+                </button>
+              </a>
+              <a *ngIf="value.row.unitPrice == 999999999" class="cart-button" [routerLink]="['/Product']"
+                [queryParams]="{ itemId: value.row.itemId }">
+                <button mat-stroked-button class="add-button">
+                  查看詳情
+                </button>
+              </a>
+              <button mat-stroked-button class="stock-button" (click)="
+                  arrivalNoticeDialog(
+                    value.row.itemId,
+                    value.row.itemName,
+                    value.row.itemNumber
+                  )
+                " *ngIf="value.row.productDisplayStatus === 1">
+                貨到通知我
+              </button>
+              <button mat-stroked-button class="contact-button" (click)="
+                  contactBusinessDialog(
+                    value.row.itemNumber,
+                    value.row.description
+                  )
+                " *ngIf="value.row.productDisplayStatus === 2">
+                請洽業務
+              </button>
+              <button class="remove-button" (click)="handleDelModal(value.row.itemId)">
+                移除追蹤
+              </button>
+            </ng-template>
+          </app-table>
+        </app-table-container>
+        <div class="pagination">
+          <pagination-controls (pageChange)="onPageChange($event)" [maxSize]="maxSize" [directionLinks]="true"
+            [autoHide]="!dataSource?.length" [responsive]="true" previousLabel="上一頁" nextLabel="下一頁"
+            screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page" style="text-align: center" class="paginate">
+          </pagination-controls>
+          <app-icon-select *ngIf="dataSource?.length" class="select" (valueChange)="pageSizeChange($event)"
+            [isBindForm]="false" [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: '',
+                styleMargin: '0px 0px 0px 0px',
+                options: pageSizeOption,
+                value: selectedPageSize,
+                class: '',
+                placeholder: '請選擇幾個'
+              }">
+          </app-icon-select>
+        </div>
+
+        <ng-container *ngIf="currentScreenSize === 'small'">
+          <div class="mobile-table" *ngIf="traceList?.length; else noDataMobile">
+            <div class="mobile-item" *ngFor="let data of traceListMobile.length == 0 ? traceList:traceListMobile">
+              <app-product-card-row>
+                <img img class="img" [src]="data.prodImg" alt="" />
+                <app-product-card-title title>{{
+                  data.itemName
+                  }}</app-product-card-title>
+                <app-product-card-sub-title class="sub-title" subTitle>{{
+                  data.description
+                  }}</app-product-card-sub-title>
+                <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                <app-product-card-price price *ngIf="data.unitPrice != 999999999">{{ data.unitPrice | tax : true
+                  }}</app-product-card-price>
+                <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                <app-product-card-price price *ngIf="data.unitPrice == 999999999">暫不提供</app-product-card-price>
+                <app-product-card-old-price oldPrice></app-product-card-old-price>
+                <app-product-card-icon icon>
+                  <div class="mobile-icon-wrapper">
+                    <app-icon [iconName]="'product_cart'" routerLink="/Product" [queryParams]="{ itemId: data.itemId }"
+                      *ngIf="data.productDisplayStatus === 0"></app-icon>
+                    <app-icon [iconName]="'product_notification'" *ngIf="data.productDisplayStatus === 1" (click)="
+                        arrivalNoticeDialog(
+                          data.itemId,
+                          data.itemName,
+                          data.itemNumber
+                        )
+                      "></app-icon>
+                    <app-icon [iconName]="'product_CS'" *ngIf="data.productDisplayStatus === 2" (click)="
+                        contactBusinessDialog(data.itemNumber, data.description)
+                      "></app-icon>
+                    <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                    <app-icon [iconName]="'product_search'" routerLink="/Product"
+                      [queryParams]="{ itemId: data.itemId }" *ngIf="data.productDisplayStatus === 3"></app-icon>
+                    <app-icon class="trash-can" [iconName]="'product_remove'"
+                      (click)="handleDelModal(data.itemId)"></app-icon>
+                  </div>
+                </app-product-card-icon>
+              </app-product-card-row>
+            </div>
+          </div>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>
+
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的追蹤商品。</div>
+</ng-template>

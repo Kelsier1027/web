@@ -1,0 +1,131 @@
+.wrapper.sticky {
+  position: sticky;
+  top: 0;
+}
+
+.selected-promotion-details-card {
+  width: 328px;
+  border-radius: 6px;
+  padding-top: 16px;
+
+  &.action {
+    border: 1px solid #ebebeb;
+    border-radius: 6px;
+  }
+
+  .selected-promotion-header {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    padding: 0px 16px;
+    margin: 0px 0px 20px;
+    border-left: 5px solid #0972e3;
+  }
+  .empty {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 6px;
+    color: #858585;
+    font-size: 14px;
+    line-height: 22px;
+  }
+  > .wrapper {
+    padding: 0px 20px 20px;
+  }
+}
+.default-content:not(:only-child) {
+  display: none;
+}
+
+
+.action-buttons {
+  padding: 24px 0px;
+  .half {
+    width: 50%;
+  }
+
+  .track-button {
+    background-color: #fff;
+    color: #333333;
+    box-shadow: none;
+    padding: 4.5px 24px;
+    border: 1px solid #858585;
+    border-left: 0px;
+    border-radius: 0px 5px 5px 0px;
+
+    .icon {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .add-cart-button {
+    width: 100%;
+    padding: 4.5px;
+    margin-right: 8px;
+    margin-bottom: 10px;
+  }
+
+  .compare-button {
+    background-color: #fff;
+    color: #333333;
+    box-shadow: none;
+    padding: 4.5px 24px;
+    border: 1px solid #858585;
+    border-radius: 5px 0px 0px 5px;
+  }
+
+
+  .compare-button,
+  .track-button {
+    .icon {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+.add-cart-button {
+  width: calc(100% - 8px - 240px);
+  padding: 4.5px;
+  margin-right: 8px;
+  &.red {
+    border: 1px solid #ff5555 !important;
+    color: #ff5555 !important;
+    background-color: #fff;
+    box-shadow: none;
+  }
+  &.blue {
+    border: 1px solid #0972e3 !important;
+    color: #0972e3 !important;
+    background-color: #fff;
+    box-shadow: none;
+  }
+}
+.compare-button,
+  .track-button {
+    .icon {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+    .icon-red {
+      color: #ff5555;
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+  }

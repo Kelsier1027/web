@@ -1,0 +1,145 @@
+@import "responsive";
+
+.radio-wrapper {
+  mat-form-field {
+    width: 100%;
+  }
+  .mat-radio-button {
+    width: 100%;
+    margin: 12px 42px 12px 0px;
+  }
+  .radio-label {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  &.inline {
+    .mat-radio-button {
+      width: auto;
+    }
+    .radio-label {
+      font-weight: 400;
+      font-size: 14px;
+      color: #919eab;
+    }
+    .mat-radio-group.mat-radio-group {
+      display: flex;
+    }
+  }
+}
+
+::ng-deep .mat-calendar-table-header-divider::after {
+  display: none;
+}
+
+::ng-deep .cms .mat-datepicker-content {
+  border-radius: 16px;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-body-label[colspan="4"] {
+  visibility: hidden;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-controls {
+  margin: 0;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-header {
+  padding: 10px 15px 16px 8px;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-content {
+  padding: 0 27px;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-body-cell-content {
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-previous-button {
+  margin-right: 15px;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar-table-header th[colspan="7"] {
+  display: none;
+}
+
+::ng-deep .mat-datepicker-content .mat-datepicker-toggle,
+::ng-deep .mat-datepicker-content .mat-calendar-next-button,
+::ng-deep .mat-datepicker-content .mat-calendar-previous-button,
+::ng-deep .mat-datepicker-content .mat-calendar-table-header {
+  color: #637381;
+}
+
+::ng-deep
+  app-date-range-filter
+  .mat-form-field-appearance-legacy
+  .mat-form-field-underline {
+  display: none;
+}
+
+::ng-deep
+  app-date-range-filter
+  .mat-form-field-appearance-legacy
+  .mat-form-field-flex {
+  border: 1px solid rgba(145, 158, 171, 0.32);
+  border-radius: 4px;
+  padding: 0 10px;
+  background: #fff;
+}
+
+::ng-deep
+  app-date-range-filter
+  .mat-form-field-appearance-legacy
+  .mat-form-field-suffix
+  .mat-datepicker-toggle-default-icon {
+  width: 18px;
+}
+
+::ng-deep app-date-range-filter .mat-form-field-label-wrapper {
+  display: none;
+}
+
+::ng-deep
+  app-date-range-filter
+  .mat-form-field-appearance-legacy
+  .mat-form-field-infix {
+  padding: 8px 0;
+  position: relative;
+  border: 0;
+  border-radius: 4px;
+}
+
+.date-input {
+  border: none;
+  outline: none;
+  width: 100%;
+
+  &::placeholder {
+    color: #919eab;
+  }
+
+  &:focus,
+  &:focus-visible {
+    border: none;
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+.hint {
+  margin-top: -17px;
+  padding: 3px 0px 0px 12px;
+  margin-bottom: 12px;
+}
+
+.error {
+  margin-top: -17px;
+  padding: 8px 0px 0px 16px;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+::ng-deep .date-invalid .mat-form-field-wrapper .mat-form-field-flex {
+  border: 2px solid #ff4842;
+}

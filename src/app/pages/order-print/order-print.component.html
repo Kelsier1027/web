@@ -1,0 +1,115 @@
+<div class="container" *ngIf="apiResponse | async as orderDetail">
+  <header>
+    <div class="title">採購清單編號：{{ orderDetail.origSysDocumentRef }}</div>
+    <div>建立時間：{{ orderDetail.creationDate | date : "yyyy/MM/dd" }}</div>
+  </header>
+  <section class="sub-header">
+    <div class="subPrice">金額小計 ${{ orderDetail.orderAmount | number }} 元</div>
+    <div>
+      <span>運費{{orderDetail.FreightChargeType}} ${{ orderDetail.freightCharge | number }} 元</span>
+      [<a (click)="onOpenSummary()">說明</a>]
+    </div>
+    <div>稅金 ${{ orderDetail.taxAmount | number }} 元</div>
+    <div class="totalPrice">總金額 ${{ orderDetail.totalAmount | number }} 元</div>
+  </section>
+
+  <table mat-table [dataSource]="orderDetail.orderItems">
+    <ng-container matColumnDef="brand">
+      <th mat-header-cell *matHeaderCellDef>品牌</th>
+      <td mat-cell *matCellDef="let element">{{ element.brand }}</td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>品牌/規格</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="description-text">{{ element.description }}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="inventoryItem">
+      <th mat-header-cell *matHeaderCellDef>品號</th>
+      <td mat-cell *matCellDef="let element">
+        <p class="link">{{ element.inventoryItem }}</p>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="orderedQuantity">
+      <th mat-header-cell *matHeaderCellDef>訂單數量</th>
+      <td class="count-text" mat-cell *matCellDef="let element">{{ element.orderedQuantity }}</td>
+    </ng-container>
+    <ng-container matColumnDef="unitIorderPrice">
+      <th class="price-text" mat-header-cell *matHeaderCellDef>經銷費(未稅)</th>
+      <td class="price-text" mat-cell *matCellDef="let element">${{ element.unitIorderPrice | number }}</td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <th class="price-text" mat-header-cell *matHeaderCellDef>總價(未稅)</th>
+      <td class="price-text" mat-cell *matCellDef="let element">
+        ${{ element.price | number }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns"></tr>
+  </table>
+
+  <section class="detail">
+    <header>送貨資訊：</header>
+    <section class="content">
+      <div>
+        <label>送貨地址：</label>
+        <span>{{orderDetail.shipAddr}}</span>
+      </div>
+      <div>
+        <label>收貨人：</label>
+        <span>{{orderDetail.shipToName}}</span>
+      </div>
+      <div>
+        <label>帳單寄送地址：</label>
+        <span>{{orderDetail.billAddr}}</span>
+      </div>
+      <div>
+        <label>帳單聯絡人：</label>
+        <span>{{orderDetail.invoiceToName}}</span>
+      </div>
+      <div>
+        <label>採購人：</label>
+        <span>{{orderDetail.buyerName}}</span>
+      </div>
+      <div>
+        <label>E-mail：</label>
+        <span>{{orderDetail.email}}</span>
+      </div>
+      <div>
+        <label>配送方式：</label>
+        <span>{{orderDetail.shippingMethodCode}}</span>
+      </div>
+      <div>
+        <label>PO No：</label>
+        <span>{{orderDetail.customerPoNumber}}</span>
+      </div>
+      <div>
+        <label>出貨備註：</label>
+        <span>{{orderDetail.shipMessage}}</span>
+      </div>
+    </section>
+  </section>
+  <section class="button">
+    <button type="button" class="print-order" (click)="print()">列印</button>
+  </section>
+  <ul>
+    <li>本電子訊息是由系統自動產生與發送，請勿直接回覆。</li>
+    <li>
+      本電子訊息內所載相關資訊，若與實際之交易資訊不相符時，以實際之交易資訊為依據。
+    </li>
+    <li>
+      本電子訊息之內容(包括附件)係由精技電股股份有限公司所傅送，本電子訊息之內容具有機密性必須經由本公司之授權方可利用。
+    </li>
+    <li>
+      本電子訊息為保密文件並僅供指定之收件人通知使用，除本電子訊息所指定之收件者及其所屬機構外，任何人或機構不得就本電子訊息全部或部分之内容為審閱、傳送、散布、揭露、重製、保存或向任何人披露其內容與其附件或為其他使用。
+    </li>
+    <li>
+      若您非所指定之收件者，請立即通知我們並請完全刪除本電子訊息之內容，謝謝你的合作。
+    </li>
+    <li>網路通訊可能含有病毒，收件人應自行確訊本電子訊息是否安全。</li>
+    <li style="color: red">
+      網際網路並不保證本電子訊享內容之完整性，本電子訊言內容可能被變更，精技電腦股份有限公司對於他人變更、修改、竄改或偽造之電子訊息內容，恕不負任何責任。
+    </li>
+  </ul>
+</div>

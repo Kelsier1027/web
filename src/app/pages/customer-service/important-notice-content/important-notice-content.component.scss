@@ -1,0 +1,354 @@
+@import '~bootstrap/dist/css/bootstrap.css';
+@import "responsive";
+.problem-header {
+  background-color: #f5f5f5;
+  display: flex;
+  width: 100%;
+  color: #0972e3;
+  padding-left: 8px;
+  height: 32px;
+  align-items: center;
+}
+
+.noticeContent {
+  display: flex;
+  flex-direction: column;
+  @include pad {
+    flex-direction: column;
+  }
+  .title {
+    display: none;
+    @include pad {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        padding: 16px;
+        justify-content: space-between;
+        padding: 0 0 2rem 0;
+        font-size: 26px;
+    }
+  }
+  .data-content{
+    .table{
+        thead{
+            .th-center{
+                @include pad{
+                    text-align: center;
+                }
+            }
+
+            th{
+                display: none;
+                @include pad{
+                    background-color: #F5F5F5;
+                    font-size: 14px;
+                    color: #333333;
+                    font-weight: 500;
+                    display: table-cell;
+                }
+            }
+            
+            .tb-center{
+                @include pad{
+                    text-align: center;
+                    
+                }
+            }
+        }
+
+        thead, tbody, tfoot, tr  {
+            @include pad{
+                border-style: none;
+                border: 1px solid #D0D0D0;
+            }
+        }
+
+        th,td{
+            @include pad{
+                border-bottom: 1px solid #D0D0D0;
+            }
+        }
+        
+        tbody{
+            tr{
+                display: grid;
+                padding-top: 6px;
+
+                @include pad{
+                    display: table-row;
+                    height: 62px;
+                    padding-top: 0;
+                }
+                td{
+                    border-bottom-width: 0;
+                    padding: 10px 16px 0 16px;
+                    @include pad{
+                        height: inherit;
+                        border: 1px solid #D0D0D0;
+                        border-bottom-width: 1px;
+                        padding: 0.5rem;
+                    }
+                    div.activy-tag{
+                        @include pad{
+                            display: flex;
+                            align-items: center;
+                            height: 100%;
+                        }
+                        div.name{
+                            margin-top: 0.5rem;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            font-size: 16px;
+                            @include pad{
+                                margin-top: unset;
+                                display: block;
+                            }
+                            img{
+                                display: block;
+                                width: 20px;
+                                height: 20px;
+                                margin-left: 0.5rem;
+                                @include pad{
+                                    display: none;
+                                }
+                            }
+                        }
+                        .active-status {
+                            color: #007B55; 
+                            background-color: #C9E6DB; 
+                            border-radius: 20px;
+                        }
+                          
+                        .finished-status {
+                            color: #A2A9B1; 
+                            background-color: #EFF2F4; 
+                            border-radius: 20px;
+                        }
+                    }
+
+                    span{
+                        @include pad{
+                            display: inline-flex;
+                            align-items: center;
+                            height: 100%;
+                            width: 100%;
+                        }
+                    }
+                    span.tag{
+                        margin-right: 5px;
+                        padding: 3px;
+                        background-color: #CEE3F9;
+                        border-radius: 4px;
+                        color: #0972E3;
+                        display: table-cell;
+                        @include pad{
+                            display: inline-flex;
+                            align-items: center;
+                            height: auto;
+                            justify-content: center;
+                            width: 67px;
+                        }
+                    }
+
+                    span.tb-center{
+                        @include pad{
+                            justify-content: center;
+                            width: 100%;
+                        }
+                    }
+                }
+
+                td:nth-child(even){
+                    border-bottom: 1px solid #EBEBEB;
+                    padding-bottom: 0.5rem;
+                    @include pad{
+                        border-bottom: revert;
+                        padding-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+  }
+
+  .data-detail{
+    @include pad{
+        margin: 1vh 0 10vh 0;
+        display: grid;
+    }
+
+    .table{
+        width: 100%; 
+        max-width: 100%; 
+        @include pad{
+            width: auto;
+        }
+        thead{
+            th{
+                background-color: #F5F5F5;
+                font-size: 13px;
+                color: #333333;
+                padding: 16px;
+                border-bottom: 1px solid #EBEBEB;
+                @include pad{
+                    font-weight: 500;
+                    padding: 16px 24px;
+                    font-size: 14px;
+                }
+                .activy-tag{
+                    display: grid;
+
+                    @include pad{
+                        display: table-cell;
+                    }
+
+                    span.tag{
+                        width: 64px;
+                        text-align: center;
+                        margin-right: 5px;
+                        padding: 3px;
+                        background-color: #CEE3F9;
+                        border-radius: 4px;
+                        color: #0972E3;
+                        @include pad{
+                            display: inline-flex;
+                            align-items: center;
+                            height: auto;
+                            justify-content: center;
+                        }
+                    }
+    
+                    span.name{
+                        margin: 0.3rem 0;
+                        font-size: 16px;
+                        font-weight: 500;
+                        line-height: 23px;
+                        letter-spacing: 0em;
+                        @include pad{
+                            margin: 0;
+                        }
+                    }
+                }
+
+                span.times{
+                    @include pad{
+                        font-size: 13px;
+                        font-weight: 400;
+                        line-height: 19px;
+                        letter-spacing: 0em;
+                    }
+                }
+            }
+        }
+        thead, tbody, tfoot, tr  {
+            @include pad{
+                border-style: none;
+                border: 1px solid #D0D0D0;
+            }
+        }
+        th,td{
+            @include pad{
+                border-bottom: 1px solid #D0D0D0;
+            }
+        }
+        tbody{
+            tr{
+                td{
+                    padding: 16px;
+                    word-wrap: break-word;
+                    border-bottom-width: 0;
+                    @include pad{
+                        height: inherit;
+                        border: 1px solid #D0D0D0;
+                        padding: 24px;
+                        border-bottom-width: 1;
+                    }
+
+                    span.detail{
+                        font-size: 16px;
+                        @include pad{
+                            font-weight: 400;
+                            line-height: 30px;
+                            letter-spacing: 0em;
+                        }
+                    }
+
+                    .detail-search-title{
+                        font-size: 16px;
+                        margin-top: 1rem;
+                        font-weight: 700;
+                        line-height: 30px;
+                        letter-spacing: 0em;
+                    }
+                    a.detail-search{
+                        font-size: 16px;
+                        color: #0972E3;
+                        text-decoration: none;
+                        @include pad{
+                            font-weight: 700;
+                            line-height: 30px;
+                            letter-spacing: 0em;
+                        }
+                    }
+                    .detail-link{
+                        border-radius: 4px;
+                        border: 1px solid #B6CBEC;
+                        background-color: #E3EEFF;
+                        font-size: 14px;
+                        font-weight: 400;
+                        line-height: 22px;
+                        margin-top: 1.5rem;
+                        display: inline-flex;
+                        padding: 10px 12px;
+                        letter-spacing: 0em;
+                        @include pad{
+                            display: block;
+                        }
+
+                        span{
+                            width: 30%;
+                            @include pad{
+                                width: auto;
+                            }
+                        }
+
+                        a{
+                            text-decoration: none;
+                            color: #0972E3;
+                            overflow-wrap: break-word;
+                            word-break: break-all;
+                            margin-left: 0.5rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .back{
+        display: none;
+        @include pad{
+            display: flex;
+            align-items: center;
+        }
+        img{
+            @include pad{
+                width: 20px;
+                height: 20px;
+            }
+        }
+        span{
+            @include pad{
+                font-size: 13px;
+                font-weight: 400;
+                line-height: 19px;
+                letter-spacing: 0em;
+                color: #333333;
+            }
+        }
+    }
+  }
+}

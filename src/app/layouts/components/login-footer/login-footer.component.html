@@ -1,0 +1,13 @@
+<footer class="footer">
+  <div class="business">
+    <div class="logo" *ngIf="!this.isJingHo()"></div>
+    <div class="logo-jingho" *ngIf="this.isJingHo()"></div>
+    <span class="revserved"
+      >COPYRIGHT © {{ year }} {{this.isJingHo() ? 'Jingho computer Co., Itd.' : 'UNITECH.'}} ALL RIGHTS RESERVED.</span
+    >
+  </div>
+  <ul class="info-links">
+    <li class="link-item"><a href="https://www.unitech.com.tw/" target="_blank">精技集團</a></li>
+    <li class="link-item"><a (click)="openModal()">會員權益</a></li>
+  </ul>
+</footer>

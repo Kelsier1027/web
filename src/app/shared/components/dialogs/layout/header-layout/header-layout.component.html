@@ -1,0 +1,55 @@
+<header class="dialog-header">
+  <h2 class="title" [style]="data.titleStyle || {}">{{ data.title }}</h2>
+  <button mat-icon-button class="close-button icon-outside" mat-dialog-close (click)="onCancel()">
+    <mat-icon class="close-icon material-icons color_white">close</mat-icon>
+  </button>
+</header>
+<div class="dialog-content" [ngStyle]="{ margin: data?.StyleMargin }">
+  <h4 class="subtitle">{{ data.subtitle }}</h4>
+  <div *ngIf="data.warning" class="dialog-body">
+    <span class="wrapper">
+      <app-icon class="dialog-icon" [iconName]="'warning'"></app-icon>
+    </span>
+    <span class="dialog-message" [innerHtml]="data.message"></span>
+  </div>
+  <ng-content *ngIf="!data.warning"></ng-content>
+</div>
+<footer
+  class="dialog-footer"
+  [ngStyle]="{ display: data?.displayFooter ? 'flex' : 'none' }"
+>
+  <section class="footer-wrapper">
+    <button
+      *ngIf="data?.cancelButton"
+      class="button"
+      mat-stroked-button
+      mat-dialog-close
+      (click)="onCancel()"
+    >
+      {{ data.cancelButton }}
+    </button>
+    <button
+      type="submit"
+      *ngIf="data?.confirmButton && data?.async"
+      [ngClass]="{ single: !data?.cancelButton }"
+      class="button"
+      mat-raised-button
+      [color]="data.color ? data.color : 'primary'"
+      (click)="onConfirm()"
+    >
+      {{ data.confirmButton }}
+    </button>
+    <button
+      type="submit"
+      *ngIf="data?.confirmButton && !data?.async"
+      class="button"
+      [ngClass]="{ single: !data?.cancelButton }"
+      mat-raised-button
+      [color]="data.color ? data.color : 'primary'"
+      [mat-dialog-close]="otherData ?? true"
+      (click)="onConfirm()"
+    >
+      {{ data.confirmButton }}
+    </button>
+  </section>
+</footer>

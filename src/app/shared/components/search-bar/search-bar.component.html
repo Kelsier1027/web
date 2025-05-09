@@ -1,0 +1,17 @@
+<div class="search-bar">
+  <div class="left">
+    <ng-content select="[left]"></ng-content>
+    <div class="left-extend">
+      <ng-content select="[left-extend]"></ng-content>
+      <button type="button" class="refresh-icon" (click)="reset.emit()">
+        <span class="icon">
+          <mat-icon class="icon-wrapper">refresh</mat-icon>
+        </span>
+        重設篩選
+      </button>
+    </div>
+  </div>
+  <div class="right">
+    <ng-content select="[right]"></ng-content>
+  </div>
+</div>

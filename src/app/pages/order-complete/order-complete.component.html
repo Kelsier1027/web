@@ -1,0 +1,269 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <ng-container *ngIf="!isLoading; else nodata">
+    <main>
+      <div class="layout">
+        <app-member-header-mobile-nav
+          (action)="redirect()"
+          *ngIf="currentScreenSize === 'small'"
+          [title]="'訂單'"
+        ></app-member-header-mobile-nav>
+        <app-home-header-notice
+          *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "
+        ></app-home-header-notice>
+        <app-home-header-action
+          class="header-action"
+          *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "
+        ></app-home-header-action>
+        <app-home-header-search
+          class="header-search"
+          *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "
+        ></app-home-header-search>
+        <app-home-header-product
+          [isCategoryLayout]="isCategoryLayout"
+          (layoutChange)="toggleMenuType($event)"
+          [hidden]="!isHomePage && currentScreenSize === 'small'"
+        ></app-home-header-product>
+      </div>
+      <div class="main">
+        <app-breadcrumb
+          [links]="links"
+          [linkOnly]="true"
+          style="width: 100px"
+        ></app-breadcrumb>
+        <div class="container order-complete mt24">
+          <div class="header" style="padding-top:80px">
+            <img
+              class="header-icon"
+              src="../../../assets/icons/check_bg_green.svg"
+              alt=""
+            />
+            <h2 class="header-text mt20">{{ Message }}</h2>
+            <h3 class="header-order-no">
+              <span>訂單編號</span><span>{{ form.purchaseNo }}</span>
+            </h3>
+
+            <div *ngIf="isGroupCheck=='1'">
+              <span class="header-desc mt8" style="letter-spacing: .2rem;">
+                <span>預計出貨期間 {{ form.shippingStartDate | date: "YYYY/MM/dd" }} - {{ form.shippingEndDate | date: "YYYY/MM/dd" }}</span>
+              </span>
+              <div class="text-green" style="padding-top:40px; text-align: center;"*ngIf="form.groupBuyCurrentCount < form.groupBuyTargetCount">
+                <span>數量超過{{ form.groupBuyTargetCount }}個即享優惠</span>
+              </div>
+              <div class="text-green" style="padding-top:40px; text-align: center;" *ngIf="form.groupBuyCurrentCount >= form.groupBuyTargetCount">
+                <span>已達優惠門檻</span>
+              </div>
+            </div>
+
+            <div *ngIf="isGroupCheck=='2'" style="margin-top: 20px; margin-bottom: 20px;">
+              <span class="header-desc mt8" style="letter-spacing: .2rem;">
+                <span>預計出貨日 {{ form.shippingDate | date: "YYYY/MM/dd" }}</span>
+              </span>
+            </div>
+          </div>
+
+          <div *ngIf="isGroupCheck=='1'" class="progressBar" style="padding-top:20px; padding-bottom:50px; ">
+            <img class="group-buy-icon" src="assets/icons/group_buy.svg" style="margin-right:14px;">
+            <mat-progress-bar [color]="color" [mode]="mode" [value]="progress">
+            </mat-progress-bar>
+            <span class="text-progressbar">{{ form.groupBuyCurrentCount }} / {{ form.groupBuyTargetCount }}</span>
+          </div>
+
+          <div class="body">
+            <span class="text-send-order">
+              訂單確認函已發送至您的Email：
+              <br *ngIf="currentScreenSize === 'small'">
+              {{ form.email }}
+            </span>
+            <a
+              *ngIf="currentScreenSize !== 'small'"
+              class="link-print-order"
+              href="/Order/PrintOrder/{{ form.purchaseNo }}"
+              ><img
+                class="icon-print-order"
+                src="../../../assets/icons/print.svg"
+                alt=""
+              /><span class="text-print-order">列印訂單</span></a
+            >
+          </div>
+          <div class="footer-container">
+            <div class="footer-texts">
+              <div *ngIf="isGroupCheck !== '1' && isGroupCheck !== '2'">
+                •每日18:00前的訂單，電子發票將於次日寄至您的Email。
+              </div> 
+              <div>•訂單查詢亦提供查詢該訂單電子發票功能。</div>
+            </div>
+            <div class="footer-actions">
+              <button
+                class="border"
+                mat-raised-button
+                type="button"
+                (click)="goMemberOrder()"
+              >
+                訂單查詢
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                type="button"
+                (click)="goShopping()"
+              >
+                繼續購物
+              </button>
+            </div>
+          </div>
+        </div>
+        <section class="section-recommended-products">
+          <div class="list-header-container">
+            <span class="list-header-primary">推薦商品</span>
+          </div>
+          <div class="list-product">
+            <div
+              *ngFor="let guessYouLike of recommended; let index = index"
+              class="item-product"
+            >
+              <a
+                routerLink="/Product"
+                [queryParams]="{ itemId: guessYouLike.itemId, source: 'recommended' }"
+              >
+                <app-product-card-column class="item-container-product">
+                  <img
+                    img
+                    class="img-product"
+                    [src]="guessYouLike.prodImg"
+                    alt=""
+                  />
+                  <ng-container
+                    ngProjectAs="[tag]"
+                    *ngIf="guessYouLike.promoInfos"
+                  >
+                    <ng-container
+                      *ngFor="
+                        let tag of guessYouLike.promoInfos | productListPromos
+                      "
+                    >
+                      <app-product-card-tag
+                        class="tags"
+                        [color]="
+                          promoTagLabel[
+                            promoTagLabelIndexModify(tag.promoCategory)
+                          ][promoTagLabelIndexModify(tag.promoMethod)]?.color
+                        "
+                      >
+                        {{
+                          promoTagLabel[
+                            promoTagLabelIndexModify(tag.promoCategory)
+                          ][promoTagLabelIndexModify(tag.promoMethod)]?.text
+                        }}
+                      </app-product-card-tag>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container
+                    ngProjectAs="[tag]"
+                    *ngIf="!guessYouLike.promoInfos"
+                  >
+                    <div style="height: 24px">&nbsp;</div>
+                  </ng-container>
+
+                  <app-product-card-title class="title-product" title>{{
+                    guessYouLike.itemName
+                  }}</app-product-card-title>
+                  <app-product-card-sub-title
+                    class="subtitle-product"
+                    subTitle
+                    >{{ guessYouLike.description }}</app-product-card-sub-title
+                  >
+                  <app-product-card-price class="price-product" price>{{
+                    guessYouLike.unitPrice | currency : "" : "symbol" : "1.0-0"
+                  }}</app-product-card-price>
+                  <app-product-card-old-price
+                    oldPrice
+                  ></app-product-card-old-price>
+                </app-product-card-column>
+              </a>
+            </div>
+          </div>
+        </section>
+        <section class="section-guess-you-like">
+          <div class="list-header-container">
+            <span class="list-header-primary">猜你喜歡</span>
+          </div>
+          <div class="list-product">
+            <div
+              *ngFor="let guessYouLike of guessYouLikes; let index = index"
+              class="item-product"
+            >
+              <a
+                routerLink="/Product"
+                [queryParams]="{ itemId: guessYouLike.itemId, source: 'guess-you-like' }"
+              >
+                <app-product-card-column class="item-container-product">
+                  <img
+                    img
+                    class="img-product"
+                    [src]="guessYouLike.prodImg"
+                    alt=""
+                  />
+                  <ng-container
+                    ngProjectAs="[tag]"
+                    *ngIf="guessYouLike.promoInfos"
+                  >
+                    <ng-container
+                      *ngFor="
+                        let tag of guessYouLike.promoInfos | productListPromos
+                      "
+                    >
+                      <app-product-card-tag
+                        class="tags"
+                        [color]="
+                          promoTagLabel[
+                            promoTagLabelIndexModify(tag.promoCategory)
+                          ][promoTagLabelIndexModify(tag.promoMethod)]?.color
+                        "
+                      >
+                        {{
+                          promoTagLabel[
+                            promoTagLabelIndexModify(tag.promoCategory)
+                          ][promoTagLabelIndexModify(tag.promoMethod)]?.text
+                        }}
+                      </app-product-card-tag>
+                    </ng-container>
+                  </ng-container>
+                  <app-product-card-title class="title-product" title>{{
+                    guessYouLike.itemName
+                  }}</app-product-card-title>
+                  <app-product-card-sub-title
+                    class="subtitle-product"
+                    subTitle
+                    >{{ guessYouLike.description }}</app-product-card-sub-title
+                  >
+                  <app-product-card-price class="price-product" price>{{
+                    guessYouLike.unitPrice | currency : "" : "symbol" : "1.0-0"
+                  }}</app-product-card-price>
+                  <app-product-card-old-price
+                    oldPrice
+                  ></app-product-card-old-price>
+                </app-product-card-column>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+      <app-home-footer></app-home-footer>
+      <app-footer-mobile-nav *ngIf="currentScreenSize === 'small'"></app-footer-mobile-nav>
+    </main>
+  </ng-container>
+  <ng-template #nodata>
+    <div class="loader-container">
+      <app-loader></app-loader>
+    </div>
+  </ng-template>
+</ng-container>

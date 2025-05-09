@@ -1,0 +1,55 @@
+<ul class="footer-mobile-nav">
+  <li
+    class="mobile-nav-item"
+    [ngClass]="{ selected: navCategory === LayoutEnum.Category }"
+    (click)="onToggleOpenFixedNav(LayoutEnum.Category)"
+  >
+    <span class="icon-wrapper">
+      <app-icon [iconName]="'menu'"></app-icon>
+    </span>
+    <span class="text">　類別　</span>
+  </li>
+  <li
+    class="mobile-nav-item favorite"
+    [ngClass]="{ selected: navCategory === LayoutEnum.MyTrace }"
+    routerLink="/Member/Wishlist"
+    (click)="onToggleOpenFixedNav(null)"
+    *ngIf="!isSales()"
+  >
+    <span class="icon-wrapper">
+      <app-icon [iconName]="'favorite'"></app-icon>
+    </span>
+    <span class="text">我的追蹤</span>
+  </li>
+  <li
+    class="mobile-nav-item"
+    [ngClass]="{ selected: navCategory === LayoutEnum.Home }"
+    routerLink="/"
+    (click)="onToggleOpenFixedNav(null)"
+  >
+    <span class="icon-wrapper">
+      <app-icon [iconName]="'home'"></app-icon>
+    </span>
+    <span class="text">　首頁　</span>
+  </li>
+  <li
+    class="mobile-nav-item"
+    [ngClass]="{ selected: navCategory === LayoutEnum.RecentlyViewed }"
+    (click)="onToggleOpenFixedNav(LayoutEnum.RecentlyViewed)"
+  >
+    <span class="icon-wrapper">
+      <app-icon [iconName]="'member_recent'"></app-icon>
+    </span>
+    <span class="text">最近瀏覽</span>
+  </li>
+  <li
+    class="mobile-nav-item account"
+    [ngClass]="{ selected: navCategory === LayoutEnum.Member || this.subnavCategory === 'ImportantNotice' || this.subnavCategory === 'CommonProblom'}"
+    [routerLink]="isSales() ? '/Member/Account' : '/Member/Member'"
+  >
+    <span class="icon-wrapper">
+      <app-icon [iconName]="'account'"></app-icon>
+    </span>
+    <span class="text">會員中心</span>
+  </li>
+</ul>

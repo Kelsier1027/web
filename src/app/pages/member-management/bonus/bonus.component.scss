@@ -1,0 +1,224 @@
+@import "responsive";
+
+::ng-deep .breadcrumb {
+  background-color: #ffffff;
+  padding-left: 40px !important;
+}
+.point {
+  font-weight: 700;
+}
+
+.warning {
+  color: #ed1c24;
+  font-weight: 700;
+}
+
+.table-container {
+  border-radius: 6px;
+}
+
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  background-color: #eff2f4;
+
+  .form {
+    @include pad {
+      display: grid;
+      align-items: center;
+      grid-template-columns: 110px 400px 400px 240px;
+      column-gap: 12px;
+    }
+  }
+
+  .table {
+    display: none;
+    @include pad {
+      display: initial;
+    }
+  }
+
+  .paginate {
+    display: none;
+    @include pad {
+      display: initial;
+    }
+  }
+
+  .mobile-table {
+    background-color: #fff;
+    padding: 16px;
+  }
+
+  .mobile-table-item {
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+
+  @include pad {
+    background-color: #fff;
+  }
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+}
+
+.bonus-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: #eff2f4;
+  border-radius: 6px;
+  padding-top: 20px;
+  margin: 0px 16px;
+  @include pad {
+    border: 1px solid #d2dbe7;
+    padding: 20px 0px;
+    margin: 16px 0px 0px;
+  }
+  .bonus-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    .bonus-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100% / 3);
+      @include pad {
+        width: calc(100% / 4);
+      }
+      &:last-of-type {
+        display: none;
+        @include pad {
+          display: flex;
+        }
+      }
+      .bonus-title {
+        font-weight: 700;
+        font-size: 22px;
+        line-height: 24px;
+        color: #333333;
+        text-align: center;
+        &.red {
+          color: #ed1c24;
+        }
+      }
+      .bonus-text {
+        display: flex;
+        justify-content: center;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+        color: #5c5c5c;
+
+        &.link {
+          color: #0972e3;
+          cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+        }
+
+        &.disabled {
+          color: #adadad;
+        }
+
+        &.zeroExpireSoon {
+          color: #adadad;
+        }
+      }
+    }
+  }
+
+  .datepicker-wrapper {
+    justify-content: space-between;
+  }
+  .bonus-row-mobile {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #d6d6d6;
+    border-radius: 26px;
+    padding: 12px 20px;
+    margin: 16px 16px 0px;
+    @include pad {
+      display: none;
+    }
+    .bonus-title {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      color: #858585;
+      .bonus {
+        margin-left: 8px;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 19px;
+        color: #333333;
+      }
+    }
+    .bonus-text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #0972e3;
+
+      &.zeroExpireSoon {
+        color: #adadad;
+      }
+    }
+  }
+}
+
+app-table-container {
+  .datepicker-wrapper {
+    flex-direction: column;
+
+    @include pad {
+      flex-direction: row;
+    }
+  }
+
+  ::ng-deep app-date-range-filter {
+    .datepicker-wrapper {
+      grid-template-columns: 1fr 1fr;
+      @include pad {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+.pagination {
+  display: none;
+  @include pad {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0 2rem 0;
+  }
+}
+
+.no-result {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 48px 0px;
+}

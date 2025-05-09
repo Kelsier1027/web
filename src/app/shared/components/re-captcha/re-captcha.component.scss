@@ -1,0 +1,21 @@
+@import "responsive";
+
+.re-captcha-wrapper {
+  @media screen and (max-width: 768px){
+    transform: scale(0.88);
+  }
+  transform: scale(1.16);
+  transform-origin: 0;
+  @include pad {
+    transform: scale(1.11);
+  }
+  .error {
+    font-weight: 400;
+    font-size: 12px;
+    transform: scale(0.92);
+    transform-origin: 0;
+    @include pad {
+      transform: scale(0.73);
+    }
+  }
+}

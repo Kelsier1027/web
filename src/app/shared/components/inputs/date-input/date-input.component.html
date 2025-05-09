@@ -1,0 +1,57 @@
+<div class="radio-wrapper" [ngClass]="field['class']">
+  <mat-form-field
+    appearance="outline"
+    [ngClass]="{
+      'date-invalid':
+        field.validations?.hasErrorMessage &&
+        group.get(field.name!)?.invalid &&
+        group.get(field.name!)?.touched
+    }"
+  >
+    <mat-datetimepicker-toggle
+      [for]="datePicker"
+      matSuffix
+      [disabled]="disabled"
+    ></mat-datetimepicker-toggle>
+    <mat-datetimepicker
+      #datePicker
+      [openOnFocus]="false"
+      mode="portrait"
+      type="date"
+      [multiYearSelector]="true"
+      [disabled]="disabled"
+    ></mat-datetimepicker>
+    <input
+      class="date-input"
+      [placeholder]="field.placeholder"
+      [matDatetimepicker]="datePicker"
+      [formControlName]="field.name!"
+      autocomplete="false"
+      (dateChange)="onDataChange()"
+      [min]="field['minCreateDate']"
+      [disabled]="disabled"
+    />
+    <input matInput style="display: none" />
+  </mat-form-field>
+  <ng-container *ngFor="let valids of field.validations?.errorMessage">
+    <div
+      *ngIf="
+        field.validations?.hasErrorMessage &&
+        group.get(field.name!)?.invalid &&
+        group.get(field.name!)?.touched
+      "
+    >
+      <mat-error
+        class="error"
+        *ngIf="
+          (group.get(field['name']!)?.hasError(valids['type']) &&
+            !group.get(field['name']!)?.hasError('matDatepickerParse')) ||
+          (group.get(field['name']!)?.hasError('matDatepickerParse') &&
+            valids['type'] === 'matDatepickerParse')
+        "
+      >
+        {{ valids["message"] }}
+      </mat-error>
+    </div>
+  </ng-container>
+</div>

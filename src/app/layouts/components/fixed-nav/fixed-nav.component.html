@@ -1,0 +1,336 @@
+<div
+  class="fixed-nav no-print"
+  *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  (scroll)="onWindowScroll()"
+>
+<div *ngIf="isHideNavbar">
+  <button *ngIf="goToTopShow" class="button-wrapper" (click)="goToTop()">
+    <span class="icon-wrapper to_the_top">
+      <app-icon [iconName]="'to_the_top'"></app-icon>
+    </span>
+  </button>
+  <button
+    *ngIf="currentScreenSize !== 'small'"
+    class="button-wrapper"
+    (click)="toggleDialog(LayoutEnum.RecentlyViewed)"
+  >
+    <span class="icon-wrapper">
+      <app-icon [iconName]="'member_recent'"></app-icon>
+    </span>
+  </button>
+  <button class="button-wrapper" (click)="toggleCustomer()">
+    <span class="icon-wrapper">
+      <img src="{{ imageUrl }}" />
+    </span>
+    <span class="new-message-notification" *ngIf="isnewMessage">
+    </span>
+  </button>
+
+  <button
+    class="button-wrapper-blue"
+    *ngIf="currentScreenSize === 'small' && showButton"
+    (click)="toggleComparisonDialog()"
+  >
+    <span class="icon-wrapper">
+      <img src="../../../../assets/icons/subtract.png" />
+    </span>
+    <span class="count-wrapper" *ngIf="compareItems?.length">
+      {{ compareItems.length }}
+    </span>
+
+  </button>
+  <ng-container *ngIf="isComparison && compareItems?.length">
+    <div class="dialog">
+      <div class="dialog-content">
+        <header>
+          <div class="clearAll">
+            商品比較 <span class="line">|</span>
+            <span (click)="clearDialog()" class="clearAll">全部清除</span>
+          </div>
+          <button mat-icon-button (click)="toggleComparisonDialog()">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+        </header>
+        <ng-container *ngFor="let item of compareItems; let index = index">
+          <div class="dialog-main">
+            <div class="main-content">
+              <div class="main-img">
+                <img [src]="item.imgUrl" alt="" />
+              </div>
+              <div class="main-text">
+                <div class="product-name">{{ item.name }}</div>
+                <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                <div class="product-price" *ngIf="item.price != 999999999">
+                  {{ item.price | tax : true }}
+                </div>
+                <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                <div class="product-price" *ngIf="item.price == 999999999">
+                  暫不提供
+                </div>
+              </div>
+              <img
+                (click)="removeAt(index)"
+                class="clear"
+                src="../../../../assets/icons/Clear_Mobile.png"
+                alt=""
+              />
+            </div>
+          </div>
+        </ng-container>
+
+        <footer>
+          <div class="text">需選擇2項商品進行比較</div>
+          <button (click)="onComparison()">
+            比較 ({{ compareItems.length }}/2)
+          </button>
+        </footer>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div *ngIf="isCustomerPopupVisible" class="popup">
+  <div class="popup-header">
+    <img src="../../../../assets/images/Logo_iOrder_white.svg" />
+    線上客服
+    <div class="closeCustomer" (click)="toggleCustomer()">
+      <img src="../../../../assets/icons/close_white.png" />
+    </div>
+  </div>
+  <div class="popup-content" #scrollContainer [scrollTop]="scrollContainer.scrollHeight">
+    <div class="message row" *ngFor="let item of message">
+      <span class="date">{{convertTime(item.groupDate)}}</span>
+      <div class="popup-message" *ngIf="!item.isSentByUser">
+        <div class="popup-message-icon">
+          <div class="customer-icon">
+            <img src="../../../../assets/icons/product_CS.svg" alt="" />
+          </div>
+        </div>
+        <div class="popup-message-text">
+          <div class="message-group" [ngClass]="{ 'only-text': item.buttons.length === 0}">
+            <img [src]="item.imagePath" alt="" />
+            <div class="message-text" [ngClass]="{ 'no-border': item.buttons.length === 0}">
+              <h5 [ngClass]="{ 'd-none': !item.title }">
+                {{ item.title }}
+              </h5>
+              <span>{{ item.message }}</span>
+            </div>
+            <div class="message-button" [ngClass]="{ 'd-none': item.buttons.length == 0}">
+              <a (click)="adLink(link.url,item.adId,item.isExternal)" *ngFor="let link of item.buttons">
+                {{ link.text }}
+              </a>
+            </div>
+          </div>
+          <div class="message-time">
+            {{ convertTime(item.creationTime,'message')}}
+          </div>
+        </div>
+      </div>
+      <div class="send-it" *ngIf="item.isSentByUser">
+        <img [src]="item.imagePath" alt="" />
+        <div class="message-text" *ngIf="item.message">
+          {{ item.message }}
+        </div>
+        <div class="message-time">{{ convertTime(item.creationTime,'message') }}</div>
+      </div>
+    </div>
+    <!-- <div class="restock">
+      <div class="col-12">
+        <div class="col-2">
+          <div class="customer-icon">
+            <img src="../../../../assets/icons/product_CS.svg" alt="" />
+          </div>
+        </div>
+        <div class="col-10">
+          <div class="restock-text">您好，您在2022/05/24詢問的商品已補貨！</div>
+          <div class="restock-notify">
+            <div class="product-img">
+              <img
+                class="productImg"
+                src="../../../../assets/images/ProductImage.png"
+                alt=""
+              />
+              <img
+                class="notify-img"
+                src="../../../../assets/icons/Indicator.png"
+                alt=""
+              />
+            </div>
+            <span class="product">ASUS PRO-UX425EA-0802 P113 5G7</span>
+            <span class="detail"
+              >灰/i7-12700H/8G/512G_SSD/RTX3070 _8G/WIN11</span
+            >
+          </div>
+          <div class="restock-time">16:23</div>
+        </div>
+      </div>
+    </div>
+    <span class="date">2022/12/04</span>
+    <div class="restock">
+      <div class="send-it">
+        <div class="message-text">一行訊息</div>
+        <div class="message-time">16:23</div>
+      </div>
+      <div class="col-12">
+        <div class="col-2">
+          <div class="customer-icon">
+            <img src="../../../../assets/icons/product_CS.svg" alt="" />
+          </div>
+        </div>
+        <div class="col-10">
+          <div class="message-text">一行訊息</div>
+          <div class="restock-time">16:23</div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+  <div class="popup-footer">
+    <a target="blank" href="/CustomerService/CommonProblom">
+      <img class="help" src="../../../../assets/icons/help.png" />
+    </a>
+    <div class="message-input">
+      <textarea
+        #textElement
+        (input)="areaHeight(textElement,scrollContainer)"
+        [placeholder]="isSendingMessage ? '傳送訊息中...' : '請問有什麼能協助您的?'"
+        rows="1"
+        maxlength="87"
+        [(ngModel)]="sendMessagecontent"
+        (keydown.enter)="sendMessag(textElement)"
+        [disabled]="isSendingMessage"
+      ></textarea>
+    <input
+      type="file"
+      #fileInput
+      (change)="onFileSelected($event)"
+      class="d-none"
+    />
+    <img
+      src="../../../../assets/icons/ic_image.svg"
+      (click)="fileInput.click()"
+      class="uploadImg"
+    />
+    </div>
+    <button (click)="sendMessag(textElement)">
+      <img class="send" src="../../../../assets/icons/Path.png" />
+    </button>
+  </div>
+</div>
+
+<div
+  class="browse-popup"
+  *ngIf="(isOpenFixedNav$ | async) === LayoutEnum.RecentlyViewed"
+>
+  <div class="popup-header">
+    <div class="header">
+      <img
+        class="arrow-back"
+        src="../../../assets/images/arrow_back.png"
+        (click)="toggleDialog(null)"
+      />
+      <div class="title">最近瀏覽</div>
+      <div class="spacer-line">|</div>
+      <a class="clear" (click)="followDialog(null, 'clearAll')"> 全部清除</a>
+    </div>
+    <button mat-icon-button class="close" (click)="toggleDialog(null)">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <img class="search" src="../../../assets/images/search.png" />
+    </button>
+    <button mat-icon-button>
+      <img class="cart" src="../../../assets/icons/cart.svg" />
+    </button>
+  </div>
+  <div *ngIf="recentProducts[0].time != ''">
+    <div
+      class="popup-content"
+      *ngFor="let recentProduct of recentProducts; let i = index"
+    >
+      {{ recentProduct.time | fixedNavDate }}
+      <a
+        *ngIf="i == 0"
+        class="clear-mobile"
+        (click)="followDialog(null, 'clearAll')"
+      >
+        全部清除
+      </a>
+      <div class="product-list" *ngFor="let item of recentProduct.list">
+        <a
+          class="link"
+          routerLink="/Product"
+          [queryParams]="{ itemId: item.itemId }"
+          (click)="toggleDialog(null)"
+        >
+          <img src="{{ item.imgUrl }}" />
+          <div class="product-info">
+            <div class="product-name">{{ item.productName }}</div>
+            <div class="product-price">
+              {{ item.productPrice | tax : true }}
+            </div>
+          </div>
+        </a>
+        <div class="icon">
+          <button
+            class="action-button"
+            (click)="addToCart(item)"
+            *ngIf="item.productDisplayStatus === 0"
+          >
+            <app-icon
+              class="action-icon"
+              iconName="cart"
+              #tooltip="matTooltip"
+              matTooltip="我要訂購"
+            ></app-icon>
+        </button>
+        <button
+          class="action-button"
+          (click)="arrivalNoticeDialog(item.itemId, item.productName, item.itemNumber)"
+          *ngIf="item.productDisplayStatus === 1"
+        >
+          <app-icon
+            class="action-icon ring"
+            iconName="ring"
+            #tooltip="matTooltip"
+            matTooltip="貨到通知我"
+          ></app-icon>
+        </button>
+        <button
+          class="action-button"
+          (click)="contactBusinessDialog(item.itemNumber, item.description)"
+          *ngIf="item.productDisplayStatus === 2"
+        >
+          <app-icon
+           class="action-icon call"
+           iconName="call"
+           #tooltip="matTooltip"
+           matTooltip="請洽業務"
+          ></app-icon>
+        </button>
+          <button
+            class="action-button"
+            *ngIf="!item.favorite"
+            (click)="addToWishList(item.itemId)"
+          >
+            <app-icon class="action-icon" iconName="heart"></app-icon>
+          </button>
+          <button
+            class="action-button"
+            *ngIf="item.favorite"
+            (click)="addToWishList(item.itemId)"
+          >
+            <app-icon class="action-icon" iconName="heart_red"></app-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="recentProducts[0].time == ''" class="no-history">
+    <img
+      class="arrow-back"
+      src="../../../assets/icons/member_recent_gray.png"
+    />
+    <div>{{ isQueryingRecentlyViewed ? '查詢瀏覽紀錄中…' : '您目前沒有瀏覽紀錄。'}}</div>
+  </div>
+</div>
+</div>

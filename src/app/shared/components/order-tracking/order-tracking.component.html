@@ -1,0 +1,107 @@
+<ul class="bill-layout">
+  <section class="bill-info-section">
+    <div class="bill-info" *ngIf="!isCancel">
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][0]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][1]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">成立訂單</p>
+        <p>
+          {{
+            tracking.creationDate | date : "MM/dd"
+          }}
+        </p>
+        <p>{{ tracking.creationDate | date : "HH:mm" }}</p>
+      </div>
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][2]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][3]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">撿貨</p>
+        <p>
+          {{
+            tracking.transferedDatetime
+              | date : "MM/dd"
+          }}
+        </p>
+        <p>{{ tracking.transferedDatetime | date : "HH:mm" }}</p>
+      </div>
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][4]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][5]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">理貨</p>
+        <p>
+          {{ tracking.pickDate | date : "MM/dd"}}
+        </p>
+        <p>{{ tracking.pickDate | date : "HH:mm" }}</p>
+      </div>
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][6]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][7]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">已出貨</p>
+        <p>
+          {{
+            tracking.estimateDeliverTime
+              | date : "MM/dd"
+          }}
+        </p>
+        <p>{{ tracking.estimateDeliverTime | date : "HH:mm" }}</p>
+      </div>
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][8]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][9]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">送達</p>
+        <p>
+          {{
+            tracking.lastUpdatedDate
+              | date : "MM/dd"
+          }}
+        </p>
+        <p>{{ tracking.lastUpdatedDate | date : "HH:mm" }}</p>
+      </div>
+    </div>
+    <div class="bill-info cancel" *ngIf="isCancel">
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][0]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][1]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">成立訂單</p>
+        <p>
+          {{
+            tracking.creationDate | date : "MM/dd"
+          }}
+        </p>
+        <p>{{ tracking.creationDate | date : "HH:mm" }}</p>
+      </div>
+      <div class="bill-info-icon" [ngClass]="iconMap[tracking.stage][2]">
+        <div class="icon">
+          <button mat-icon>
+            <app-icon [iconName]="iconMap[tracking.stage][3]"></app-icon>
+          </button>
+        </div>
+        <p class="bill-info-title">已取消</p>
+        <p>
+          {{
+            tracking.lastUpdatedDate | date : "MM/dd"
+          }}
+        </p>
+        <p>{{ tracking.lastUpdatedDate | date : "HH:mm" }}</p>
+      </div>
+    </div>
+  </section>
+</ul>

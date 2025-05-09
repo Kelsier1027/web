@@ -1,0 +1,1277 @@
+<app-loading-mask [showIf]="isLoading"></app-loading-mask>
+<app-fixed-nav></app-fixed-nav>
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <ng-container>
+    <main>
+      <div class="header">
+        <a  href="/">
+          <div class="business-logo">
+            <div class="logo"></div>
+          </div>
+        </a>
+        <div class="divider"></div>
+        <span class="title" (click)="testsubmit()">結帳</span>
+      </div>
+      <div class="main">
+        <section class="section-group">
+          <section class="section-products">
+            <div class="list-header-product">
+              <div class="list-header-left">
+                <div class="list-header-text">
+                  {{ selectedWarehouse && selectedWarehouse.title }}
+                </div>
+                <div class="list-header-badge">
+                  {{ selectedWarehouseMainProductCount }}
+                </div>
+              </div>
+              <!-- <button
+                class="add"
+                (click)="showFirstBlock(true)"
+                *ngIf="isButtonVisible"
+              >
+                +
+              </button>
+              <button
+                class="minus"
+                (click)="showFirstBlock(false)"
+                *ngIf="!isButtonVisible"
+              >
+                -
+              </button> -->
+              <span class="list-header-note">
+                以下是您的採購清單內容，確認後請填寫下方收件資料。
+              </span>
+            </div>
+            <table
+              class="list-product"
+              [ngClass]="{
+                first: idx == 0
+              }"
+              mat-table
+              *ngFor="
+                let products of selectedWarehouse?.productGroups;
+                let idx = index
+              "
+              [dataSource]="products || []"
+            >
+              <ng-container matColumnDef="product">
+                <th mat-header-cell *matHeaderCellDef style="width: auto">
+                  <div class="cell-product">商品</div>
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: auto">
+                  <div class="cell-product-outer">
+                    <span
+                      *ngIf="(element.isactivityName == true && getPromotionTag(element.promotionMethod, element.promoCategory)?.color == 'lightgreen') || getPromotionTag(element.promotionMethod, element.promoCategory)?.color != 'lightgreen'"
+                      class="product-promotion-tag"
+                      [ngClass]="[
+                        getPromotionTag(element.promotionMethod, element.promoCategory)?.color
+                      ]"
+                    >
+                      {{ getPromotionTag(element.promotionMethod, element.promoCategory)?.text }}
+                    </span>
+                    <div class="cell-product"
+                      [ngClass]="{'no-tag-ml':!((element.isactivityName == true && getPromotionTag(element.promotionMethod, element.promoCategory)?.color == 'lightgreen') || getPromotionTag(element.promotionMethod, element.promoCategory)?.color != 'lightgreen')}"
+                      >
+                      <span class="product-name">{{ element.name }}</span>
+                      <span class="product-desc">{{ element.desc }}</span>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div class="cell-center">單價 (未)</div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="cell-center" *ngIf="!element.priceError">
+                    <ng-container *ngIf="element.promotionMethod && element.isactivityName != true">
+                      <span class="product-price">
+                        {{
+                          element.useOverridePromoPriceText
+                            ? element.overridePromoPriceText
+                            : toPrice(element.price)
+                        }}
+                      </span>
+                      <span class="product-price-with-tax">
+                        {{ toPrice(element.priceWithTax) }}
+                      </span>
+                    </ng-container>
+                    <ng-container *ngIf="!element.promotionMethod && element.isactivityName != true">
+                      <span class="product-price">
+                        {{ toPrice(element.priceWithTax) }}
+                      </span>
+                    </ng-container>
+                  </div>
+                  <div class="cell-center" *ngIf="element.priceError && element.isactivityName != true">
+                    <span class="text-error-product">
+                      {{ element.priceError }}
+                    </span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="qty">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div class="cell-center">數量</div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="cell-center" *ngIf="!element.priceError">
+                    <span class="mobile" style="display: none">x</span>
+                    <span>{{ element.qty }}</span>
+                    <span class="mobile" style="display: none">(個)</span>
+                  </div>
+                  <div class="cell-center" *ngIf="element.priceError"></div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="subtotal">
+                <th mat-header-cell *matHeaderCellDef>
+                  <div class="cell-center">小計 (未)</div>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="cell-center" *ngIf="!element.priceError">
+                    <span *ngIf="(element.isactivityName == true && getPromotionTag(element.promotionMethod, element.promoCategory)?.color == 'lightgreen')">
+                      {{
+                        toPrice(
+                          element.sum
+                        )
+                      }}
+                    </span>
+                    <span *ngIf="getPromotionTag(element.promotionMethod, element.promoCategory)?.color != 'lightgreen'">
+                      {{
+                        toPrice(
+                          toPrice2(
+                            element.price,
+                            element.qty,
+                            element.priceWithTax
+                          )
+                        )
+                      }}
+                    </span>
+                  </div>
+                  <div class="cell-center" *ngIf="element.priceError"></div>
+                </td>
+              </ng-container>
+              <!-- <ng-container *ngIf="idx == 0"></ng-container> -->
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="
+                  ['product', 'price', 'qty', 'subtotal'];
+                  sticky: true
+                "
+              ></tr>
+
+              <tr
+                mat-row
+                *matRowDef="
+                  let row;
+                  columns: ['product', 'price', 'qty', 'subtotal']
+                "
+                [ngClass]="{
+                  error: row.priceError,
+                  replace: row.priceError
+                }"
+              ></tr>
+            </table>
+          </section>
+          <section class="award-group" *ngIf="(awards || []).length > 0">
+            <div class="list-header-product">
+              <div class="list-header-left">
+                <div class="list-header-text" *ngIf="currentScreenSize !=='small'">獎勵活動達成禮＆補出商品</div>
+                <div class="list-header-text" *ngIf="currentScreenSize ==='small'">獎勵活動達成禮</div>
+                <div class="list-header-badge">
+                  {{ awardGiftListIds.length }}
+                </div>
+              </div>
+              <div class="toggle-list" *ngIf="currentScreenSize ==='small'">
+                <ng-container *ngIf="ShowList; else remove">
+                  <button
+                    class="toggle-list-item"
+                    type="button"
+                    mat-button
+                    mat-icon-button
+                    matSuffix
+                    aria-label="Remove"
+                    (click)="togglelist()"
+                  >
+                  <mat-icon>remove</mat-icon>
+                  </button>
+                </ng-container>
+                <ng-template #remove>
+                  <button
+                    class="toggle-list-item"
+                    type="button"
+                    mat-button
+                    mat-icon-button
+                    matSuffix
+                    aria-label="Add"
+                    (click)="togglelist()"
+                  >
+                  <mat-icon>add</mat-icon>
+                  </button>
+                </ng-template>
+              </div>
+            </div>
+
+            <table class="list-product" mat-table [dataSource]="awards || []" *ngIf="currentScreenSize !=='small'">
+              <ng-container matColumnDef="activityName">
+                <th mat-header-cell *matHeaderCellDef style="width: auto">
+                  <div class="cell-product">活動名稱</div>
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: auto">
+                  <div class="">
+                    <span>{{ element.activityName }}</span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="productType">
+                <th mat-header-cell *matHeaderCellDef style="width: auto">
+                  <div class="cell-product">商品類別</div>
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: auto">
+                  <div class="">
+                    <span>{{ element.productType }}</span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="productName">
+                <th mat-header-cell *matHeaderCellDef style="width: auto">
+                  <div class="">商品名稱</div>
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: auto">
+                  <div class="">
+                    <span>{{ element.productName }}</span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef style="width: auto">
+                  <div class="">數量</div>
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: auto">
+                  <div class="">
+                    <span>{{ element.number }}</span>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="closeTime">
+                <th mat-header-cell *matHeaderCellDef style="width: auto">
+                  <div class="">兌換截止日期</div>
+                </th>
+                <td mat-cell *matCellDef="let element" style="width: auto">
+                  <div class="">
+                    <span>{{ element.closeTime | date : "yyyy/MM/dd" }}</span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="[
+                  'activityName',
+                  'productType',
+                  'productName',
+                  'number',
+                  'closeTime'
+                ]"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="
+                  let row;
+                  columns: [
+                    'activityName',
+                    'productType',
+                    'productName',
+                    'number',
+                    'closeTime'
+                  ]
+                "
+              ></tr>
+            </table>
+            <table class="bonus-card list-product" mat-table [dataSource]="awards" *ngIf="currentScreenSize ==='small'">
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef>
+                  <span>所有商品</span>
+
+                </th>
+              </ng-container>
+              <ng-container matColumnDef="activityName">
+                <td mat-cell *matCellDef="let element">
+                  <span class="activityName">{{ element.activityName }}</span>
+                  <span class="productName">{{ element.productName }}</span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="number">
+                <td mat-cell *matCellDef="let element">
+                  <div class="numberGroup">
+                    <p>數量</p>
+                    <span>{{ element.number }}</span>
+                  </div>
+                  <div class="dateGroup">
+                  <p>兌換截止日期</p>
+                  <span>{{ element.closeTime | date : "yyyy/MM/dd" }}</span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="['title']"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: ShowListColumns"
+              ></tr>
+            </table>
+          </section>
+          <section class="section-delivery-info">
+            <div class="list-header">
+              <div class="list-header-text">填寫送貨資訊</div>
+            </div>
+            <div class="form-container">
+              <div class="form-component">
+                <div id="header-delivery-info" class="form-header">
+                  收貨人資料
+                </div>
+                <div class="row">
+                  <div
+                    class="deliType-label-wrapper"
+                    [ngStyle]="{
+                      width: currentScreenSize === 'small' ? '100%' : 'auto'
+                    }"
+                  >
+                    <label>配送類別</label>
+                    <div class="container-tooltip">
+                      <img
+                        class="tooltip-icon"
+                        src="../../../assets/icons/info_blue.svg"
+                        [matTooltip]="this.getFreightTooltip()"
+                        [matTooltipPosition]="'below'"
+                        [matTooltipClass]="'below'"
+                        #tooltip="matTooltip"
+                        (click)="tooltip.toggle()"
+                      />
+                      <span style="white-space: nowrap">關於指送</span>
+                    </div>
+                  </div>
+                  <div class="form-input">
+                    <div class="deliType radio-group-wrapper" style="gap: 24px">
+                      <mat-radio-group
+                        color="primary"
+                        class="radio-group"
+                        name="clazz"
+                        [(ngModel)]="form.clazz"
+                        (ngModelChange)="onSelectionChange($event)"
+                        [value]="1"
+                        *ngIf="currentScreenSize !== 'small'"
+                      >
+                        <mat-radio-button
+                          [value]="1"
+                          name="clazz"
+                          id="radioButton1"
+                        >
+                          公司地址
+                        </mat-radio-button>
+                        <mat-radio-button
+                          [value]="2"
+                          name="clazz"
+                          id="radioButton2"
+                        >
+                          常用指送地址
+                        </mat-radio-button>
+                        <mat-radio-button
+                          [value]="3"
+                          name="clazz"
+                          id="radioButton3"
+                        >
+                          手動輸入
+                        </mat-radio-button>
+                      </mat-radio-group>
+                      <div
+                        class="address"
+                        *ngIf="currentScreenSize === 'small'"
+                      >
+                        <div class="address-button-wrapper">
+                          <button
+                            (click)="ChangeAddressChoice(1)"
+                            [ngClass]="{ active: form.clazz == 1 }"
+                            class="address-button"
+                          >
+                            公司地址
+                          </button>
+                          <button
+                            (click)="ChangeAddressChoice(2)"
+                            [ngClass]="{ active: form.clazz == 2 }"
+                            class="address-button"
+                          >
+                            常用指送地址
+                          </button>
+                          <button
+                            (click)="ChangeAddressChoice(3)"
+                            [ngClass]="{ active: form.clazz == 3 }"
+                            class="address-button"
+                          >
+                            手動輸入
+                          </button>
+                        </div>
+                      </div>
+                      <div class="container-tooltip">
+                        <img
+                          class="tooltip-icon"
+                          src="../../../assets/icons/info_blue.svg"
+                          [matTooltip]="this.getFreightTooltip()"
+                          [matTooltipPosition]="'above'"
+                          [matTooltipClass]="'above'"
+                        />
+                        <span style="white-space: nowrap">關於指送</span>
+                      </div>
+                    </div>
+                    <div class="multi-button-group form-input">
+                      <div class="multi-button-group-wrapper">
+                        <button
+                          (click)="onSelectionChange(1)"
+                          [ngClass]="{ active: form.clazz === 1 }"
+                          class="group-button"
+                        >
+                          公司地址
+                        </button>
+                        <button
+                          (click)="onSelectionChange(2)"
+                          [ngClass]="{ active: form.clazz === 2 }"
+                          class="group-button"
+                        >
+                          常用指送地址
+                        </button>
+                        <button
+                          (click)="onSelectionChange(3)"
+                          [ngClass]="{ active: form.clazz === 3 }"
+                          class="group-button"
+                        >
+                          手動輸入
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      *ngIf="form.clazz == 2"
+                      class="delivery-addresses mt20"
+                    >
+                      <div class="header">
+                        <div class="header-text">
+                          {{ form.deliverInfo?.addrName }}
+                        </div>
+                        <div
+                          class="header-link"
+                          (click)="deliveryAddressesDialog()"
+                        >
+                          重新挑選
+                        </div>
+                      </div>
+                      <div class="body">
+                        <table>
+                          <tr>
+                            <td class="label">送貨地址</td>
+                            <td class="value">
+                              {{ form.deliverInfo?.fullAddr }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="label">收貨人</td>
+                            <td class="value">
+                              {{ form.deliverInfo?.receiver }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="label">聯絡電話</td>
+                            <td class="value">
+                              {{ form.deliverInfo?.contactNo }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="label">行動電話</td>
+                            <td class="value">
+                              {{ form.deliverInfo?.phoneNo }}
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel" *ngIf="form.clazz == 1">
+                  <div class="row">
+                    <label>配送方式</label>
+                    <div class="form-input radio-group-wrapper">
+                      <mat-radio-group
+                        color="primary"
+                        class="radio-group"
+                        [(ngModel)]="form.shippingMethod"
+                      >
+                        <mat-radio-button
+                          name="shippingMethod"
+                          *ngFor="let item of shippingMethods"
+                          [value]="item.value"
+                        >
+                          {{ item.label }}
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="multi-button-group form-input">
+                      <div class="multi-button-group-wrapper">
+                        <button
+                          *ngFor="let item of shippingMethods"
+                          (click)="form.shippingMethod = item.value"
+                          [ngClass]="{
+                            active: form.shippingMethod === item.value
+                          }"
+                          class="group-button"
+                        >
+                          {{ item.label }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>送貨地址</label>
+                    <div class="form-input">
+                      <mat-select
+                        class="select"
+                        [(ngModel)]="form.addressOption"
+                        (selectionChange)="this.updateShippingMethods()"
+                      >
+                        <mat-option
+                          *ngFor="let option of options.addresses"
+                          [value]="option.value"
+                        >
+                          {{ option.label }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>收貨人</label>
+                    <div class="form-input">
+                      <mat-select
+                        class="select"
+                        [(ngModel)]="form.receiverOption"
+                        [ngClass]="{ error: error.receivers }"
+                      >
+                        <mat-option
+                          *ngFor="let option of options.receivers"
+                          [value]="option.value"
+                        >
+                          {{ option.label }}
+                        </mat-option>
+                      </mat-select>
+                      <span [ngClass]="{ 'text-error': error.receivers }">
+                        {{ error.receivers }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel" *ngIf="form.clazz == 3">
+                  <div class="row">
+                    <label>送貨公司</label>
+                    <div class="form-input">
+                      <input
+                        class="input"
+                        matInput
+                        placeholder="公司、部門、單位名稱"
+                        [(ngModel)]="form.customDeliverInfo.addrName"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['addrName'].length > 0
+                        }"
+                        maxlength="15"
+                      />
+                      <mat-hint class="input-hint" align="end">
+                        {{ form.customDeliverInfo.addrName.length }} / 15
+                      </mat-hint>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    [ngClass]="{
+                      error: error.customDeliverInfo['addrName'].length > 0
+                    }"
+                    *ngIf="error.customDeliverInfo['addrName'].length > 0"
+                  >
+                    <label>&nbsp;</label>
+                    <div class="form-input">
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['addrName']
+                        }"
+                      >
+                        {{ error.customDeliverInfo["addrName"] }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>送貨地址</label>
+                    <div class="form-input" style="display: flex; gap: 10px">
+                      <mat-select
+                        class="select"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['cityCode'].length > 0
+                        }"
+                        [(ngModel)]="form.customDeliverInfo.addrCity"
+                        style="flex: 1"
+                        (selectionChange)="getCityArea($event)"
+                        placeholder="縣市"
+                      >
+                        <mat-option [value]="'0'" disabled> 縣市 </mat-option>
+                        <mat-option *ngFor="let city of this.cityOption" [value]="city['city']" > {{city['city']}} </mat-option>
+                      </mat-select>
+                      <mat-select
+                        class="select"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['distCode'].length > 0
+                        }"
+                        [(ngModel)]="form.customDeliverInfo.addrCityArea"
+                        style="flex: 1"
+                        placeholder="鄉鎮市區"
+                      >
+                        <mat-option [value]="'0'" disabled>
+                          鄉鎮市區
+                        </mat-option>
+                        <mat-option *ngFor="let cityArea of this.cityAreaOption" [value]="cityArea['area']">{{cityArea['area']}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    [ngClass]="{
+                      error:
+                        error.customDeliverInfo['cityCode'].length > 0 ||
+                        error.customDeliverInfo['distCode'].length > 0
+                    }"
+                    *ngIf="
+                      error.customDeliverInfo['cityCode'].length > 0 ||
+                      error.customDeliverInfo['distCode'].length > 0
+                    "
+                  >
+                    <label>&nbsp;</label>
+                    <div class="form-input" style="display: flex; gap: 10px">
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['cityCode']
+                        }"
+                        style="flex: 1"
+                        >{{ error.customDeliverInfo["cityCode"] }}</span
+                      >
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['distCode']
+                        }"
+                        style="flex: 1"
+                      >
+                        {{ error.customDeliverInfo["distCode"] }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>&nbsp;</label>
+                    <div class="form-input">
+                      <!-- 這個地址的長度是特殊算法，有用 setter 限制輸入內容 -->
+                      <!-- 如果長度要改，除了這裡的字樣，別忘了改 setter 中的驗證 -->
+                      <input
+                        #addressInput
+                        class="input"
+                        matInput
+                        placeholder="請輸入詳細地址(最多15個中文字)"
+                        [(ngModel)]="form.customDeliverInfo.addr"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['addr'].length > 0
+                        }"
+                        (ngModelChange)="updateAddressInput()"
+                      />
+                      <mat-hint class="input-hint" align="end">
+                        {{ this.getAddrLengthForView() }} / 15
+                      </mat-hint>
+                      <span class="addrErrorMessage" *ngIf="addrOverLength">地址長度不可超過 15 個中文字</span>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    [ngClass]="{
+                      error: error.customDeliverInfo['addr'].length > 0
+                    }"
+                    *ngIf="error.customDeliverInfo['addr'].length > 0"
+                  >
+                    <label>&nbsp;</label>
+                    <div class="form-input">
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['addr']
+                        }"
+                      >
+                        {{ error.customDeliverInfo["addr"] }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>收貨人</label>
+                    <div class="form-input">
+                      <input
+                        class="input"
+                        matInput
+                        placeholder="請輸入收貨人中文全名"
+                        [(ngModel)]="form.customDeliverInfo.receiver"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['receiver'].length > 0
+                        }"
+                        maxlength="10"
+                      />
+                      <mat-hint class="input-hint" align="end">
+                        {{ form.customDeliverInfo.receiver.length }} / 10
+                      </mat-hint>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    [ngClass]="{
+                      error: error.customDeliverInfo['receiver'].length > 0
+                    }"
+                    *ngIf="error.customDeliverInfo['receiver'].length > 0"
+                  >
+                    <label>&nbsp;</label>
+                    <div class="form-input">
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['receiver']
+                        }"
+                      >
+                        {{ error.customDeliverInfo["receiver"] }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>聯絡電話</label>
+                    <div class="form-input">
+                      <input
+                        class="input"
+                        matInput
+                        placeholder="範例：(02)2796-2345#800"
+                        (blur)="validateContactNo()"
+                        [(ngModel)]="form.customDeliverInfo.contactNo"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['contactNo'].length > 0
+                        }"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    [ngClass]="{
+                      error: error.customDeliverInfo['contactNo'].length > 0
+                    }"
+                    *ngIf="error.customDeliverInfo['contactNo'].length > 0"
+                  >
+                    <label>&nbsp;</label>
+                    <div class="form-input">
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['contactNo']
+                        }"
+                      >
+                        {{ error.customDeliverInfo["contactNo"] }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label>行動電話<span>(選填)</span></label>
+                    <div class="form-input">
+                      <input
+                        class="input"
+                        matInput
+                        (blur)="validatePhoneNo()"
+                        placeholder="範例：09XX-XXX-XXX"
+                        [(ngModel)]="form.customDeliverInfo.phoneNo"
+                        [ngClass]="{
+                          error: error.customDeliverInfo['phoneNo'].length > 0
+                        }"
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label></label>
+                    <div class="form-input">
+                      <mat-checkbox (change)="saveCommonAddressChange($event)" class="checkbox" color="primary">
+                        <span>存為常用指送地址</span>
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                  <div
+                    class="row"
+                    [ngClass]="{
+                      error: error.customDeliverInfo['phoneNo'].length > 0
+                    }"
+                    *ngIf="error.customDeliverInfo['phoneNo'].length > 0"
+                  >
+                    <label>&nbsp;</label>
+                    <div class="form-input">
+                      <span
+                        [ngClass]="{
+                          'text-error': error.customDeliverInfo['phoneNo']
+                        }"
+                      >
+                        {{ error.customDeliverInfo["phoneNo"] }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label style="align-self: flex-start">
+                    出貨備註<span>(選填)</span>
+                  </label>
+                  <div class="form-input multi-input">
+                    <div class="radio-group-wrapper delivery-button-wrapper">
+                      <mat-radio-group
+                        color="primary"
+                        class="radio-group"
+                        name="remark"
+                        [(ngModel)]="form.commentOption"
+                        [value]="1"
+                        *ngIf="currentScreenSize !== 'small'"
+                      >
+                        <mat-radio-button [value]="1" name="commentOption">
+                          手動輸入
+                        </mat-radio-button>
+                        <mat-radio-button [value]="2" name="commentOption">
+                          常用出貨備註
+                        </mat-radio-button>
+                      </mat-radio-group>
+                      <div
+                        class="commentOption"
+                        *ngIf="currentScreenSize === 'small'"
+                      >
+                        <div class="commentOption-button-wrapper">
+                          <button
+                            (click)="ChangecommentOptionChoice(1)"
+                            [ngClass]="{ active: form.commentOption == 1 }"
+                            class="commentOption-button"
+                          >
+                            手動輸入
+                          </button>
+                          <button
+                            (click)="ChangecommentOptionChoice(2)"
+                            [ngClass]="{ active: form.commentOption == 2 }"
+                            class="commentOption-button"
+                          >
+                            常用出貨備註
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="multi-button-group form-input">
+                      <div class="multi-button-group-wrapper">
+                        <button
+                          (click)="form.commentOption = 1"
+                          [ngClass]="{ active: form.commentOption === 1 }"
+                          class="group-button"
+                        >
+                          手動輸入
+                        </button>
+                        <button
+                          (click)="form.commentOption = 2"
+                          [ngClass]="{ active: form.commentOption === 2 }"
+                          class="group-button"
+                        >
+                          常用出貨備註
+                        </button>
+                      </div>
+                    </div>
+                    <div
+                      class="container-textarea"
+                      *ngIf="form.commentOption == 1"
+                    >
+                      <textarea
+                        matInput
+                        class="textarea"
+                        placeholder="出貨單備註僅供司機參考"
+                        [(ngModel)]="form.commentInfo.comment"
+                        maxlength="60"
+                      >
+                      </textarea>
+                      <mat-hint class="input-hint">
+                        {{ form.commentInfo.comment.length }} / 60
+                      </mat-hint>
+                    </div>
+                    <div *ngIf="form.commentOption == 2">
+                      <div
+                        class="media-header-link"
+                        (click)="deliveryRemarkDialog()"
+                      >
+                        重新挑選
+                      </div>
+                      <div class="delivery-note">
+                        <div class="header">
+                          <div class="header-text">
+                            {{ form.customCommentInfo.title }}
+                          </div>
+                          <div
+                            *ngIf="
+                              form.customCommentInfo.title.trim() !==
+                              '尚未有常用出貨備註'
+                            "
+                            class="delivery-header-link"
+                            (click)="deliveryRemarkDialog()"
+                          >
+                            重新挑選
+                          </div>
+                        </div>
+                        <div class="body">
+                          {{ form.customCommentInfo.comment }}
+                        </div>
+                      </div>
+                    </div>
+                    <mat-checkbox
+                      class="checkbox"
+                      color="primary"
+                      [(ngModel)]="form.savePurchaserRemark"
+                    >
+                      <span>存為常用出貨備註</span>
+                    </mat-checkbox>
+                  </div>
+                </div>
+              </div>
+              <div class="form-component">
+                <div id="header-receipt-info" class="form-header">發票資料</div>
+                <div class="row">
+                  <label>發票寄送地址</label>
+                  <div class="form-input">
+                    <mat-select
+                      class="select"
+                      [(ngModel)]="form.receiptAddressOption"
+                    >
+                      <mat-option
+                        *ngFor="let option of options.receiptAddresses"
+                        [value]="option.value"
+                      >
+                        {{ option.label }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="row">
+                  <label>發票收件人</label>
+                  <div class="form-input">
+                    <mat-select
+                      class="select"
+                      [(ngModel)]="form.receiptReceiverOption"
+                      [ngClass]="{ error: error.receiptReceivers }"
+                      (ngModelChange)="onReceiptReceiverChange($event)"
+                    >
+                      <mat-option
+                        *ngFor="let option of options.receiptReceivers"
+                        [value]="option.value"
+                      >
+                        {{ option.label }}
+                      </mat-option>
+                    </mat-select>
+                    <span [ngClass]="{ 'text-error': error.receiptReceivers }">
+                      {{ error.receiptReceivers }}
+                    </span>
+                  </div>
+                </div>
+                <div class="row" *ngIf="isQualifiedForCloudInvoice">
+                  <label>載具類別</label>
+                  <div
+                    class="carrierCategory-radio-group radio-group-wrapper form-input"
+                  >
+                    <mat-radio-group
+                      color="primary"
+                      class="radio-group"
+                      name="carrierCategory"
+                      [(ngModel)]="form.carrierCategoryOption"
+                      (ngModelChange)="onCarrierCategoryChange($event)"
+                    >
+                      <mat-radio-button [value]="1" name="carrierCategory">
+                        無
+                      </mat-radio-button>
+                      <mat-radio-button [value]="2" name="carrierCategory">
+                        手機條碼
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div class="multi-button-group form-input">
+                    <div class="multi-button-group-wrapper">
+                      <button
+                        (click)="onCarrierCategoryChange(1)"
+                        [ngClass]="{ active: form.carrierCategoryOption === 1 }"
+                        class="group-button active"
+                      >
+                        無
+                      </button>
+                      <button
+                        (click)="onCarrierCategoryChange(2)"
+                        [ngClass]="{ active: form.carrierCategoryOption === 2 }"
+                        class="group-button"
+                      >
+                        手機條碼
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="form.carrierCategoryOption == 2">
+                  <label>手機條碼</label>
+                  <div class="form-input">
+                    <input
+                      class="input"
+                      matInput
+                      placeholder="請輸入手機條碼"
+                      [(ngModel)]="form.mobileBarcode"
+                      [ngClass]="{
+                        error: error.mobileBarcode.length > 0
+                      }"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="row"
+                  [ngClass]="{
+                    error: error.mobileBarcode.length > 0
+                  }"
+                  *ngIf="
+                    form.carrierCategoryOption == 2 &&
+                    error.mobileBarcode.length > 0
+                  "
+                >
+                  <label>&nbsp;</label>
+                  <div class="form-input">
+                    <span
+                      [ngClass]="{
+                        'text-error': error.mobileBarcode.length > 0
+                      }"
+                    >
+                      {{ error.mobileBarcode }}
+                    </span>
+                  </div>
+                </div>
+                <div class="row" *ngIf="isQualifiedForCloudInvoice">
+                  <label>愛心碼<span>(選填)</span></label>
+                  <div class="form-input">
+                    <input
+                      class="input"
+                      matInput
+                      placeholder="請輸入愛心碼"
+                      [(ngModel)]="form.loveCode"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="form-component">
+                <div id="header-other-info" class="form-header">其它資料</div>
+                <div class="row">
+                  <label>採購人</label>
+                  <div class="form-input">
+                    {{ purchaserJobTitle.replace("*", "") }} -
+                    {{ purchaserName }}
+                  </div>
+                </div>
+                <div class="row">
+                  <label>通知Email</label>
+                  <div class="form-input">
+                    <input
+                      type="email"
+                      class="input"
+                      matInput
+                      [(ngModel)]="form.email"
+                      [ngClass]="{ error: error.email }"
+                    />
+                    <span [ngClass]="{ 'text-error': error.email }">
+                      {{ error.email }}
+                    </span>
+                  </div>
+                </div>
+                <div class="row">
+                  <label>PO No.<span>(選填)</span></label>
+                  <div class="form-input">
+                    <input
+                      class="input"
+                      matInput
+                      placeholder="可輸入貴公司的採購單號"
+                      [(ngModel)]="form.poNo"
+                      maxlength="20"
+                    />
+                    <mat-hint class="input-hint" align="end">
+                      {{ form.poNo.length }} / 20
+                    </mat-hint>
+                  </div>
+                </div>
+                <div class="form-divider mt24"></div>
+              </div>
+              <div class="form-component">
+                <div class="notice">
+                  <div class="notice-header">
+                    <img
+                      class="notice-icon"
+                      src="../../../assets/icons/info_bg_blue.svg"
+                    />
+                    <div class="notice-header-text">注意事項</div>
+                  </div>
+                  <ul class="notice-body">
+                    <li>• 貨況以送出訂單時間為準，本系統無保留庫存功能。</li>
+                    <li>• 暫存採購清單僅儲存品項及數量，不保留庫存及價格。</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+        <div class="overview-container-product">
+          <div class="overview-outer-product">
+            <div class="overview-product">
+              <div class="overview-header">總覽</div>
+              <div class="overview-divider"></div>
+              <div class="overview-body">
+                <div class="col">
+                  <div class="row">
+                    <span>小計</span>
+                    <span>{{ toPrice(totalPrice) }}</span>
+                  </div>
+                  <div class="row" *ngIf="canUseBonus">
+                    <span>紅利折抵</span>
+                    <span class="dividend-discount">
+                      -{{
+                        form.isChecked
+                          ? toPrice(inputDividendDiscount)
+                          : toPrice(0)
+                      }}
+                    </span>
+                  </div>
+                  <div class="row">
+                    <span>運費</span>
+                    <span>{{ freightText() }}</span>
+                  </div>
+                  <div class="row">
+                    <span>稅金</span>
+                    <span>+{{ toPrice(totalTax) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="overview-divider"></div>
+              <div class="overview-body" *ngIf="canUseBonus">
+                <div class="col">
+                  <div class="row">
+                    <div class="bonus-area">
+                      <div>
+                        <div class="row">
+                          <div style="display: flex; position: relative" class="canUseBonus-font">
+                            <mat-checkbox
+                              color="primary"
+                              [(ngModel)]="form.isChecked"
+                              >可折紅利點數</mat-checkbox
+                            >
+                            <app-icon
+                              [iconName]="'info'"
+                              class="custom-icon"
+                              (mouseenter)="isHovering = true"
+                              (mouseleave)="isHovering = false"
+                            ></app-icon>
+                            <div
+                              class="dividend-discount-hint"
+                              [class.open]="isHovering"
+                              (mouseenter)="isHovering = true"
+                              (mouseleave)="isHovering = false"
+                            >
+                              每張訂單最多可折抵未稅總金額 30 %
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <span class="bonus-point-font" *ngIf="canUseBonus">
+                            紅利點數 ：{{ bonusPoints.toLocaleString() }}
+                          </span>
+                        </div>
+                      </div>
+                      <div>
+                        <mat-form-field appearance="outline">
+                          <input
+                            type="number"
+                            matInput
+                            [value]="useBonusPoint"
+                            (input)="onDividendDiscountInput($event)"
+                            (change)="onDividendDiscountChange($event)"
+                            *ngIf="canUseBonus"
+                          />
+                          <mat-icon matSuffix class="bonus-font">點</mat-icon>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="overview-divider"></div>
+              <div class="overview-footer">
+                <div class="row container-price">
+                  <span class="label-price">總金額</span>
+                  <span class="real-price">
+                    {{ toPrice(totalPriceWithTax) }}
+                    <span class="note-price">(含)</span>
+                  </span>
+                </div>
+              </div>
+              <div class="overview-divider"></div>
+              <div class="overview-footer">
+                <div class="col">
+                  <div class="row">
+                    <div id="check-agree-terms" class="agree-terms">
+                      <div
+                        class="checkbox-group"
+                        [ngClass]="{
+                          error: error.agreeTerms
+                        }"
+                      >
+                        <mat-checkbox
+                          class="checkbox"
+                          color="primary"
+                          style="align-self: baseline"
+                          [(ngModel)]="form.agreeTerms"
+                        ></mat-checkbox>
+                        <span class="checkbox-label">
+                          本公司同意遵守精技電腦「<a (click)="internetTradingTermsDialog()">網路下單條款</a>」
+                          之相關規定
+                        </span>
+
+                      </div>
+                      <div
+                        class="checkbox-group"
+                        [ngClass]="{
+                          error: error.agreeTerms
+                        }"
+                      >
+                        <div class="checkbox-error">請勾選同意條款</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-submit"
+              [disabled]="productTotalCount === 0"
+              (click)="submit()"
+            >
+              <span class="media-money">
+                {{ toPrice(totalPriceWithTax) }}(含) &nbsp;
+              </span>
+              送出訂單
+            </button>
+            <a class="link" href="/ShoppingCart">
+              <img
+                class="link-icon"
+                src="../../../assets/icons/arrow-left.svg"
+                alt=""
+              />
+              <span class="link-text">返回購物車</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <app-home-footer></app-home-footer>
+    </main>
+  </ng-container>
+</ng-container>

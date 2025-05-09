@@ -1,0 +1,21 @@
+<app-product-card class="product-card">
+  <div class="img-container" [ngStyle]="{width: imgWidth + 'px'}">
+    <ng-content select="[img]"></ng-content>
+    <ng-content select="[badge]"></ng-content>
+  </div>
+  <div class="content">
+    <div class="title-wrapper">
+      <div class="titles">
+        <ng-content select="[title]"></ng-content>
+        <ng-content select="[subTitle]"></ng-content>
+      </div>
+      <ng-content select="[icon]"></ng-content>
+    </div>
+    <app-product-card-row-wrapper>
+      <ng-content select="[tag]"></ng-content>
+      <ng-content select="[price]"></ng-content>
+      <ng-content select="[oldPrice]"></ng-content>
+      <ng-content select="[content]"></ng-content>
+    </app-product-card-row-wrapper>
+  </div>
+</app-product-card>

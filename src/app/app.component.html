@@ -1,0 +1,6 @@
+<router-outlet></router-outlet>
+<!-- 全站通用的 app loading mask -->
+<!-- 因為是開發後期才加上，實際會觸發的只有 POST requests -->
+<!-- 等程式穩定後想對專案 cleanup，可以整理出哪些地方不需讀取中效果（例如線上客服） -->
+<!-- 設定那些 request 為 noLoading，並清掉此頁以外所有的 app-loading-mask -->
+<app-loading-mask [showIf]="this.isLoading()"></app-loading-mask>

@@ -1,0 +1,17 @@
+<div [ngClass]="{ 'discount-card': defaultStyle }" >
+  <header class='discount-header'>{{ detail.name }}</header>
+  <div class='discount-body'>
+    {{ detail.remark }}
+  </div>
+  <footer class='discount-footer'>
+    活動期間 {{ detail.startDate | date : "yyyy/MM/dd" }}~{{ detail.endDate | date : "yyyy/MM/dd" }}
+    <br>
+    <div *ngIf = "detail.promoCategory ==4">
+      預計出貨日～出貨終日
+      {{detail.shippingStartDate | date : "yyyy/MM/dd"}}~{{detail.shippingEndDate| date : "yyyy/MM/dd"}}
+    </div>
+    <div *ngIf = "detail.promoCategory ==2">
+      預計出貨日{{ detail.shippingDate | date : "yyyy/MM/dd"}}
+    </div>
+  </footer>
+</div>

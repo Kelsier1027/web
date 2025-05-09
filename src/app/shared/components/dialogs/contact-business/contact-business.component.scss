@@ -1,0 +1,67 @@
+@import "../../../../../styles/responsive";
+
+.contact-business-wrapper {
+  display: inline-flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.product-icon {
+  display: flex;
+  gap: 8px;
+  color: #858585;
+  .custom-icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.footer-wrapper {
+  padding: 24px 0px;
+  gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wrapper {
+  display: inline-block;
+  width: 75px;
+  height: 40px;
+}
+
+.dialog-wrapper {
+  background-color: #eff2f4;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+    @include pad{
+      flex-direction: row;
+    }
+  .left,
+  .right {
+    width: 100%;
+    margin-bottom: 20px;
+    @include pad{
+      width: 50%;
+      margin-bottom: 0px;
+    }
+    .items {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .wrapper {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+    }
+    .name {
+      font-size: 20px;
+      line-height: 29px;
+      font-weight: 500;
+    }
+  }
+}
+

@@ -1,0 +1,13 @@
+<app-header-inline-close-layout [data]="data">
+  <div class='bonus-detail'>
+    <p><span class='bonus-detail-title'>交易點數</span>{{data.bonusPointResult}}</p>
+    <p><span class='bonus-detail-title'>來源名稱</span>{{data.bonusName}}</p>
+    <p><span class='bonus-detail-title'>來源編號</span>{{data.orderNumber}}</p>
+    <p><span class='bonus-detail-title'>來源說明</span>{{data.origSysDocumentRef}}</p>
+  </div>
+  <footer class='dialog-footer'>
+    <section class='footer-wrapper'>
+      <button class='button' mat-raised-button mat-dialog-close color='primary'>關閉</button>
+    </section>
+  </footer>
+</app-header-inline-close-layout>

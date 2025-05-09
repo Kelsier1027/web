@@ -1,0 +1,24 @@
+<div class='mobile-nav'>
+  <div class='left'>
+    <div class='icon-wrapper arrow' (click)="clickAction()">
+      <mat-icon *ngIf="title != '訂單'" matSuffix>keyboard_backspace</mat-icon>
+      <app-icon *ngIf="title === '訂單'" [iconName]="'home'"></app-icon>
+    </div>
+    <span *ngIf="title != '訂單'">{{title}}</span>
+  </div>
+  <div class='right'>
+    <div class='search'>
+      <app-search-radius-input
+        [placeholder]="'請輸入關鍵字或品號'"
+      >
+      </app-search-radius-input>
+    </div>
+    <div class='icon-wrapper' *ngIf="this.canUseCart()">
+      <a routerLink="/ShoppingCart">
+      <app-icon class='icon' [iconName]="'cart'" matBadge="{{cartCount}}" matBadgeColor="warn">
+      </app-icon>
+      </a>
+    </div>
+
+  </div>
+</div>

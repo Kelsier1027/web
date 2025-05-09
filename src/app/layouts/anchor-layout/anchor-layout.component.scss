@@ -1,0 +1,84 @@
+@import "/src/styles/responsive";
+
+.section {
+  padding-top: 16px;
+
+  @include pad {
+    padding: 0;
+  }
+}
+
+.nav-wrapper {
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+
+  @include pad {
+    padding: 0;
+  }
+}
+
+.nav {
+  border-radius: 0px 6px 6px 0px;
+  padding: 0px;
+  border-radius: 6px;
+  border: 1px solid #ebebeb;
+  overflow: hidden;
+
+  @include pad {
+    margin-bottom: 20px;
+  }
+
+  .nav-button {
+    position: relative;
+
+    &.active {
+      background: #333333;
+      color: #fff;
+    }
+
+    &.active:before {
+      display: none;
+    }
+
+    &.active + .category-button:before {
+      display: none;
+    }
+
+    &:not(:first-child):before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 100%;
+      background: #ebebeb;
+    }
+  }
+
+  &.sticky {
+    position: sticky;
+    top: 0;
+  }
+
+  > button {
+    padding: 14px;
+    width: calc(100% / 3);
+    background: #ffffff;
+  }
+  .active {
+    color: #ffffff;
+    background: #333333;
+  }
+}
+
+.header {
+  color: #333333;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 29px;
+  margin: 0px 0px 16px;
+  padding: 12px 0px;
+  border-bottom: 1px solid #ebebeb;
+}

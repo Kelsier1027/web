@@ -1,0 +1,30 @@
+<ng-container *ngIf="breadCrumbs$ | async as breadCrumbs">
+  <ul class="breadcrumb">
+    <li class="breadcrumb-item" [ngClass]="{ active: false }">
+      <a class="home" [routerLink]="['/']" [queryParams]="{}"><app-icon iconName="home"></app-icon></a
+      ><span class="arrow"></span>
+    </li>
+    <ng-container *ngIf="!linkOnly">
+      <li
+        class="breadcrumb-item"
+        [ngClass]="{ active: index === breadCrumbs.length - 1 }"
+        *ngFor="let link of breadCrumbs; let index = index"
+      >
+        <a [routerLink]="[link.url]" [queryParams]="link.queryParams" queryParamsHandling="merge" *ngIf="link.url">{{ link.name }}</a>
+        <span *ngIf="!link.url">{{ link.name }}</span
+        ><span class="arrow"></span>
+      </li>
+    </ng-container>
+    <ng-container *ngIf="linkOnly">
+      <li
+        class="breadcrumb-item"
+        [ngClass]="{ active: index === links.length - 1 }"
+        *ngFor="let link of links; let index = index"
+      >
+        <a [routerLink]="[link.url]" [queryParams]="link.queryParams" queryParamsHandling="merge" *ngIf="link.url">{{ link.name }}</a>
+        <span *ngIf="!link.url">{{ link.name }}</span
+        ><span class="arrow"></span>
+      </li>
+    </ng-container>
+  </ul>
+</ng-container>

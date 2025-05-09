@@ -1,0 +1,31 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <div class="detail-card">
+    <header class="detail-header">
+      <ng-content select="[tag]"></ng-content>
+      <span class="detail-title">{{ detailTitle }}</span>
+      <div *ngIf="currentScreenSize === 'small'">
+        <button class="link" *ngIf="href" (click)="mobileClick.emit()">
+          {{ linkText
+          }}<img
+            style="width: 16px"
+            src="../../../../../assets/icons/arrow_right_active.svg"
+          />
+        </button>
+      </div>
+    </header>
+    <nav class="detail-nav" *ngIf="(date || linkText || href) && currentScreenSize !== 'small'">
+      <span class="text" *ngIf="date">{{ date }}</span>
+      <a
+        class="link"
+        *ngIf="href && currentScreenSize !== 'small'"
+        [href]="href"
+        >{{ linkText
+        }}<img
+          *ngIf="!noImg"
+          style="width: 16px"
+          src="../../../../../assets/icons/arrow_right_active.svg"
+      /></a>
+    </nav>
+    <ng-content select="[detail-body]"></ng-content>
+  </div>
+</ng-container>

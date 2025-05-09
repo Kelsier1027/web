@@ -1,0 +1,207 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-loading-mask [showIf]="isLoading"></app-loading-mask>
+  <ng-container *ngIf="!isLoading || loadedOnce; else nodata">
+    <main>
+      <div class="layout">
+        <app-member-header-mobile-nav (action)="redirect()" *ngIf="currentScreenSize === 'small'"
+          [title]="'訂單'"></app-member-header-mobile-nav>
+        <app-home-header-notice *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "></app-home-header-notice>
+        <app-home-header-action class="header-action" *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "></app-home-header-action>
+        <app-home-header-search class="header-search" *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "></app-home-header-search>
+        <app-home-header-product [isCategoryLayout]="isCategoryLayout" (layoutChange)="toggleMenuType($event)"
+          [hidden]="!isHomePage && currentScreenSize === 'small'"></app-home-header-product>
+      </div>
+      <div class="main">
+        <app-breadcrumb [links]="links" [linkOnly]="true" style="width: 100px"></app-breadcrumb>
+        <div class="container order-complete mt24">
+          <div class="header" style="padding-top:80px;">
+            <img class="header-icon" src="../../../assets/icons/warn_bg_red.svg" alt="" />
+            <h2 class="header-text mt20">訂單尚未成立</h2>
+          </div>
+          <div class="body">
+            <div class="notification mt16">
+              已接收到對公司單號為({{ form.purchaseNo }})之採購需求，此訂單目前因餘額不足尚未能出貨，
+              請於
+              <span class="text-hint">{{ form.dueDate }}</span>
+              前匯款，逾時未收到匯款，訂單將自動取消。
+            </div>
+            <span class="mt32">
+              請選擇以下一個銀行匯款，完成匯款後，每個小時的40分
+              (例：9:40、10:40...)
+              匯款資料會轉入系統或按下方按鍵通知{{getOrgName()}}電腦電子商務部＆您的業務窗口。
+            </span>
+            <div class="list-bank mt16" *ngIf="!isJingHo()">
+              <!-- <div class="item-bank">
+                <div class="header">
+                  <img class="icon" src="../../../assets/images/bank_1.svg" />
+                  <span class="text">兆豐國際商業銀行</span>
+                </div>
+                <div class="body">
+                  <div class="label-account">匯款帳號</div>
+                  <div class="number-account mt4">77777-{{ taxReference }}-0</div>
+                  <div class="list-account-info mt16">
+                    <div class="item-account-info">
+                      <span class="label">戶名</span>
+                      <span class="text">精技電腦股份有限公司</span>
+                    </div>
+                    <div class="item-account-info">
+                      <span class="label">分行</span>
+                      <span class="text">東內湖分行 (金融機構代碼 017)</span>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              <div class="item-bank">
+                <div class="header">
+                  <img class="icon" src="../../../assets/images/bank_2.svg" />
+                  <span class="text">第一商業銀行</span>
+                </div>
+                <div class="body">
+                  <div class="label-account">匯款帳號</div>
+                  <!-- Modify by Tako on 2025/02/11 For No.2024037103 -->
+                  <p class="col-text account">55988-{{ taxReference === '12215548' ? personCustNo : taxReference +'-0'}}
+                  </p>
+                  <div class="list-account-info mt16">
+                    <div class="item-account-info">
+                      <span class="label">戶名</span>
+                      <span class="text">精技電腦股份有限公司</span>
+                    </div>
+                    <div class="item-account-info">
+                      <span class="label">分行</span>
+                      <span class="text">民權分行 (金融機構代碼 007)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="list-bank mt16" *ngIf="isJingHo()">
+              <div class="item-bank">
+                <div class="header">
+                  <img class="icon" src="../../../assets/images/bank_2.svg" />
+                  <span class="text">第一商業銀行</span>
+                </div>
+                <div class="body">
+                  <div class="label-account">匯款帳號</div>
+                  <!-- Modify by Tako on 2025/02/11 For No.2024037103 -->
+                  <p class="col-text account">52668-{{ taxReference === '12215548' ? personCustNo : taxReference +'-0'}}
+                  </p>
+                  <div class="list-account-info mt16">
+                    <div class="item-account-info">
+                      <span class="label">戶名</span>
+                      <span class="text">精豪電腦股份有限公司</span>
+                    </div>
+                    <div class="item-account-info">
+                      <span class="label">分行</span>
+                      <span class="text">民權分行 (金融機構代碼 007)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-container mt32">
+            <div class="footer-actions">
+              <button class="border" mat-raised-button type="button" (click)="goHome()">
+                繼續購物
+              </button>
+              <button mat-raised-button color="primary" type="button" style="width: 174px" (click)="notifyDialog()"
+                [disabled]="isLoading || hasSent">
+                {{hasSent ? "已通知" : "匯款完成，通知"}}{{getOrgName()}}
+              </button>
+            </div>
+          </div>
+        </div>
+        <section class="section-recommended-products">
+          <div class="list-header-container">
+            <span class="list-header-primary">推薦商品</span>
+          </div>
+          <div class="list-product">
+            <div *ngFor="let guessYouLike of recommended; let index = index" class="item-product">
+              <a routerLink="/Product" [queryParams]="{ itemId: guessYouLike.itemId, source: 'recommended' }">
+                <app-product-card-column class="item-container-product">
+                  <img img class="img-product" [src]="guessYouLike.prodImg" alt="" />
+                  <ng-container ngProjectAs="[tag]" *ngIf="guessYouLike.promoInfos">
+                    <ng-container *ngFor="
+                        let tag of guessYouLike.promoInfos | productListPromos
+                      ">
+                      <app-product-card-tag class="tags"
+                        [color]="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color">
+                        {{
+                        promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text
+                        }}
+                      </app-product-card-tag>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container ngProjectAs="[tag]" *ngIf="!guessYouLike.promoInfos">
+                    <div style="height: 24px">&nbsp;</div>
+                  </ng-container>
+
+                  <app-product-card-title class="title-product" title>{{
+                    guessYouLike.itemName
+                    }}</app-product-card-title>
+                  <app-product-card-sub-title class="subtitle-product" subTitle>{{ guessYouLike.description
+                    }}</app-product-card-sub-title>
+                  <app-product-card-price class="price-product" price>{{
+                    guessYouLike.unitPrice | currency : "" : "symbol" : "1.0-0"
+                    }}</app-product-card-price>
+                  <app-product-card-old-price oldPrice></app-product-card-old-price>
+                </app-product-card-column>
+              </a>
+            </div>
+          </div>
+        </section>
+        <section class="section-guess-you-like">
+          <div class="list-header-container">
+            <span class="list-header-primary">猜你喜歡</span>
+          </div>
+          <div class="list-product">
+            <div *ngFor="let guessYouLike of guessYouLikes; let index = index" class="item-product">
+              <a routerLink="/Product" [queryParams]="{ itemId: guessYouLike.itemId, source: 'guess-you-like' }">
+                <app-product-card-column class="item-container-product">
+                  <img img class="img-product" [src]="guessYouLike.prodImg" alt="" />
+                  <ng-container ngProjectAs="[tag]" *ngIf="guessYouLike.promoInfos">
+                    <ng-container *ngFor="
+                        let tag of guessYouLike.promoInfos | productListPromos
+                      ">
+                      <app-product-card-tag class="tags"
+                        [color]="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color">
+                        {{
+                        promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text
+                        }}
+                      </app-product-card-tag>
+                    </ng-container>
+                  </ng-container>
+                  <app-product-card-title class="title-product" title>{{
+                    guessYouLike.itemName
+                    }}</app-product-card-title>
+                  <app-product-card-sub-title class="subtitle-product" subTitle>{{ guessYouLike.description
+                    }}</app-product-card-sub-title>
+                  <app-product-card-price class="price-product" price>{{
+                    guessYouLike.unitPrice | currency : "" : "symbol" : "1.0-0"
+                    }}</app-product-card-price>
+                  <app-product-card-old-price oldPrice></app-product-card-old-price>
+                </app-product-card-column>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+      <app-home-footer></app-home-footer>
+      <app-footer-mobile-nav *ngIf="currentScreenSize === 'small'"></app-footer-mobile-nav>
+    </main>
+  </ng-container>
+  <ng-template #nodata>
+    <div class="loader-container">
+      <app-loader></app-loader>
+    </div>
+  </ng-template>
+</ng-container>

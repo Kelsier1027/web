@@ -1,0 +1,63 @@
+<div
+  class="bottom-content"
+  [@slideInOut]="animationState"
+  *ngIf="currentScreenSize !== 'small' && animationState === 'in'"
+>
+  <div class="product-comparison">
+    <button class="nav-arrow">
+      <img
+        src="../../../assets/icons/nav-arrow.png"
+        (click)="toggleAnimation()"
+      />
+    </button>
+    <div class="comparison-content" *ngFor="let item of items; let i = index">
+      <img
+        class="comparison-close"
+        src="../../../assets/icons/Clear_Mobile.png"
+        (click)="removeAt(i)"
+      />
+      <div class="comparison-item">
+        <div class="item-img" (click)="routeToProduct(item.itemId)">
+          <img [src]="item.imgUrl" alt="Product Image" />
+        </div>
+        <div class="item-group">
+          <div class="item-name" (click)="routeToProduct(item.itemId)">
+            {{ item.name }}
+          </div>
+          <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+          <div class="item-price" *ngIf="item.price != 999999999">
+            {{ item.price | tax : true }}
+          </div>
+          <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+          <div class="item-price" *ngIf="item.price == 999999999">
+            暫不提供
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="comparison-content"
+      *ngFor="let item of emptyItems; let i = index"
+    >
+      <div class="comparison-span">比較商品{{ items.length + i + 1 }}</div>
+    </div>
+
+    <div class="comparison-list">
+      <span class="prompt-text">需選擇 2 項商品進行比較</span>
+      <button (click)="onComparison()">
+        比較 {{ items.length }} / {{ maxCompareCount }}
+      </button>
+      <a class="clear" (click)="clearAll()">全部清除</a>
+    </div>
+  </div>
+</div>
+<div class="bottom-button" *ngIf="showBottomButton" (click)="toggleAnimation()">
+  <div class="bottom-group">
+    <button class="bottom-text">
+      <img src="../../../assets/icons/up.png" />
+      <span>已選{{ items.length }}項產品</span>
+    </button>
+    <button (click)="onComparison()">比較</button>
+  </div>
+</div>

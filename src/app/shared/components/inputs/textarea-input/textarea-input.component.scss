@@ -1,0 +1,55 @@
+.input-wrapper {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+
+  &.outside {
+    .input-box {
+      width: calc(100% - 4rem - 16px);
+    }
+  }
+  .label_top {
+    color: #333333;
+    width: 100%;
+    display: flex;
+    margin-bottom: 4px;
+    justify-content: space-between;
+    span{
+      font-weight: 500;
+    }
+  }
+  .input {
+    width: 100%;
+    background-color: #fff;
+  }
+  .input-box {
+    width: 100%;
+  }
+  .hint {
+    margin-top: 4px;
+    font-size: 12px;
+  }
+  .mat-form-field {
+    width: 100%;
+    textarea {
+      height: 76px;
+      resize: none;
+    }
+  }
+  .reason {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+  .error {
+    // padding: 8px 0px 0px 16px;
+    font-weight: 400;
+    font-size: 12px;
+  }
+}
+
+.count {
+  font-size: 13px;
+  line-height: 19px;
+  color: #999;
+}

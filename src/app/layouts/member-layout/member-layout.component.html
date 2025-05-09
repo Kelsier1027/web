@@ -1,0 +1,9 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <div class="member-layout">
+    <app-member-header-mobile-nav *ngIf="currentScreenSize === 'small'" [title]="title"
+      (action)="redirect()"></app-member-header-mobile-nav>
+    <ng-content> </ng-content>
+    <app-home-footer></app-home-footer>
+    <app-footer-mobile-nav *ngIf="currentScreenSize === 'small'"></app-footer-mobile-nav>
+  </div>
+</ng-container>

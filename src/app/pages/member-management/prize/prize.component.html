@@ -1,0 +1,321 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu active="獎勵活動達成禮"></app-member-menu>
+      <main class="content">
+        <app-title>獎勵活動達成禮</app-title>
+        <div class="prize-tab">
+          <app-status-filter (tabChange)="onTabChange($event.status)">
+            <ng-template [filterConfig]="{ value: { status: 1 } }"
+              >待領達成禮 ({{ unclaimed }})</ng-template
+            >
+            <ng-template [filterConfig]="{ value: { status: 2 } }"
+              >領取紀錄</ng-template
+            >
+          </app-status-filter>
+        </div>
+
+        <ng-container *ngIf="tabIndex$ | async as tabIndex">
+          <app-table-container *ngIf="currentScreenSize !== 'small'">
+            <app-table
+              [dataSource]="
+                dataSource
+                  | paginate
+                    : { itemsPerPage: 10, currentPage: pagination?.currentPage }
+              "
+              *ngIf="tabIndex === 1"
+              [noDataCaption]="'查無您的待領達成禮。'"
+            >
+              <ng-template
+                [column]="{
+                  key: 'activityName',
+                  title: '活動名稱',
+                  width: 370
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{ key: 'giftName', title: '贈品名稱', width: 370 }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'quantity',
+                  title: '數量',
+                  width: 100,
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'expireTime',
+                  title: '兌換截止日期',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 156
+                }"
+                let-value
+              >
+                <p>{{ value.cell | date : "yyyy/MM/dd" }}</p>
+              </ng-template>
+            </app-table>
+            <app-table
+              [dataSource]="dataSource | paginate : paginateArgs"
+              *ngIf="tabIndex === 2"
+              [noDataCaption]="'查無您的待取紀錄。'"
+            >
+              <ng-template
+                [column]="{
+                  key: 'activityId',
+                  title: '活動編號',
+                  cellAlign: 'center',
+                  width: 88
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'activityDate',
+                  title: '活動日期',
+                  width: 120
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'activityName',
+                  title: '活動名稱',
+                  width: 182
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{ key: 'giftName', title: '贈品名稱', width: 182 }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'quantity',
+                  title: '數量',
+                  width: 60,
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'expireTime',
+                  title: '兌換截止日期',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 116
+                }"
+                let-value
+              >
+                <p>{{ value.cell | date : "yyyy/MM/dd" }}</p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'giftTime',
+                  title: '兌換日期',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 112
+                }"
+                let-value
+              >
+                <p>{{ value.cell | date : "yyyy/MM/dd" }}</p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'purchaseNo',
+                  width: 136,
+                  title: '採購單號',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p
+                  *ngIf="giftList[value.index].canClick"
+                  class="link"
+                  [routerLink]="['/Member/Order/', value.cell]"
+                  style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;"
+                >
+                  {{ value.cell }}
+                </p>
+                <p
+                  *ngIf="!giftList[value.index].canClick"
+                >
+                  {{ value.cell }}
+                </p>
+              </ng-template>
+            </app-table>
+          </app-table-container>
+          <div class="pagination">
+            <pagination-controls
+              (pageChange)="onPageChange($event)"
+              [maxSize]="maxSize"
+              [directionLinks]="true"
+              [autoHide]="!dataSource?.length"
+              [responsive]="true"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+              class="paginate"
+            >
+            </pagination-controls>
+            <app-icon-select
+              *ngIf="dataSource?.length"
+              class="select"
+              (valueChange)="pageSizeChange($event)"
+              [isBindForm]="false"
+              [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: '',
+                styleMargin: '0px 0px 0px 0px',
+                options: pageSizeOption,
+                value: selectedPageSize,
+                class: '',
+                placeholder: '請選擇幾個'
+              }"
+            >
+            </app-icon-select>
+          </div>
+          <ng-container *ngIf="currentScreenSize === 'small' && tabIndex === 1">
+            <app-mobile-table-container
+              *ngIf="dataSource?.length; else unClaimedNoDataMobile"
+            >
+              <app-mobile-table-item
+                *ngFor="
+                  let data of dataSource
+                    | paginate
+                      : {
+                          itemsPerPage: 10,
+                          currentPage: pagination?.currentPage
+                        };
+                  let last = last
+                "
+                [isLast]="last"
+              >
+                <app-status-card [isActive]="true">
+                  <ng-template #headerTitle>
+                    <div class="product">
+                      <app-status-type color="blue">活動</app-status-type
+                      >{{ data.activityName }}
+                    </div>
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '贈品名稱' }">{{
+                    data.giftName
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '數量' }">{{
+                    data.quantity
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '截止日期' }">{{
+                    data.expireTime | date : "yyyy/MM/dd"
+                  }}</ng-template>
+                </app-status-card>
+              </app-mobile-table-item>
+            </app-mobile-table-container>
+          </ng-container>
+          <ng-container *ngIf="currentScreenSize === 'small' && tabIndex === 2">
+            <app-mobile-table-container
+              *ngIf="dataSource?.length; else recordNoDataMobile"
+            >
+              <app-mobile-table-item
+                *ngFor="
+                  let data of dataSource
+                    | paginate
+                      : {
+                          itemsPerPage: 10,
+                          currentPage: pagination?.currentPage
+                        };
+                  let last = last
+                "
+                [isLast]="last"
+              >
+                <app-status-card [isActive]="true">
+                  <ng-template #headerTitle>
+                    <div class="product">
+                      <app-status-type color="blue">活動</app-status-type
+                      >{{ data.activityName }}
+                    </div>
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '活動編號' }">{{
+                    data.activityId
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '活動日期' }">{{
+                    data.activityDate
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '贈品名稱' }">{{
+                    data.giftName
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '數量' }">{{
+                    data.quantity
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '截止日期' }">{{
+                    data.expireTime | date : "yyyy/MM/dd"
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '兌換日期' }">{{
+                    data.giftTime | date : "yyyy/MM/dd"
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '採購單號' }">
+                    <p
+                      *ngIf="data.canClick"
+                      class="link"
+                      [routerLink]="['/Member/Order/', data.purchaseNo]"
+                    >
+                      {{ data.purchaseNo }}
+                    </p>
+                    <p
+                      *ngIf="!data.canClick"
+                      class="link"
+                    >
+                      {{ data.purchaseNo }}
+                    </p>
+                  </ng-template
+                  >
+                </app-status-card>
+              </app-mobile-table-item>
+            </app-mobile-table-container>
+          </ng-container>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>
+
+<ng-template #unClaimedNoDataMobile>
+  <div class="no-data-mobile">查無您的待領達成禮。</div>
+</ng-template>
+
+<ng-template #recordNoDataMobile>
+  <div class="no-data-mobile">查無您的待取紀錄。</div>
+</ng-template>

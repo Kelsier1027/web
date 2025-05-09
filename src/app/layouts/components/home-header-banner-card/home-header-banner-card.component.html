@@ -1,0 +1,34 @@
+<article class='slide-card'>
+  <header class='slide-card-title'><span>👍 熱門促銷</span>
+    <div class='arrows'>
+      <button mat-stroked-button (click)="slidePrev()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+
+      <div class="swiper-pagination-card"></div>
+      <button mat-stroked-button (click)="slideNext()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
+  </header>
+  <section class='slide-card-body'>
+    <swiper #swiper [config]="config" (swiper)="onSwiper($event)" (slideChange)="onSlideChange()">
+      <ng-container *ngFor="let slide of slidesOption; index as i">
+        <ng-template swiperSlide>
+          <div *ngFor="let data of slide" class="box cursor-pointer">
+            <app-product-card-row [imgWidth]="84">
+              <img img class="img" [src]="data.images.pc" alt="">
+              <app-product-card-title class="title" title>{{ data.name }}</app-product-card-title>
+              <app-product-card-sub-title class="banner-sub-title" subTitle>{{ data.type
+                }}</app-product-card-sub-title>
+              <app-product-card-tag tag *ngFor="let tag of data.tag" [color]="tag.color">{{ tag.value }}
+              </app-product-card-tag>
+              <app-product-card-price class="price" price>{{ data.price | tax }}</app-product-card-price>
+            </app-product-card-row>
+          </div>
+
+        </ng-template>
+      </ng-container>
+    </swiper>
+  </section>
+</article>

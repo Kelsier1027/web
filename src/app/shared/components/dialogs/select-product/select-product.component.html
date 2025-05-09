@@ -1,0 +1,627 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <ng-container *ngIf="detail">
+    <app-header-inline-close-layout
+      [data]="data"
+      [detailUrl]="detail.detailUrl"
+      *ngIf="currentScreenSize !== 'small'"
+    >
+      <form class="product-form" [formGroup]="group" (ngSubmit)="onSubmit()">
+        <div class="layout">
+          <div class="wrapper">
+            <div class="slider">
+              <section class="slide-card-body">
+                <swiper #swiper [config]="config">
+                  <ng-container
+                    *ngFor="let slide of detail.prodImg; index as i"
+                  >
+                    <ng-template swiperSlide>
+                      <div class="card">
+                        <div class="images-wrapper">
+                          <img [src]="slide" [alt]="i" />
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ng-container>
+                </swiper>
+                <div class="buttons" *ngIf="number(detail.prodImg?.length) > 1">
+                  <button
+                    type="button"
+                    class="prev-button"
+                    (click)="slidePrev()"
+                  >
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                  </button>
+                  <button
+                    type="button"
+                    class="next-button"
+                    (click)="slideNext()"
+                  >
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                  </button>
+                </div>
+              </section>
+            </div>
+            <ul class="right-layout">
+              <div class="title-wrapper">
+                <p class="title">{{ detail.itemName }}</p>
+                <p class="sub-title">
+                  {{ detail.description }}
+                </p>
+              </div>
+
+              <div
+                class="product-detail"
+                *ngIf="
+                  detail.accessories && number(detail.accessories?.length) > 0
+                "
+              >
+                <p
+                  *ngFor="let accessory of detail!.accessories"
+                  class="product-text"
+                >
+                  <app-icon class="accessory-icon" iconName="bag"></app-icon>
+                  {{ accessory.accessoryName }}
+                </p>
+                <p *ngIf="detail.iorderDescription" class="product-text">
+                  <app-icon class="accessory-icon" iconName="info"></app-icon>
+                  {{ detail!.iorderDescription }}
+                </p>
+              </div>
+
+              <p
+                class="select-item"
+                [ngClass]="{ 'promo-item-wrapper': detail.promoInfos.length }"
+              >
+                <span class="select-title">促銷</span>
+                <app-icon-select
+                  class="promotion"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'promoId',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: promoInfoOption,
+                    class: '',
+                    placeholder: '選擇促銷方案',
+                    validations: {
+                      hasErrorMessage: true,
+                      errorMessage: [{ type: 'required', message: '必填欄位' }]
+                    }
+                  }"
+                >
+                </app-icon-select>
+              </p>
+              <div
+                class="select-item promo-item"
+                *ngIf="detail.promoInfos.length"
+              >
+                <ng-container
+                  *ngFor="
+                    let info of detail.promoInfos!
+                      | productListPromos : this.group.value.promoId
+                  "
+                >
+                  <app-product-card-tag
+                    [gap]="false"
+                    [color]="promoTagLabel[promoTagLabelIndexModify(info.promoCategory)][promoTagLabelIndexModify(info.promoMethod)]?.color"
+                    padding="1px 3px"
+                  >
+                    {{ promoTagLabel[promoTagLabelIndexModify(info.promoCategory)][promoTagLabelIndexModify(info.promoMethod)]?.text[0] }}
+                  </app-product-card-tag>
+                </ng-container>
+                <div class="promotion-name">
+                  {{ detail.promoInfos! | promotionName : promoId!.value }}
+                </div>
+              </div>
+              <p class="select-item">
+                <span class="select-title">選倉</span>
+                <app-icon-select
+                  class="select-positions"
+                  (valueChange)="selectSubInventory($event)"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'subinventoryCode',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: subInventoryOption,
+                    value: subInventory,
+                    class: '',
+                    placeholder: '選擇倉',
+                    validations: {
+                      hasErrorMessage: true,
+                      errorMessage: [{ type: 'required', message: '必填欄位' }]
+                    }
+                  }"
+                >
+                </app-icon-select>
+              </p>
+              <div class="select-item">
+                <span class="select-title">數量</span>
+                <div class="count-wrapper">
+                  <app-increment-input
+                    class="select-number"
+                    (numberChange)="changeQty($event)"
+                    [max]="currentSubInventory?.qty!"
+                    [field]="countOption"
+                    matTooltip="您選購的商品須符合購買限制且小於庫存數量"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipClass]="'above'"
+                    [matTooltipDisabled]="
+                      currentQty < currentSubInventory?.qty!
+                    "
+                  >
+                  </app-increment-input>
+                </div>
+              </div>
+            </ul>
+          </div>
+        </div>
+        <footer class="dialog-footer">
+          <section class="footer-wrapper">
+            <div class="total">
+              總計<span class="count">${{ getTotal() | number }}</span
+              >(未)
+            </div>
+            <button
+              type="submit"
+              class="button"
+              mat-raised-button
+              color="primary"
+              [disabled]="group.invalid || !countOption._value"
+            >
+            我要訂購
+            </button>
+          </section>
+        </footer>
+      </form>
+    </app-header-inline-close-layout>
+    <section
+      class="mobile-layout mobile-promotion"
+      *ngIf="currentScreenSize === 'small'"
+    >
+      <header class="mobile-header">
+        <div class="images-wrapper" *ngIf="detail.prodImg">
+          <img [src]="detail.prodImg[0]" />
+        </div>
+        <p>{{ detail.itemName }}</p>
+        <button
+          mat-icon-button
+          class="close-button icon-outside"
+          mat-dialog-close
+        >
+          <mat-icon class="close-icon material-icons color_white"
+            >close</mat-icon
+          >
+        </button>
+      </header>
+
+      <div class="mobile-promotion-wrapper">
+        <form class="form" [formGroup]="group" (ngSubmit)="onSubmit()">
+        <div class="mobile-promotion-content">
+          <p class="product-chosses-title">
+            <span>選擇促銷方案</span>
+          </p>
+          <ng-container
+            *ngIf="detail.promoInfos && detail.promoInfos.length > 0"
+          >
+            <ng-container *ngFor="let info of detail.promoInfos">
+              <div
+                class="product-chosses-item"
+                [ngClass]="{ active: info.id === currentPromotion?.id }"
+                (click)="selectPromotion(info)"
+                *ngIf="info.name != '' "
+              >
+                <div class="item-left">
+                  <div class="grey-box">
+                    <div class="product-tag">
+                      <app-product-card-tag
+                        [gap]="false"
+                        [color]="promoTagLabel[promoTagLabelIndexModify(info.promoCategory)][promoTagLabelIndexModify(info.promoMethod)]?.color"
+                        padding="1px"
+                      >
+                        {{ promoTagLabel[promoTagLabelIndexModify(info.promoCategory)][promoTagLabelIndexModify(info.promoMethod)]?.text.slice(0, 1) }}
+                      </app-product-card-tag>
+                    </div>
+                    <span>{{ info.name }}</span>
+                  </div>
+
+                  <span
+                    *ngIf="info.subPromoInfo && info.subPromoInfo.length > 0"
+                    class="plus"
+                    >+</span
+                  >
+                  <ng-container
+                    *ngFor="
+                      let subPromo of info.subPromoInfo | uniqBy : 'promoMethod'
+                    "
+                  >
+                    <div class="product-tag">
+                      <app-product-card-tag
+                        [gap]="false"
+                        [color]="promoTagLabel[promoTagLabelIndexModify(subPromo.promoCategory)][promoTagLabelIndexModify(subPromo.promoMethod)]?.color"
+                        padding="1px"
+                      >
+                        {{
+                          promoTagLabel[promoTagLabelIndexModify(subPromo.promoCategory)][promoTagLabelIndexModify(subPromo.promoMethod)]?.text.slice(0, 1)
+                        }}
+                      </app-product-card-tag>
+                    </div>
+                  </ng-container>
+                </div>
+                <p class="price-wrapper">
+                  <span class="price">{{
+                    info | totalPrice : 1 : detail.unitPrice : 0
+                  }}</span>
+                </p>
+              </div>
+              <div *ngIf="currentPromotion && currentPromotion.id === info.id">
+                <app-selected-detail-card
+                  (mobileClick)="isShowMobileAddition = true"
+                  class="mobile-select-detail-card"
+                  [detailTitle]="
+                    currentScreenSize === 'small'
+                      ? info.promoString
+                      : currentPromotion.promoMethod ===
+                        PromoMethod.AdditionalItem
+                      ? '加購詳情'
+                      : promoTagLabel[promoTagLabelIndexModify(currentPromotion.promoCategory)][promoTagLabelIndexModify(currentPromotion.promoMethod)]?.text +
+                        '詳情'
+                  "
+                  [date]="currentPromotion.promoString"
+                  [href]="
+                    currentPromotion.subMethod === SubMethod.AttachedAdditional
+                      ? this.additionalItemLink
+                      : ''
+                  "
+                  linkText="查看所有加購"
+                >
+                  <div class="product-tag" tag>
+                    <app-product-card-tag
+                      [gap]="false"
+                      color="{{
+                        promoTagLabel[promoTagLabelIndexModify(currentPromotion.promoCategory)][promoTagLabelIndexModify(currentPromotion.promoMethod)]?.color
+                      }}"
+                      padding="1px"
+                    >
+                      {{
+                        promoTagLabel[promoTagLabelIndexModify(currentPromotion.promoCategory)][promoTagLabelIndexModify(currentPromotion.promoMethod)]?.text.slice(
+                          0,
+                          1
+                        )
+                      }}
+                    </app-product-card-tag>
+                  </div>
+
+                  <!-- <ng-container [ngSwitch]="field.matType"> -->
+                  <app-discount-card
+                    [defaultStyle]="false"
+                    *ngIf="currentPromotion.promoMethod == PromoMethod.Discount"
+                    detail-body
+                    [detail]="currentPromotion"
+                  ></app-discount-card>
+                  <div
+                    *ngIf="currentPromotion.promoMethod == PromoMethod.Gift"
+                    detail-body
+                    class="product-detail-card mt-8"
+                  >
+                    <!-- <span class="tag">滿$40,745元，可享贈品優惠</span> -->
+                    <p class="hint mt-12">
+                      {{ currentPromotion.promoString }}
+                    </p>
+                    <div class="product-detail-wrapper">
+                      <app-images-card>
+                        <app-product-detail-card body>
+                        </app-product-detail-card>
+                        <ng-container footer>
+                          <div class="mt-20">
+                            活動期間
+                            {{
+                              currentPromotion.startDate | date : "yyyy/MM/dd"
+                            }}~{{
+                              currentPromotion.endDate | date : "yyyy/MM/dd"
+                            }}
+                          </div>
+                        </ng-container>
+                      </app-images-card>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="
+                      this.detail.bindingProductAttachedPromoInfos.length > 0
+                    "
+                    detail-body
+                    class="product-detail-card"
+                  >
+                    <div class="product-detail-wrapper">
+                      <div class="product-detail-wrapper additional">
+                        <app-images-card
+                          [simple]="true"
+                          [data]="{
+                            imgUrl: detail.prodImg[0],
+                            title: detail.itemName,
+                            price:
+                              detail.priceWithTax
+                              | currency : '' : 'symbol' : '1.0-0',
+                            discount:
+                              detail.unitPrice
+                              | currency : '' : 'symbol' : '1.0-0'
+                          }"
+                        ></app-images-card>
+                        <app-icon
+                          [iconName]="'add'"
+                          class="plus-sign"
+                        ></app-icon>
+                        <div
+                          *ngFor="
+                            let promos of this.detail
+                              .bindingProductAttachedPromoInfos
+                          "
+                        >
+                          <div *ngFor="let item of promos.products">
+                            <app-images-card
+                              [simple]="true"
+                              [data]="{
+                                imgUrl: item.prodImg[0],
+                                title: item.itemName,
+                                price:
+                                  item.promoInfos
+                                  | currency : '' : 'symbol' : '1.0-0',
+                                discount:
+                                  item.unitPrice
+                                  | currency : '' : 'symbol' : '1.0-0'
+                              }"
+                            ></app-images-card>
+                          </div>
+                        </div>
+                        <a class="slide-next" [href]="additionalItemLink">
+                          <img
+                            src="../../../assets/icons/arrow_right.svg"
+                            alt=""
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="
+                      currentPromotion.promoMethod ==
+                        PromoMethod.AdditionalItem &&
+                      currentPromotion.subMethod == SubMethod.ChosenAdditional
+                    "
+                    detail-body
+                    class="product-detail-card"
+                  >
+                    <div class="product-detail-wrapper">
+                      <app-order-card
+                        [defaultStyle]="false"
+                        [detail]="{
+                          header: currentPromotion.name,
+                          startDate: currentPromotion.startDate,
+                          endDate: currentPromotion.endDate,
+                          products: getProducts(currentPromotion)
+                        }"
+                      >
+                      </app-order-card>
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="currentPromotion.promoMethod == PromoMethod.Combo"
+                    detail-body
+                    class="product-detail-card"
+                  >
+                    <div class="product-detail-wrapper">
+                      <app-order-card
+                        [defaultStyle]="false"
+                        [detail]="{
+                          header: currentPromotion.name,
+                          startDate: currentPromotion.startDate,
+                          endDate: currentPromotion.endDate,
+                          products: getProducts(currentPromotion)
+                        }"
+                      >
+                      </app-order-card>
+                    </div>
+                  </div>
+                  <app-bulk-card
+                    *ngIf="currentPromotion.promoMethod == PromoMethod.Bulk"
+                    detail-body
+                    [detail]="{
+                      name: currentPromotion.name,
+                      remark: '量購說明',
+                      startDate: currentPromotion.startDate,
+                      endDate: currentPromotion.endDate,
+                      data: currentPromotion.bulkGradeSettings
+                    }"
+                  >
+                  </app-bulk-card>
+                </app-selected-detail-card>
+                <app-selected-detail-card
+                  class="mobile-select-detail-card"
+                  *ngFor="let subPromo of currentPromotion.subPromoInfo"
+                  (mobileClick)="isShowMobileAddition = true"
+                  [detailTitle]="
+                    currentScreenSize === 'small'
+                      ? info.promoString
+                      : promoTagLabel[promoTagLabelIndexModify(subPromo.promoCategory)][promoTagLabelIndexModify(subPromo.promoMethod)]?.label + '詳情'
+                  "
+                  [date]="subPromo.promoString"
+                  [href]="
+                    subPromo.promoMethod === PromoMethod.AdditionalItem
+                      ? this.additionalItemLink
+                      : ''
+                  "
+                  linkText="查看所有加購"
+                >
+                  <div tag class="product-tag">
+                    <app-product-card-tag
+                      tag
+                      [gap]="false"
+                      color="{{ promoTagLabel[promoTagLabelIndexModify(subPromo.promoCategory)][promoTagLabelIndexModify(subPromo.promoMethod)]?.color }}"
+                      padding="1px"
+                    >
+                      {{
+                        promoTagLabel[promoTagLabelIndexModify(subPromo.promoCategory)][promoTagLabelIndexModify(subPromo.promoMethod)]?.text.slice(0, 1)
+                      }}
+                    </app-product-card-tag>
+                  </div>
+
+                  <div
+                    *ngIf="true"
+                    class="product-detail-card mt-8"
+                    detail-body
+                  >
+                    <ng-container
+                      *ngIf="subPromo.products && subPromo.products.length > 0"
+                    >
+                      <div
+                        class="product-detail-wrapper"
+                        *ngFor="let product of subPromo.products"
+                      >
+                        <app-images-card
+                          [data]="{ imgUrl: product.prodImg[0] }"
+                        >
+                          <app-product-detail-card
+                            body
+                            [data]="{
+                              title: product.itemName,
+                              hint: product.description,
+                              price:
+                                product.promoPrice
+                                | currency : '' : 'symbol' : '1.0-0',
+                              discount:
+                                product.unitPrice
+                                | currency : '' : 'symbol' : '1.0-0',
+                              priceHint: '(未)'
+                            }"
+                          >
+                          </app-product-detail-card>
+                          <ng-container footer>
+                            <div class="mt-20">
+                              活動期間
+                              {{ subPromo.startDate | date : "yyyy/MM/dd" }}~{{
+                                subPromo.endDate | date : "yyyy/MM/dd"
+                              }}
+                            </div>
+                          </ng-container>
+                        </app-images-card>
+                      </div>
+                    </ng-container>
+                  </div>
+                </app-selected-detail-card>
+              </div>
+            </ng-container>
+          </ng-container>
+          <div
+            *ngIf="!detail.isLimit"
+            class="product-chosses-item"
+            [ngClass]="{ active: currentPromotion === null }"
+            (click)="selectPromotion(null)"
+          >
+            <div class="item-left">
+              <div class="grey-box">
+                <div class="product-tag">
+                  <app-product-card-tag [gap]="false" color="gray" padding="1px"
+                    >$</app-product-card-tag
+                  >
+                </div>
+                <span>經銷價</span>
+              </div>
+            </div>
+            <p class="price-wrapper">
+              <span class="price">{{
+                detail.unitPrice | currency : "" : "symbol" : "1.0-0"
+              }}</span>
+            </p>
+          </div>
+        </div>
+          <div class="product-label mt-8">
+            <span class="product-tag">選倉</span>
+            <app-icon-select
+              class="select"
+              (valueChange)="selectSubInventory($event)"
+              [isBindForm]="false"
+              [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: 'subinventoryCode',
+                options: subInventoryOption,
+                value: subInventory,
+                styleMargin: '0px 0px 0px 0px',
+                class: '',
+                placeholder: '選擇倉'
+              }"
+            >
+            </app-icon-select>
+            <div class="custom-icon">
+              <app-icon
+                [iconName]="'info'"
+                style="color: #558EE3;"
+                #tooltip="matTooltip"
+                matTooltip="倉別將依據您結帳的到貨地址不同的到貨時間、運費"
+              ></app-icon>
+            </div>
+          </div>
+          <div class="product-label mt-8">
+            <span class="product-tag">數量</span>
+            <div class="product-number-card">
+              <div class="left">
+                  <div class="count-wrapper">
+                    <app-increment-input
+                      #incrementInput
+                      (numberChange)="changeQty($event)"
+                      class="select-number"
+                      [disableCond]="
+                        !currentSubInventory || currentPromotion === undefined
+                      "
+                      [field]="countOption"
+                      #tooltip="matTooltip"
+                      matTooltip="您選購的商品須符合購買限制且小於庫存數量"
+                      [matTooltipPosition]="'above'"
+                      [matTooltipClass]="'above'"
+                      [max]="currentSubInventory?.qty!"
+                      [matTooltipDisabled]="
+                        currentQty < currentSubInventory?.qty!
+                      "
+                    >
+                    </app-increment-input>
+                  </div>
+              </div>
+              <div class="right">
+                <!-- <p class="hint">已加購2個</p> -->
+                <!-- <p class="text">
+                  總計<span class="total">
+                    {{
+                      currentPromotion
+                        | totalPrice
+                          : currentQty
+                          : detail.unitPrice
+                          : getAdditionalItemsTotalPrice()
+                    }} </span
+                  >(未)
+                </p>-->
+                <div class="total">
+                  總計<span class="count">${{ getTotal() | number }}</span
+                  >(未)
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="mobile-footer">
+            <button
+              type="submit"
+              class="button"
+              mat-raised-button
+              color="primary"
+              [disabled]="group.invalid || !countOption._value"
+            >
+            我要訂購
+            </button>
+          </footer>
+        </form>
+      </div>
+    </section>
+  </ng-container>
+</ng-container>

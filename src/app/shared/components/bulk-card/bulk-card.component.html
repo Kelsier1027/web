@@ -1,0 +1,25 @@
+<div class="bulk-card">
+  <header class="bulk-header">{{ detail.name }}</header>
+  <div class="bulk-remark">{{ detail.remark }}</div>
+  <div class="bulk-body">
+    <table cellspacing="0">
+      <thead>
+        <tr *ngFor="let item of detail.data | slice:0:3">
+          <th>
+            {{ item.minQuantity }}~{{ item.maxQuantity || "999" }} (個)
+          </th>
+          <td>
+            {{ item.promoPrice | tax }}
+          </td>
+        </tr>
+      </thead>
+    </table>
+    <div *ngIf="detail.data.length > 3">更多級距請至下方促銷總覽查看</div>
+  </div>
+  <footer class="bulk-footer">
+    活動期間 {{ detail.startDate | date : "yyyy/MM/dd" }}~{{
+      detail.endDate | date : "yyyy/MM/dd"
+    }}
+    <br>
+  </footer>
+</div>

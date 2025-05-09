@@ -1,0 +1,159 @@
+@import "responsive";
+.product-commodity-change-wrapper {
+  display: inline-flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.text {
+  color: #5c5c5c;
+  display: flex;
+  justify-content: space-between;
+  .delete {
+    color: #0972e3;
+    cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+  }
+}
+.text1 {
+  color: #a2a9b1;
+}
+.title {
+  font-size: 18px;
+  line-height: 26px;
+  color: #333333;
+  margin-top: 28px;
+}
+.mt-16 {
+  margin-top: 16px;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+.underline {
+  border-bottom: 1px solid #ebebeb;
+}
+
+.form {
+  border: 1px solid #c2c2c2;
+  border-radius: 6px;
+  padding: 16px;
+  overflow-y: auto;
+  &:first-child span {
+    margin: 0px;
+  }
+  &-name {
+    display: flex;
+    flex-direction: row;
+  }
+  &-data,
+  &-data-text {
+    order: 1;
+    @include pad {
+      order: 0;
+    }
+  }
+  .name-content {
+    max-width: calc(100% - 64px);
+    word-break: break-all;
+  }
+  .form-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    @include pad {
+      flex-direction: row;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      // gap: 8px;
+      width: 100%;
+      @include pad {
+        width: 50%;
+      }
+      .select {
+        width: calc(100% - 64px);
+        @include pad {
+          width: 100px;
+        }
+      }
+      .count-wrapper {
+        width: Calc(100% - 64px);
+        @include pad {
+          width: 100px;
+        }
+        ::ng-deep.mat-form-field-appearance-outline .mat-form-field-prefix {
+          min-width: auto;
+        }
+        ::ng-deep.mat-form-field-appearance-outline .mat-form-field-flex {
+          padding: 0px !important;
+        }
+      }
+    }
+  }
+  .name {
+    margin-right: 8px;
+    width: 56px;
+  }
+  .wrapper {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    height: auto;
+    flex-direction: column;
+    @include pad {
+      flex-direction: row;
+    }
+    button {
+      align-self: end;
+      width: 76px;
+    }
+  }
+  .select-input {
+    width: 100%;
+  }
+}
+
+.product-icon {
+  display: flex;
+  gap: 8px;
+  color: #858585;
+  .custom-icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.footer-wrapper {
+  margin-top: 25px;
+  gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.wrapper {
+  display: inline-block;
+  width: 75px;
+  height: 40px;
+}
+
+.datepicker-wrapper {
+  width: calc(100% - 64px);
+  @include pad {
+    width: 144px;
+  }
+}
+.user-wrapper
+  app-label-radio
+  .radio-wrapper
+  .mat-radio-group
+  .mat-radio-button {
+  margin: 0px;
+}
+
+::ng-deep app-header-layout {
+  .dialog-footer {
+    padding: 24px 0;
+  }
+}

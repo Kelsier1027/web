@@ -1,0 +1,86 @@
+.product-remind-me-wrapper {
+  display: inline-flex;
+  gap: 8px;
+  .iconWrapper {
+    display: inline-block;
+    width: 75px;
+    height: 40px;
+  }
+}
+
+.text {
+  color: #5c5c5c;
+}
+.text1 {
+  color: #a2a9b1;
+}
+.title {
+  font-size: 18px;
+  line-height: 26px;
+  color: #333333;
+  margin-top: 28px;
+}
+.mt-16 {
+  margin-top: 16px;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+.underline {
+  border-bottom: 1px solid #ebebeb;
+}
+
+.form {
+  border: 1px solid #c2c2c2;
+  border-radius: 6px;
+  padding: 16px;
+  overflow-y: auto;
+  .form-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    .item {
+      display: flex;
+      align-items: center;
+      // gap: 8px;
+      width: 50%;
+      .select {
+        width: 100px;
+      }
+      .count-wrapper {
+        width: 100px;
+        ::ng-deep.mat-form-field-appearance-outline .mat-form-field-prefix {
+          min-width: auto;
+        }
+        ::ng-deep.mat-form-field-appearance-outline .mat-form-field-flex {
+          padding: 0px !important;
+        }
+      }
+    }
+  }
+  .swtichWrapper {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+  }
+  .select-input {
+    width: 100%;
+  }
+}
+
+.product-icon {
+  display: flex;
+  gap: 8px;
+  color: #858585;
+  .custom-icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.footer-wrapper {
+  margin-top: 25px;
+  gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+}

@@ -1,0 +1,57 @@
+@import '~bootstrap/dist/css/bootstrap.css';
+@import "responsive";
+
+.member-wrapper{
+    display: flex;
+    display: block;
+    background: #ffffff;
+    border-top: 1px solid #ebebeb;
+    @include pad {
+        padding-top: 1.5rem;
+    }
+    p {
+        margin: 0px;
+    }
+    .container {
+        display: flex;
+        max-width: 100%;
+        padding: 0;
+        @include pad {
+            max-width: 65%;        
+        }
+    }
+    .header-wrapper{
+            @include pad {
+                display: flex;
+                justify-content: center;
+            }
+        .topHeader{
+            display: none;
+            @include pad {
+                width: 63.5%;
+                display: flex;
+                align-items: center;
+                color: #858585;
+                font-size: 13px;
+                padding: 0 0 1rem 0;
+            }
+            img{
+                @include pad {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        
+            .mat-icon{
+                @include pad {
+                    color: #ADADAD;
+                }
+            }
+        }
+    }
+}
+
+
+.content {
+  flex: 1 1 100%;
+}

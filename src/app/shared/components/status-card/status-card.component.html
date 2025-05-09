@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="header" [ngClass]="{ active: isActive }">
+    <div class="header-title">
+      <ng-container *ngTemplateOutlet="headerTitle"></ng-container>
+    </div>
+    <ng-container *ngIf="!shortenedHeight">
+      <ng-container *ngTemplateOutlet="headerEnd"></ng-container>
+    </ng-container>
+    <button
+      class="extend-button"
+      (click)="isExtend = !isExtend"
+      *ngIf="shortenedHeight"
+    >
+      <app-icon
+        *ngIf="!isExtend; else minus"
+        class="add"
+        [iconName]="'add'"
+      ></app-icon>
+      <ng-template #minus>
+        <app-icon class="minus" [iconName]="'minus'"></app-icon>
+      </ng-template>
+    </button>
+  </div>
+  <div
+    class="content"
+    [ngClass]="
+      shortenedHeight && !isExtend ? 'card-height-' + shortenedHeight : ''
+    "
+  >
+    <ng-container *ngFor="let item of items">
+      <div
+        class="card-row"
+        *ngIf="!item.statusItem.isColumn; else column"
+        [ngClass]="{ cartbtnRwd: item.statusItem.title == 'RWD按鈕' }"
+      >
+        <div
+          class="item-title"
+          *ngIf="item.statusItem.title != 'RWD按鈕'"
+          [ngClass]="{ 'card-title-blue': item.statusItem.title == '取消訂單' }"
+        >
+          {{ item.statusItem.title }}
+        </div>
+        <ng-container *ngTemplateOutlet="item.templateRef"></ng-container>
+      </div>
+      <ng-template #column>
+        <div class="card-column">
+          <ng-container *ngTemplateOutlet="item.templateRef"></ng-container>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

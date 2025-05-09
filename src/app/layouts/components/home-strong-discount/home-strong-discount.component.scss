@@ -1,0 +1,110 @@
+.slide-card {
+  position: relative;
+
+  .controllButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+
+    .page {
+      margin: 10px;
+
+      &.swiper-pagination-custom {
+        width: auto;
+      }
+    }
+
+    .slideButton {
+      background: #fff;
+      border-radius: 50%;
+      border: 1px solid #ebebeb;
+      width: 48px;
+      height: 48px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .box {
+    background: #fff;
+    border: 1px solid #ebebeb;
+
+    &:hover > .cart-wrapper {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+
+    .product-control-column {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cart-wrapper {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s 0.3s;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      gap: inherit;
+      padding-bottom: 0;
+    }
+
+    .progressBar {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      height: 60px;
+
+      .mat-progress-bar {
+        height: 30px;
+        border-radius: 20px;
+        border: 1px solid #d6d6d6;
+
+        ::ng-deep .mat-progress-bar-buffer {
+          background-color: #fff;
+        }
+      }
+
+      .conditionText {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(
+          to right,
+          white 0%,
+          #ed1c24 100%
+        ); // 使用 linear-gradient 設定漸層文字顏色
+        -webkit-background-clip: text; // 使用 -webkit-background-clip: text; 讓文字只在背景範圍內可見
+        color: transparent; // 設定文字顏色為透明
+        width: calc(100% - 48px);
+      }
+
+      ::ng-deep .mat-progress-bar-fill::after {
+        background-color: #ed1c24;
+      }
+    }
+
+    .divide {
+      border: 1px dashed #d6d6d6;
+    }
+
+    .gray {
+      color: #858585;
+    }
+
+    .mb-5px {
+      margin-bottom: 5px;
+    }
+
+    .mb-10px {
+      margin-bottom: 10px;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+  }
+}

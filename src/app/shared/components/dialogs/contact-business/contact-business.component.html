@@ -1,0 +1,45 @@
+<app-header-layout [data]="data">
+  <app-loading-mask [showIf]="isLoading"></app-loading-mask>
+  <ng-container *ngIf="apiResponse | async as sales">
+    <section class="dialog-wrapper">
+      <div class="left">
+        <p>我的業務</p>
+        <p class="name">{{ sales.empName }}</p>
+      </div>
+      <div class="right">
+        <p class="items">
+          <span class="wrapper">
+            <app-icon [iconName]="'blue_phone'"></app-icon>
+          </span>
+          {{ sales.tel }}
+        </p>
+        <p class="items">
+          <span class="wrapper">
+            <app-icon [iconName]="'blue_skype'"></app-icon>
+          </span>
+          {{ sales.skype }}
+        </p>
+        <p class="items">
+          <span class="wrapper">
+            <app-icon [iconName]="'blue_line'"></app-icon> </span
+          >{{ sales.line }}
+        </p>
+        <p class="items">
+          <span class="wrapper">
+            <app-icon [iconName]="'blue_email'"></app-icon>
+          </span>
+          {{ sales.mail }}
+        </p>
+      </div>
+    </section>
+  </ng-container>
+
+  <footer class="dialog-footer">
+    <section class="footer-wrapper">
+      <button class="button" mat-stroked-button (click)="cancel()">關閉</button>
+      <button class="button" mat-raised-button color="primary" (click)="save()">
+        請業務聯繫我
+      </button>
+    </section>
+  </footer>
+</app-header-layout>

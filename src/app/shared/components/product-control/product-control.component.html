@@ -1,0 +1,56 @@
+<button
+  (click)="addToCart.emit()"
+  class="action-button"
+  *ngIf="displayStatus === 0"
+>
+  <app-icon
+    class="action-icon"
+    iconName="cart"
+    #tooltip="matTooltip"
+    matTooltip="我要訂購"
+  ></app-icon>
+</button>
+<button
+  (click)="arrivalNotice.emit()"
+  class="action-button"
+  *ngIf="displayStatus === 1"
+>
+  <app-icon
+    class="action-icon ring"
+    iconName="ring"
+    #tooltip="matTooltip"
+    matTooltip="貨到通知我"
+  ></app-icon>
+</button>
+<button
+  (click)="contactSales.emit()"
+  class="action-button"
+  *ngIf="displayStatus === 2"
+>
+  <app-icon
+    class="action-icon call"
+    iconName="call"
+    #tooltip="matTooltip"
+    matTooltip="請洽業務"
+  ></app-icon>
+</button>
+<button class="action-button" (click)="addToComparison.emit()">
+  <app-icon
+    class="action-icon"
+    [iconName]="isCompareAddOrRemove ? 'compare' : 'compare_checked'"
+    #tooltip="matTooltip"
+    [matTooltip]="isCompareAddOrRemove ? '比較' : '移除比較'"
+  ></app-icon>
+</button>
+<button *ngIf="!isAddToWishList" (click)="addToWishList.emit()" class="action-button">
+  <app-icon
+    class="action-icon"
+    iconName="heart"
+  ></app-icon>
+</button>
+<button *ngIf="isAddToWishList" (click)="addToWishList.emit()" class="action-button">
+  <app-icon
+    class="action-icon"
+    iconName="heart_red"
+  ></app-icon>
+</button>

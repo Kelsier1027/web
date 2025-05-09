@@ -1,0 +1,78 @@
+@import "responsive";
+.dialog-footer {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-top: 16px;
+  .footer-wrapper {
+    display: flex;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 24px;
+    height: 36px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.detail {
+  margin-top: 12px;
+  border-radius: 6px;
+  border: 1px solid #ebebeb;
+  .serial-title {
+    background: #eff2f4;
+    padding: 13px 16px;
+    color: #333333;
+    font-weight: 500;
+    @include pad {
+      padding: 13px 24px;
+    }
+  }
+
+  .serial-detail {
+    display: flex;
+    padding: 20px 16px;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    color: #333333;
+    font-family: "Lato";
+    border-bottom: 1px solid #ebebeb;
+    @include pad {
+      padding: 20px 24px;
+    }
+    .copy {
+      display: none;
+      @include pad {
+        display: flex;
+        border: 1px solid #858585;
+        border-radius: 4px;
+        padding: 4px 8px;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        align-items: center;
+        color: #333333;
+        app-icon {
+          width: 16px;
+          line-height: 0px;
+        }
+      }
+    }
+  }
+}
+
+.content {
+  .text {
+    color: #5c5c5c;
+    font-family: "Lato";
+  }
+}

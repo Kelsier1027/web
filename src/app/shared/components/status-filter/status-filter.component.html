@@ -1,0 +1,11 @@
+<div class="filter">
+  <ng-container *ngFor="let content of children; let i = index">
+    <button
+      class="tab"
+      [ngClass]="{ active: activeIndex === i }"
+      (click)="onTabChange(content.filterConfig.value, i)"
+    >
+      <ng-container *ngTemplateOutlet="content.templateRef"></ng-container>
+    </button>
+  </ng-container>
+</div>

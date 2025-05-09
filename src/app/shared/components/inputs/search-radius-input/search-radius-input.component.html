@@ -1,0 +1,67 @@
+<div class="search" *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <form>
+    <mat-form-field appearance="fill" *ngIf="!onlyIcon">
+
+      <input *ngIf="currentScreenSize === 'small' else inputMediumUp" type="text" name="value" matInput
+        [(ngModel)]="inputValue" [placeholder]="placeholder" (click)="openSearchBottomSheet()" />
+
+      <ng-template #inputMediumUp>
+        <input type="text" name="value" matInput [(ngModel)]="inputValue" [placeholder]="placeholder"
+          [matAutocomplete]="auto" (input)="onInputValue($event)" />
+      </ng-template>
+      <button *ngIf="currentScreenSize != 'small'" type="button" matSuffix (click)="advancedSearchViewModal()">
+        <mat-icon svgIcon='filter' matTooltip="進階搜尋"></mat-icon>
+      </button>
+      <button *ngIf="currentScreenSize != 'small'" matSuffix (click)="submit()">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button *ngIf="currentScreenSize === 'small'" matSuffix (click)="openSearchBottomSheet()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button *ngIf="onlyIcon" type="button" matSuffix (click)="openSearchBottomSheet()">
+      <mat-icon>search</mat-icon>
+    </button>
+
+    <mat-autocomplete #auto="matAutocomplete">
+      <!-- 最近搜尋 -->
+      <div *ngIf="inputValue==undefined||inputValue=='' else matchingKeyword">
+        <div *ngIf="options!=null && options.length>0" style="
+            padding: 0 16px;
+            display: flex;
+            height: 32px;
+            justify-content: space-between;
+            align-items: center;
+          ">
+          <span style="color: #A2A9B1;">
+            最近搜尋
+          </span>
+          <span class="link" (click)="onClearHistory()">
+            全部清除
+          </span>
+        </div>
+        <mat-option *ngFor="let option of options.slice(0, maxKeywordHistoryCount); index as i" [value]="option">
+          {{option}}
+          <button mat-icon-button class="icon-outside" (click)="onDelete(i, option, $event)">
+            <mat-icon class="close-icon material-icons">close</mat-icon>
+          </button>
+        </mat-option>
+      </div>
+      <!-- Matching keyword -->
+      <ng-template #matchingKeyword>
+        <mat-option *ngFor="let option of optionsMatching" [value]="option.prefix + option.keyword + option.suffix">
+          <span>
+            {{ option.prefix }}
+            <span [innerHTML]="option.keyword | searchHighlight : inputValue"></span>
+            {{ option.suffix }}
+          </span>
+          <!-- <button mat-icon-button class="icon-outside" mat-dialog-close>
+            <mat-icon class="close-icon material-icons">close</mat-icon>
+          </button> -->
+        </mat-option>
+      </ng-template>
+    </mat-autocomplete>
+
+  </form>
+</div>

@@ -1,0 +1,8 @@
+
+<div class="Loading" *ngIf="_showIf">
+    <div><app-loader></app-loader></div>
+    <div class="too-long-message" *ngIf="!showTooLongMessage"><span>讀取中...</span></div>
+    <div> <!-- 避免跳出額外訊息的時候其他元素位移 -->
+        <div class="too-long-message" *ngIf="showTooLongMessage"><span>仍在為您取得資料，請稍候 ...</span></div>
+    </div>
+</div>

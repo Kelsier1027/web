@@ -1,0 +1,35 @@
+.dialog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 12px;
+  .footer-wrapper {
+    display: flex;
+  }
+  .link {
+    display: inline-block;
+    line-height: 13px;
+    cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 24px;
+    height: 36px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.dicard-changes-wrapper {
+  .text {
+    margin: -10px 0px 36px;
+    color: #5c5c5c;
+  }
+}

@@ -1,0 +1,129 @@
+@import "responsive";
+
+.apply {
+  background: #eff2f4;
+  border-radius: 20px;
+  color: #a2a9b1;
+}
+
+.toggle_wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.toggle_off {
+  width: 36px;
+  height: 20px;
+  cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+}
+
+.toggle_on {
+  width: 36px;
+  height: 20px;
+  cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+}
+
+.table-container {
+  margin-top: 16px;
+}
+
+.operate {
+  font-size: 13px;
+  height: 19px;
+  .link {
+    display: inline-block;
+    line-height: 13px;
+    cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .reset-password {
+    border-right: 1px solid #c2c2c2;
+    padding-right: 12px;
+    margin-right: 12px;
+  }
+}
+
+.add-account-row {
+  display: flex;
+  flex-direction: column;
+  @include pad {
+    flex-direction: column;
+  }
+  .add-account {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 0px;
+    padding: 16px;
+    @include pad {
+      justify-content: space-between;
+      padding: 0px 0px 16px 0px;
+    }
+    .title {
+      display: none;
+      font-size: 26px;
+      line-height: 36px;
+      @include pad {
+        display: inline-block;
+      }
+    }
+  }
+  .account-info {
+    position: relative;
+    background: #eff2f4;
+
+    border-radius: 6px;
+    padding: 16px;
+    line-height: 22px;
+    color: #333333;
+    @include pad {
+      border: 1px solid #d2dbe7;
+    }
+    .account-info-grade {
+      display: flex;
+      justify-content: space-between;
+    }
+    .grade {
+      display: flex;
+      align-items: center;
+    }
+    .user {
+      margin: 0px 0px 0px 24px;
+      .name {
+        font-size: 16px;
+      }
+      .email {
+        display: block;
+        padding: 0px;
+        @include pad {
+          display: inline-block;
+          padding: 0px 16px 0px 8px;
+        }
+      }
+      .link {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+        @include pad {
+          position: relative;
+          top: auto;
+          right: auto;
+        }
+      }
+    }
+  }
+  .icon-wrapper {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+  }
+}
+
+.disable {
+  color: #adadad;
+}

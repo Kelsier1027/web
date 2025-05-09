@@ -1,0 +1,43 @@
+.content {
+  padding: 0 28px;
+  height: 100%
+}
+
+.description-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #5C5C5C;
+  font-size: 14px;
+}
+
+.description {
+  flex: 1;
+}
+
+::ng-deep #body app-product-delete-filter .dialog-header {
+  position: relative;
+  width: 100%;
+  padding: 17px 17px 17px 28px;
+  margin: 0;
+}
+
+::ng-deep #body app-product-delete-filter app-header-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+::ng-deep #body app-product-delete-filter .dialog-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  & > .dialog-footer {
+    padding: 24px 28px;
+  }
+
+  .button {
+    height: 36px;
+  }
+}

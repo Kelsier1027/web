@@ -1,0 +1,208 @@
+@import "responsive";
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  @include pad {
+    padding: 0px;
+  }
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+
+  .wrapper {
+    @include pad {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+.back {
+  display: none;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 13px;
+  line-height: 19px;
+  cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+  @include pad {
+    display: flex;
+  }
+}
+.bill-title {
+  padding: 12px 16px 16px 16px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 29px;
+  flex-direction: column;
+  align-items: flex-start;
+  @include pad {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 8px 16px 0px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+    border-bottom: 1px solid #ebebeb;
+    flex-direction: row;
+  }
+  .sub-title {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #858585;
+    padding: 0px;
+    @include pad {
+      display: flex;
+      color: #333;
+      .sub-item {
+        &:first-child {
+          padding-right: 16px;
+          margin-right: 16px;
+          border-right: 1px solid #c2c2c2;
+        }
+      }
+    }
+
+    .sub-name {
+      margin-right: 8px;
+    }
+  }
+  .bill-no-title {
+    margin-right: 8px;
+  }
+  .print-button {
+    display: none;
+    margin-left: 16px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+  @include pad {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 12px;
+    border-bottom: none;
+    .expand-icon {
+      display: none;
+    }
+  }
+}
+
+.bill-info {
+  background: #eff2f4;
+  border: 1px solid #d2dbe7;
+  border-radius: 6px;
+  margin-bottom: 32px;
+  margin: 0px 16px;
+  @include pad {
+    display: flex;
+    justify-content: center;
+    margin: 0px 0px 32px;
+  }
+  .bill-info-left {
+    display: flex;
+    border-bottom: 1px solid #d2dbe7;
+    @include pad {
+      border-right: 1px solid #d2dbe7;
+      border-bottom: none;
+      margin-right: 53px;
+      padding-right: 53px;
+    }
+  }
+  .bill-info-right {
+    display: flex;
+    flex-flow: wrap;
+    @include pad {
+      flex-flow: row;
+    }
+  }
+  .bill-info-item {
+    display: flex;
+    flex-direction: column;
+    color: #333333;
+    padding: 24px 28px;
+    width: 50%;
+    text-align: center;
+    .info-title {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: center;
+      @include pad {
+        word-break: keep-all;
+      }
+    }
+    .info-text {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 23px;
+    }
+  }
+  .red {
+    color: #ff5555;
+  }
+  .blue {
+    color: #0972e3;
+  }
+}
+
+.table-container {
+  border: 1px solid #ebebeb;
+}
+
+.shipping-wrapper {
+  background: #eff2f4;
+  padding: 8px 0px 8px;
+  @include pad {
+    margin-top: 32px;
+    padding: 0px;
+  }
+  .shipping-detail {
+    padding: 24px 16px 16px;
+    background: #ffffff;
+    @include pad {
+      padding: 0px;
+    }
+    .bill-no-title {
+      margin-bottom: 16px;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 25px;
+      @include pad {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 26px;
+      }
+    }
+    .shipping-image-wrapper {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+      @include pad {
+        padding: 24px;
+      }
+    }
+    .shipping-image {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+      height: 100vw;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@import "/src/styles/responsive";
+@import "src/styles/prompt_variables";
+
+@mixin setPromtTheme($bg, $icon, $border) {
+  background: $bg;
+  border: 1px solid $border;
+  .mat-icon {
+    color: $icon;
+    svg {
+      fill: $icon;
+    }
+  }
+}
+
+.prompt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  border-radius: 4px;
+
+  .message {
+    color: $text;
+    margin-left: 12px;
+    width: calc(100% - 24px);
+  }
+  &.error {
+    padding: $padding;
+    @include setPromtTheme($warn-bg, $warn-icon, $warn-border-color);
+  }
+  &.info {
+    padding: $padding;
+    @include setPromtTheme($info-bg, $info-icon, $info-border-color);
+  }
+  &.outline {
+    color: $outline-text;
+    padding: $outline-padding;
+    &.error {
+      @include setPromtTheme(
+        $outline-warn-bg,
+        $outline-warn-icon,
+        $outline-warn-border-color
+      );
+    }
+    &.info {
+      padding: $outline-padding;
+      @include setPromtTheme(
+        $outline-info-bg,
+        $outline-info-icon,
+        $outline-info-border-color
+      );
+    }
+  }
+}

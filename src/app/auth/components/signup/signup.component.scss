@@ -1,0 +1,60 @@
+@import "/src/styles/responsive";
+
+.slide-card {
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  z-index: 999;
+  background: #fff;
+  border-radius: 6px;
+  // margin: 5.5% 2.1%;
+  // padding: 32px 20px 48px;
+  width: 400px;
+  min-width: 200px;
+  max-height: 90%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .title {
+      color: #333;
+      font-weight: 500;
+      font-size: 22px;
+      line-height: 31px;
+      margin-bottom: 32.5px;
+      text-align: center;
+    }
+    .prompt-wrapper {
+      margin-bottom: 16px;
+    }
+    .hint {
+      color: #4b4b4b;
+      text-align: center;
+
+      .back {
+        display: flex;
+        align-items: center;
+      }
+      
+    }
+  }
+
+
+.slide-card-mobile {
+  display: none;
+  @media screen and (max-width: 768px) {
+    display: block;
+    position: relative;
+    width: auto;
+  }
+}
+
+.mat-error {
+  margin-top: 4px;
+}

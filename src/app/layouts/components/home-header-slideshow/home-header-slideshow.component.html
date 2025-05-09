@@ -1,0 +1,101 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <div class="slideshow">
+    <swiper #swiper [config]="config" (slideChange)="onSlideChange($event[0])">
+      <ng-container *ngFor="let slide of slidesOption; index as i">
+        <ng-template swiperSlide>
+          <a [href]="getSlideUrl(slide)" target="_blank">
+            <img
+              class="swiper-slide-img"
+              [src]="slide.mobile"
+              [alt]="slide"
+              *ngIf="currentScreenSize === 'small'"
+            />
+            <img
+              class="swiper-slide-img"
+              [src]="slide.pc"
+              [alt]="slide"
+              *ngIf="currentScreenSize !== 'small'"
+            />
+          </a>
+        </ng-template>
+      </ng-container>
+    </swiper>
+    <div class="action">
+      <span>{{ currentIndex + 1 }}</span>
+      <span>/</span>
+      <span>{{ slidesOption.length || 1  }}</span>
+      <div class="buttons">
+        <button class="prev-button" (click)="slidePrev()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <button class="next-button" (click)="slideNext()">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+    </div>
+    <article class="slide-card">
+      <header class="slide-card-title">
+        <span>👍 熱門促銷</span>
+        <div class="arrows">
+          <button mat-stroked-button (click)="slide2Prev()">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+
+          <div class="swiper-pagination-card"></div>
+          <button mat-stroked-button (click)="slide2Next()">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </header>
+      <section class="slide-card-body">
+        <swiper #swiper2 [config]="config2">
+          <ng-container *ngFor="let slide of slidesOption2; index as i">
+            <ng-template swiperSlide>
+              <div
+                *ngFor="let data of slide"
+                class="box cursor-pointer"
+                [routerLink]="['/Product']"
+                [queryParams]="{ itemId: data.itemId, source: 'hot-sale', sourceId: data.id }"
+              >
+                <app-product-card-row [imgWidth]="84">
+                  <img
+                    img
+                    class="img"
+                    [src]="data.images.pc"
+                    alt="data.images.pc"
+                  />
+                  <app-product-card-title class="title" title>{{
+                    data.name
+                  }}</app-product-card-title>
+                  <app-product-card-sub-title
+                    class="banner-sub-title"
+                    subTitle
+                    >{{ data.type }}</app-product-card-sub-title
+                  >
+                  <app-product-card-sub-title
+                    class="banner-sub-title"
+                    subTitle
+                    >{{ data.promoString }}</app-product-card-sub-title
+                  >
+                  <app-product-card-tag
+                    tag
+                    *ngFor="let tag of data.tag"
+                    [color]="tag.color"
+                    >{{ tag.value }}
+                  </app-product-card-tag>
+                  <app-product-card-price class="price" price>
+                    {{ data.promoPrice | tax }}
+                    <span class="product-card-sub-price-wrapper">{{
+                      data.unitPrice | tax : true
+                    }}</span>
+                  </app-product-card-price>
+                </app-product-card-row>
+                <div class="link-top"></div>
+              </div>
+            </ng-template>
+          </ng-container>
+        </swiper>
+      </section>
+    </article>
+  </div>
+</ng-container>

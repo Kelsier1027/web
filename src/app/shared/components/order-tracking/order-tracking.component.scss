@@ -1,0 +1,129 @@
+@import "responsive";
+
+.bill-info-section {
+  background-color: #eff2f4;
+  padding: 32px 0px;
+  height: 100%;
+  @include pad {
+    border: 1px solid #d2dbe7;
+    border-radius: 6px;
+    padding: 36px 48px 32px;
+  }
+  .bill-info {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    &.cancel {
+      justify-content: center;
+    }
+
+    .bill-info-icon {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100% / 5);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      &:first-child {
+        &:before {
+          content: none;
+        }
+      }
+      &:last-child {
+        &:after {
+          content: none;
+        }
+      }
+      &:after {
+        content: "";
+        width: calc(50% - 20px);
+        height: 2px;
+        background-color: #d2dbe7;
+        position: absolute;
+        right: 0px;
+        top: 20px;
+      }
+      &:before {
+        content: "";
+        width: calc(50% - 20px);
+        height: 2px;
+        background-color: #d2dbe7;
+        position: absolute;
+        left: 0px;
+        top: 20px;
+      }
+      .bill-info-title {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+      }
+      .icon {
+        // 送貨進度的各個圈圈原本不知道為什麼做成 mat-icon-button
+        // 改成 mat-icon 之後大小就跑掉了, 找不到 css 在哪裡對應
+        // 這邊參照原本的大小, 直接寫在這裡
+        width: 38.5px;
+        margin-bottom: 12px;
+        button{
+          cursor: url(../../../../assets/icons/cursor_default.svg), default !important;
+        }
+      }
+      &.active {
+        color: #0972e3;
+        &:before {
+          background: #0972e3;
+        }
+      }
+      &.active_address {
+        color: #858585;
+        .bill-info-title {
+          color: #333333;
+        }
+        &:before {
+          background: #0972e3;
+        }
+      }
+      &.not_reached {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 22px;
+      }
+      &.current {
+        color: #858585;
+        .bill-info-title {
+          color: #333333;
+        }
+        &:after,
+        &:before {
+          background: #0972e3;
+        }
+      }
+    }
+  }
+}
+.mat-dialog-container {
+  padding: 20px 0px 0px !important;
+  height: 100%;
+  background-color: #eff2f4;
+  @include pad {
+    padding: 20px 24px 24px !important;
+    background-color: none;
+  }
+}
+.dialog-content {
+  height: 100%;
+  .bill-layout {
+    height: 100%;
+  }
+}
+.dialog-header {
+  width: 100% !important;
+  padding: 0px 16px;
+  @include pad {
+    width: calc(100% - 48px) !important;
+    padding: 0px;
+  }
+}

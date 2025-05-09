@@ -1,0 +1,73 @@
+@import "responsive";
+
+.help-contact-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.help-contact-header {
+  margin-top: -14px;
+  color: #333333;
+  .text {
+    color: #ed1c24;
+  }
+}
+
+.help-contact-body {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  @include pad {
+    margin-top: 36px;
+    flex-direction: row;
+  }
+  justify-content: space-between;
+  .left {
+    display: flex;
+    flex-direction: column;
+    .title {
+      font-style: normal;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 23px;
+      margin-bottom: 8px;
+      @include pad {
+        margin-bottom: 12px;
+      }
+    }
+    .tel {
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 24px;
+      margin-bottom: 4px;
+    }
+    .ext {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: #858585;
+      margin-bottom: 24px;
+      @include pad {
+        margin-bottom: 76px;
+      }
+    }
+    .time {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      color: #858585;
+    }
+    img {
+      margin-bottom: 24px;
+      @include pad {
+        display: none;
+      }
+    }
+  }
+  .right {
+    display: none;
+    @include pad {
+      display: block;
+    }
+  }
+}

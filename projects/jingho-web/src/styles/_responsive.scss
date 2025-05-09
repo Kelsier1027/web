@@ -1,0 +1,26 @@
+$pad: 1024px;
+$web: 1280px;
+$large-web: 1920px;
+
+// moible first
+@mixin large-web {
+  @media screen and (min-width: $large-web) {
+    @content;
+  }
+}
+
+@mixin web {
+  @media screen and (min-width: $web) {
+    @content;
+  }
+}
+
+@mixin pad {
+  @media screen and (min-width: $pad) {
+    @content;
+  }
+}
+
+// @include web {
+//   TODO...
+// }

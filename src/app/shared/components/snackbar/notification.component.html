@@ -1,0 +1,10 @@
+<div class='custom-notification'>
+  <span class='icon'>
+    <mat-icon>info</mat-icon>
+  </span>
+  <span class='message'>{{data.message}}</span>
+  <span class='close' (click)="snackBarRef.dismiss()">
+    <mat-icon>{{data.button}}</mat-icon>
+  </span>
+
+</div>

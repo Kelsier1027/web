@@ -1,0 +1,117 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <footer class="footer">
+    <section class="actions-col">
+      <ul class="info-links">
+        <li class="link-item" *ngIf="!isJingHo()">
+          <a href="{{ urljingho }}" target="_blank">精豪電腦</a>
+        </li>
+        <li class="link-item" *ngIf="isJingHo()">
+          <a href="{{ urldchain }}" target="_blank">精技電腦</a>
+        </li>
+        <li class="link-item">
+          <a
+            href="https://www.unitech.com.tw/support-agree.aspx"
+            target="_blank"
+            >線上報修</a
+          >
+        </li>
+        <!-- <li class="link-item" *ngIf="!isJingHo()">
+          <a
+            href="https://service.unitech.com.tw/Default.aspx"
+            target="_blank"
+            >經銷商專區</a
+          >
+        </li> -->
+      </ul>
+      <a
+        class="link-company"
+        href="https://www.unitech.com.tw/"
+        target="_blank"
+      >
+        精技集團
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+    </section>
+    <section class="business-col">
+      <a
+        href="https://www.unitech.com.tw/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div class="business-left">
+          <div class="business-logo">
+            <div class="logo" *ngIf="!isJingHo()"></div>
+            <div class="logo-jingho" *ngIf="isJingHo()"></div>
+          </div>
+
+          <ul class="business-list">
+            <li class="business-item">{{isJingHo() ? '精豪電腦股份有限公司' : '精技電腦股份有限公司'}}</li>
+            <li class="business-item">(114) 北市內湖區新湖二路236號3樓</li>
+            <li class="business-item">
+              <span>電話 : 02-2796-2345</span><span>傳真 : 02-8791-9641</span>
+            </li>
+          </ul>
+        </div>
+      </a>
+
+      <nav class="business-right">
+        <ng-container *ngFor="let item of options; index as i">
+          <dl
+            class="user-info"
+            [ngClass]="{ active: item.active && currentScreenSize === 'small' }"
+            *ngIf="!item.hiddenForSales || !isSales()"
+          >
+            <dt (click)="handleClick(i)">
+              <span>{{ item.label }}</span>
+              <mat-icon class="expand" *ngIf="!this.options[i].active">add</mat-icon>
+              <mat-icon class="expand" *ngIf="this.options[i].active">remove</mat-icon>
+            </dt>
+            <ng-container *ngFor="let childItem of item.child">
+              <dd *ngIf="!childItem.hiddenIfNoShowBonus || this.displayBonus()">
+                <a
+                  *ngIf="
+                    childItem.label == '會員同意書' ||
+                      childItem.label == '網路下單條款';
+                    else aLink
+                  "
+                  class="child_link"
+                  (click)="openDialog(childItem.label)"
+                  >{{ childItem.label }}</a
+                >
+                <ng-template #aLink>
+                  <a class="child_link" 
+                    [routerLink]="childItem.url" 
+                    [queryParams]="{ dealerView: this.getDealerView(childItem.url) }">{{
+                    childItem.label
+                  }}</a>
+                </ng-template>
+              </dd>
+            </ng-container>
+          </dl>
+        </ng-container>
+      </nav>
+    </section>
+    <section class="other-col">
+      <div class="third-partys">
+        <a class="icon" target="_blank" href="https://www.facebook.com/unitechcomputertw/">
+          <button mat-icon-button>
+            <app-icon [iconName]="'facebook'"></app-icon>
+          </button>
+        </a>
+        <a class="icon" href="skype:ut_iorder?chat">
+          <button mat-icon-button>
+            <app-icon [iconName]="'skype'"></app-icon>
+          </button>
+        </a>
+        <a class="icon" target="_blank" href="https://s.aiii.ai/g/140f4a">
+          <button mat-icon-button>
+            <app-icon [iconName]="'line'"></app-icon>
+          </button>
+        </a>
+      </div>
+      <p class="revserved">
+        COPYRIGHT © {{ year }} {{this.isJingHo() ? 'Jingho computer Co., Itd.' : 'UNITECH.'}} ALL RIGHTS RESERVED.
+      </p>
+    </section>
+  </footer>
+</ng-container>

@@ -1,0 +1,42 @@
+<div class="list-header-container">
+  <span class="list-header-primary">{{ headerText }}</span>
+</div>
+<div class="list-product">
+  <div *ngFor="let product of products; let index = index" class="item-product">
+    <a routerLink="/Product" target="_blank" [queryParams]="{ itemId: product.itemId, source: this.source }">
+      <app-product-card-column class="item-container-product">
+        <img img class="img-product" [src]="product.prodImg" alt="" />
+        <ng-container ngProjectAs="[tag]" *ngIf="product.promoInfos">
+          <ng-container
+            *ngFor="let tag of product.promoInfos | productListPromos"
+          >
+            <app-product-card-tag
+              class="tags"
+              [color]="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color"
+            >
+              <ng-container
+                *ngIf="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text as text"
+              >
+                {{ isDesktop ? text : text[0] }}
+              </ng-container>
+            </app-product-card-tag>
+          </ng-container>
+        </ng-container>
+        <ng-container ngProjectAs="[tag]" *ngIf="!product.promoInfos || product.promoInfos?.length === 0">
+          <div style="height: 24px">&nbsp;</div>
+        </ng-container>
+
+        <app-product-card-title class="title-product" title>
+          {{ product.itemName }}
+        </app-product-card-title>
+        <app-product-card-sub-title class="subtitle-product" subTitle>
+          {{ product.description }}
+        </app-product-card-sub-title>
+        <app-product-card-price class="price-product" price>
+          {{ product.unitPrice | currency : "" : "symbol" : "1.0-0" | tax : true }}
+        </app-product-card-price>
+        <app-product-card-old-price oldPrice></app-product-card-old-price>
+      </app-product-card-column>
+    </a>
+  </div>
+</div>

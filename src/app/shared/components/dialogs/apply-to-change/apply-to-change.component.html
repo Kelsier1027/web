@@ -1,0 +1,151 @@
+<app-header-inline-close-layout [data]="data">
+  <ng-container *ngIf="accounts">
+    <form class="account-form" [formGroup]="applyChangeForm" (ngSubmit)="onSubmit()">
+      <ul class="account-input-layout">
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+        <form [formGroup]="applyChangeForm">
+          <div class="user-wrapper">
+            <app-label-radio [field]="{
+                type: 'radiobutton',
+                label: '',
+                inputType: 'radio',
+                name: 'status',
+                class: 'inline',
+                options: [
+                  { value: 1, label: '公司人員' },
+                  { value: 2, label: '其他人員' }
+                ],
+                value: 1,
+                color: 'primary'
+              }"></app-label-radio>
+            <ng-container [ngSwitch]="applyChangeForm.value.status">
+              <div *ngSwitchCase="1">
+                <app-icon-select [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'account',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: accounts,
+                    class: '',
+                    placeholder: '請選擇帳號身份',
+                    validations: {
+                      hasErrorMessage: true,
+                      errorMessage: [{ type: 'required', message: '必填欄位' }]
+                    }
+                  }">
+                </app-icon-select>
+              </div>
+              <div *ngSwitchCase="2">
+                <app-label-input [field]="{
+                    type: 'input',
+                    label: '',
+                    labelPosition: 'top',
+                    inputType: 'email',
+                    name: 'email',
+                    placeholder: '請輸入Email帳號',
+                    hint: '',
+                    class: '',
+                    validations: {
+                      hasErrorMessage: true,
+                      errorMessage: [
+                        { type: 'required', message: '必填欄位' },
+                        { type: 'email', message: 'Email格式錯誤' }
+                      ]
+                    }
+                  }">
+                </app-label-input>
+              </div>
+            </ng-container>
+          </div>
+          <app-password-input [field]="{
+              type: 'password',
+              label: '密碼',
+              labelPosition: 'top',
+              inputType: 'password',
+              name: 'password',
+              placeholder: '確認變更請輸入密碼',
+              hint: '',
+              class: '',
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [{ type: 'required', message: '必填欄位' }]
+              }
+            }">
+          </app-password-input>
+          <app-label-radio *ngIf="applyChangeForm.value.status == 1 && applyChangeForm.value.account" [field]="{
+            type: 'radiobutton',
+            label: '',
+            inputType: 'radio',
+            name: 'existingAccountChoice',
+            class: '',
+            options: [
+              { value: 1, label: '現有帳號管理員與變更之帳號角色互換' },
+              { value: 2, label: '變更之帳號原身分角色：「' + getCurrentChoiceRole() + '」刪除' }
+            ],
+            value: 1,
+            color: 'primary'
+          }"></app-label-radio>
+          <app-label-input *ngIf="applyChangeForm.value.status == 2" [field]="{
+            type: 'input',
+            label: '姓名',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'userName',
+            placeholder: '請輸入中文全名',
+            hint: '',
+            class: '',
+            styleMargin: '20px 0px 0px 0px',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                {
+                  type: 'required',
+                  message: '必填欄位'
+                },
+                {
+                  type: 'pattern',
+                  message: '請輸入中文字元'
+                }
+              ]
+            }
+          }">
+        </app-label-input>
+          <app-label-input *ngIf="applyChangeForm.value.status == 2" [field]="{
+            type: 'input',
+            label: '聯絡電話',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'contactNo',
+            placeholder: '範例 (02)2796-2345#800',
+            hint: '',
+            class: '',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                {
+                  type: 'pattern',
+                  message: '聯絡電話格式錯誤'
+                },
+                { type: 'required', message: '必填欄位' }
+              ]
+            }
+          }">
+        </app-label-input>
+        </form>
+      </ul>
+      <footer class="dialog-footer">
+        <section class="footer-wrapper">
+          <button class="button" mat-stroked-button mat-dialog-close>
+            取消
+          </button>
+          <button type="submit" class="button" mat-raised-button color="primary">
+            確認
+          </button>
+        </section>
+      </footer>
+    </form>
+  </ng-container>
+</app-header-inline-close-layout>

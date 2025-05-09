@@ -1,0 +1,20 @@
+<app-member-layout>
+  <app-member-header-info></app-member-header-info>
+  <app-customer-service-card *ngIf="isMobile"></app-customer-service-card>
+  <div class="section-recommend-likes">
+    <app-recommended-likes-products
+      headerText="推薦商品"
+      *ngIf="recommended.length > 0 && !isMobile"
+      [products]="recommended"
+      source="recommended"
+    ></app-recommended-likes-products>
+  </div>
+  <div class="section-guess-you-like">
+    <app-recommended-likes-products
+      headerText="猜你喜歡"
+      *ngIf="guessYouLikes.length > 0 && !isMobile"
+      [products]="guessYouLikes"
+      source="guess-you-like"
+    ></app-recommended-likes-products>
+  </div>
+</app-member-layout>

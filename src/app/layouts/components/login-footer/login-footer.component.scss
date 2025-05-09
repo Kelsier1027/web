@@ -1,0 +1,99 @@
+@import "/src/styles/responsive";
+
+.footer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column-reverse;
+  color: #838383;
+  background: #fff;
+  @include pad {
+    padding: 0px 24px;
+    height: 68px;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: revert;
+  }
+
+  .info-links {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 18.5px 20px;
+    border-bottom: 1px solid #ebebeb;
+    @include pad {
+      width: auto;
+      padding: 0px;
+      border-bottom: 1px solid transparent;
+    }
+    .link-item {
+      position: relative;
+      padding: 0px 16px;
+      &:after {
+        content: "";
+        position: absolute;
+        right: 0px;
+        top: 4px;
+        width: 1px;
+        height: 12px;
+        background-color: #e2e2e2;
+      }
+      &:first-child {
+        padding-left: 0px;
+      }
+      &:last-child {
+        &:after {
+          content: none;
+        }
+      }
+      @include pad {
+        &:first-child {
+          padding-left: 16px;
+        }
+      }
+    }
+  }
+  .business {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 20px;
+    .revserved {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      margin-top: 10px;
+    }
+    @include pad {
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: row;
+      padding: 0px;
+      .revserved {
+        font-size: 14px;
+        line-height: 22px;
+        margin-top: 0px;
+      }
+    }
+
+    .logo {
+      width: 122px;
+      height: 20px;
+      background-image: url("../../../../../src/assets/images/Logo_Company.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin-right: 16px;
+    }
+    .logo-jingho {
+      width: 148px;
+      height: 24px;
+      background-image: url("../../../../../src/assets/images/Logo_Company_JingHo.svg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin-right: 16px;
+    }
+  }
+}

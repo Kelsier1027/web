@@ -1,0 +1,45 @@
+@import "/src/styles/responsive";
+.layout {
+  position: relative;
+  background-color: #eff2f4;
+  z-index: 4;
+  width: 100%;
+  @include pad {
+    position: relative;
+    min-width: 1200px;
+    z-index: 2;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+
+  @include pad {
+    z-index: 1;
+  }
+}
+
+.header-action {
+  position: relative;
+  z-index: 1;
+}
+
+.header-search {
+  position: relative;
+  z-index: 0;
+}
+
+.fixed{
+  z-index: 3;
+  position: relative;
+  height: auto;
+}
+
+::ng-deep.custom-width .mat-bottom-sheet-container {
+  max-height: 90vh;
+}
+
+@media print {
+  .no-print { visibility: hidden; }
+}

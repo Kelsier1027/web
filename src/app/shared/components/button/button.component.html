@@ -1,0 +1,21 @@
+<div [ngClass]="field['class']" [ngStyle]="{'padding': field.stylePadding, 'margin': field.styleMargin}">
+  <ng-container [ngSwitch]="field.matType">
+    <button *ngSwitchDefault mat-raised-button [type]="field['inputType']" [color]="field['color']" class='full-width'>
+      <div class='box' [ngStyle]="{'fontWeight': field.styleFontWeight}">
+        <div class='icons' *ngIf="field.icon">
+          <app-icon [iconName]="field.icon"></app-icon>
+        </div>{{field['label']}}
+      </div>
+    </button>
+    <button *ngSwitchCase="'stroked'" mat-stroked-button [type]="field['inputType']" [color]="field['color']"
+      class='full-width'>
+      <div class='box' [ngStyle]="{'fontWeight': field.styleFontWeight}">
+        <div class='icons' *ngIf="field.icon">
+          <app-icon [iconName]="field.icon"></app-icon>
+        </div>{{field['label']}}
+      </div>
+    </button>
+  </ng-container>
+
+
+</div>

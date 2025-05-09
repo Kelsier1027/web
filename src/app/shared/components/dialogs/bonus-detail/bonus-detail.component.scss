@@ -1,0 +1,37 @@
+@import "responsive";
+.dialog-footer {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-top: 16px;
+  .footer-wrapper {
+    display: flex;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 24px;
+    height: 36px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.bonus-detail {
+  background: #eff2f4;
+  border-radius: 6px;
+  padding: 16px;
+  color: #5c5c5c;
+  @include pad {
+    margin-top: 20px;
+  }
+  .bonus-detail-title {
+    padding-right: 16px;
+  }
+}

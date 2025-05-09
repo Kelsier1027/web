@@ -1,0 +1,15 @@
+<app-header-layout [data]="headerConfig" [otherData]="isSuccessful" [confirm]="confirm.bind(this)">
+  <app-loading-mask [showIf]="isLoading"></app-loading-mask>
+  <div class="textarea-title">
+    取消原因
+  </div>
+  <div class="textarea-content">
+    <textarea [class.error]="isNotInput" [(ngModel)]="textareaValue" maxlength="60"></textarea>
+    <div class="textarea-label-text">
+      {{this.textareaValue.length}}/60
+    </div>
+  </div>
+  <div *ngIf="isNotInput" class="error-text">
+    必填欄位
+  </div>
+</app-header-layout>

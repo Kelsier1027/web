@@ -1,0 +1,72 @@
+<ul class="member-menu">
+  <p class="header" [routerLink]="['/Member/Member']">會員中心</p>
+  <li class="menu-item">
+    <p class="sub-header">公司資料管理</p>
+    <p [ngClass]="active == '公司帳戶' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Account']">
+      <app-icon
+        class="icon"
+        [iconName]="'member_center_bank_account'"
+      ></app-icon
+      >公司帳戶
+    </p>
+    <p *ngIf="authService.isAdmin" [ngClass]="active == '帳號管理' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Manage']">
+      <app-icon class="icon" [iconName]="'member_center_accounts'"></app-icon
+      >帳號管理
+    </p>
+    <p *ngIf="!this.isSales()" [ngClass]="active == '配送地址管理' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/AddressManage']">
+      <app-icon class="icon" [iconName]="'member_center_delivery'"></app-icon
+      >配送地址管理
+    </p>
+    <p *ngIf="!this.isSales()" [ngClass]="active == '變更密碼' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Password']">
+      <app-icon class="icon" [iconName]="'member_center_password'"></app-icon
+      >變更密碼
+    </p>
+  </li>
+  <li class="menu-item" *ngIf="!this.isSales()">
+    <p class="sub-header">我的精技</p>
+    <p *ngIf="displayBonus" [ngClass]="active == '紅利好康區' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Bonus']" [queryParams]="{ bonus:true, dealerView: this.getDealerView() }">
+      <app-icon class="icon" [iconName]="'member_center_point'"></app-icon
+      >紅利好康區
+    </p>
+    <p [ngClass]="active == '獎勵活動達成禮' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Prize']">
+      <app-icon class="icon" [iconName]="'member_center_gift'"></app-icon
+      >獎勵活動達成禮
+    </p>
+    <p [ngClass]="active == '我的追蹤' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Wishlist']">
+      <app-icon class="icon" [iconName]="'member_center_favorite'"></app-icon
+      >我的追蹤
+    </p>
+    <p [ngClass]="active == '貨到通知' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/StockNotice']">
+      <app-icon
+        class="icon"
+        [iconName]="'member_center_notification'"
+      ></app-icon
+      >貨到通知
+    </p>
+  </li>
+  <li class="menu-item" *ngIf="!this.isSales()">
+    <p class="sub-header">訂單與物流</p>
+    <p [ngClass]="active == '訂單查詢' ? 'menu-child-item-active' : 'menu-child-item'"  [routerLink]="['/Member/Order']" [queryParams]="{ dealerView: this.getDealerView() }">
+      <app-icon class="icon" [iconName]="'member_center_order'"></app-icon
+      >訂單查詢
+    </p>
+    <p [ngClass]="active == '帳單查詢' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/Bill']" [queryParams]="{ dealerView: this.getDealerView() }">
+      <app-icon class="icon" [iconName]="'member_center_price_type'"></app-icon
+      >帳單查詢
+    </p>
+  </li>
+  <li class="menu-item" *ngIf="!this.isSales()">
+    <p class="sub-header">結帳偏好設定</p>
+    <p [ngClass]="active == '常用指送地址' ? 'menu-child-item-active' : 'menu-child-item'" [routerLink]="['/Member/CommonAddress']">
+      <app-icon
+        class="icon"
+        [iconName]="'member_center_address_preset'"
+      ></app-icon
+      >常用指送地址
+    </p>
+    <p [ngClass]="active == '常用出貨備註' ? 'menu-child-item-active' : 'menu-child-item'"  [routerLink]="['/Member/DeliveryRemark']">
+      <app-icon class="icon" [iconName]="'member_center_note'"></app-icon
+      >常用出貨備註
+    </p>
+  </li>
+</ul>

@@ -1,0 +1,16 @@
+.content {
+  .text {
+    margin: 8px 0px 32px;
+    color: #5c5c5c;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  .mat-primary {
+    background-color: #ff5555 !important;
+  }
+}

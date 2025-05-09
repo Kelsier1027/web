@@ -1,0 +1,12 @@
+<ng-container *ngIf="items.length > 0">
+  <app-shopping-chip
+    *ngFor="let item of items | slice:0:2"
+    [text]="item.text"
+    [path]="item.path"
+  ></app-shopping-chip>
+  <span *ngIf="items.length > 2">
+    <span (click)="onGoto()">查看更多</span>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </span>
+</ng-container>
+ 

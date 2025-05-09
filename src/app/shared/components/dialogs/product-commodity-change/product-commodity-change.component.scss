@@ -1,0 +1,23 @@
+.product-commodity-change-wrapper {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.footer-wrapper {
+  text-align: right;
+  margin-top: 16px;
+}
+
+.wrapper {
+  display: inline-block;
+  width: 75px;
+  height: 40px;
+}
+
+::ng-deep #body app-product-commodity-change .dialog-header {
+  padding: 17px 17px 17px 28px;
+}
+
+::ng-deep #body app-product-commodity-change .dialog-content {
+  padding: 0px 17px 0px 28px;
+}

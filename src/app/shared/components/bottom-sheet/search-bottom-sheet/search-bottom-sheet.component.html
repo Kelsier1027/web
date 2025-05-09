@@ -1,0 +1,88 @@
+<div class="search">
+    <form (submit)="submit()">
+      <mat-form-field appearance="fill">
+        <input #inputField type="text" name="value" matInput [(ngModel)]="inputValue"
+        [placeholder]="placeholder"
+        [matAutocomplete]="auto"
+        (input)="onInputValue($event)"
+        />
+        <button matSuffix (click)="submit()">
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <mat-autocomplete #auto="matAutocomplete" [panelWidth]="'95%'">  
+          <!-- 輸入框底下的功能文字 -->
+          <div style="padding: 0 16px 0 0;
+          display: flex;
+          height: 32px;
+          justify-content: space-between;
+          align-items: center;">
+            <mat-option disabled>{{ !inputValue ? "最近搜尋" : "關聯結果" }}</mat-option>
+            <a class="link" (click)="clearAllOptions()" *ngIf="!inputValue">
+              全部清除
+            </a>
+          </div>
+
+          <!-- 最近搜尋 -->
+          <div
+            *ngIf="!inputValue else matchingKeyword"
+            style="height: 70vh; overflow-y: scroll;"
+          >
+            <mat-option *ngFor="let option of options; index as i" [value]="option" (click)="submit()">
+              {{option}}
+            <button
+              mat-icon-button
+              class="icon-outside"
+              mat-dialog-close
+              (click)="removeItem(i, $event)"
+            >
+              <mat-icon class="close-icon material-icons">close</mat-icon>
+            </button>
+            </mat-option>
+          </div>
+
+          <!-- Matching keyword -->
+          <ng-template #matchingKeyword>
+            <div
+              style="height: 70vh; overflow-y: scroll;"
+            >
+              <mat-option
+                *ngFor="let option of optionsMatching"
+                [value]="option.prefix + option.keyword + option.suffix"
+                (click)="submit()"
+              >
+                <span>
+                  {{ option.prefix }}
+                  <span [innerHTML]="option.keyword | searchHighlight : inputValue"></span>
+                  {{ option.suffix }}
+                </span>
+                <button
+                  mat-icon-button
+                  class="icon-outside"
+                  mat-dialog-close
+                >
+                </button>
+              </mat-option>
+            </div>
+
+          </ng-template>
+
+          <div class="p-10px border-top">
+            <span class="link" (click)="advancedSearchViewModal()">
+              <div class="icon-wrapper">
+                <app-icon iconName="filter"></app-icon>
+              </div>
+              進階搜尋
+            </span>
+          </div>
+        </mat-autocomplete>
+      </mat-form-field>
+      <span class="link" (click)="close()" style="width: 14%;
+      display: inline-block;
+      text-align: center;">
+        取消
+      </span>
+
+    </form>
+  </div>
+

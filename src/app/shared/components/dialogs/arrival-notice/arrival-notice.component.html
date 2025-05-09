@@ -1,0 +1,186 @@
+<app-header-layout [data]="data">
+  <app-loading-mask
+    [showIf]="isLoading"
+  >
+  </app-loading-mask>
+  <section class="product-commodity-change-wrapper">
+    <span *ngIf="data.isIcon" class="wrapper">
+      <app-icon [iconName]="'warning'"></app-icon>
+    </span>
+    <p class="text" [innerHTML]="detail.hasDefaultReply ? detail.defaultReply : data.text"></p>
+  </section>
+
+  <form class="form" [formGroup]="group">
+    <div class="form-name"><span class="name">品號</span><span class="name-content">{{ data.itemName }}</span></div>
+    <div class="form-wrapper">
+      <div class="item">
+        <span class="name">選倉</span>
+        <app-icon-select
+          class="select"
+          [field]="{
+            type: 'iconSelect',
+            label: '',
+            inputType: 'text',
+            name: 'subinventoryCode',
+            styleMargin: '0px 0px 0px 0px',
+            options: subInventories,
+            class: '',
+            placeholder: '選倉',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [{ type: 'required', message: '必填欄位' }]
+            }
+          }"
+          [disabled]="detail.hasDefaultReply"
+        >
+        </app-icon-select>
+      </div>
+      <div class="item form-data">
+        <span class="name">預期通知</span>
+        <div class="datepicker-wrapper">
+          <app-date-input
+            [group]="group"
+            [field]="{
+              class: '',
+              inputType: 'text',
+              type: 'dateInput',
+              label: '日期',
+              name: 'deadline',
+              minCreateDate: minDate,
+              placeholder: '通知日期',
+              value: '',
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [{ type: 'required', message: '必填欄位' }]
+              }
+            }"
+            [disabled]="detail.hasDefaultReply"
+          ></app-date-input>
+        </div>
+      </div>
+      <div class="item">
+        <span class="name">數量</span>
+        <div class="count-wrapper">
+          <app-increment-input
+            class="select-number w-100"
+            [disableCond]="detail.hasDefaultReply"
+            [field]="countOption"
+            [max]="countOption._max"
+          >
+          </app-increment-input>
+        </div>
+      </div>
+      <div class="item text form-data-text">系統將於設定日期前通知是否有貨</div>
+    </div>
+  </form>
+  <h4 class="title">通知對象</h4>
+
+  <div class="product-icon">
+    <app-icon class="custom-icon" [iconName]="'info'"></app-icon>
+    <p>如有需要再通知其他人員，請輸入Email。</p>
+  </div>
+
+  <form class="form mt-10" [formGroup]="group">
+    <div class="user-wrapper">
+      <app-label-radio
+        [field]="{
+          type: 'radiobutton',
+          label: '',
+          inputType: 'radio',
+          name: 'status',
+          class: 'inline',
+          options: [
+            { value: 1, label: '公司人員' },
+            { value: 2, label: '其他人員' }
+          ],
+          value: 1,
+          color: 'primary'
+        }"
+        [disabled]="detail.hasDefaultReply"
+      ></app-label-radio>
+
+      <ng-container [ngSwitch]="group.value.status">
+        <div *ngSwitchCase="1" class="wrapper">
+          <div class="select-input">
+            <app-icon-select
+              [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: 'account',
+                styleMargin: '0px 0px 0px 0px',
+                options: mailList,
+                class: '',
+                placeholder: '選擇公司人員',
+                validations: {
+                  hasErrorMessage: true,
+                  errorMessage: [{ type: 'required', message: '必填欄位' }]
+                }
+              }"
+              [disabled]="detail.hasDefaultReply"
+            >
+            </app-icon-select>
+          </div>
+          <button
+            class="button"
+            mat-raised-button
+            color="primary"
+            (click)="add()"
+            [disabled]="detail.hasDefaultReply"
+          >
+            新增
+          </button>
+        </div>
+        <div *ngSwitchCase="2" class="wrapper">
+          <app-label-input
+            [field]="{
+              type: 'input',
+              label: '',
+              labelPosition: 'top',
+              inputType: 'email',
+              name: 'email',
+              placeholder: '請輸入Email帳號',
+              hint: '',
+              class: '',
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [
+                  { type: 'required', message: '必填欄位' },
+                  { type: 'email', message: 'Email格式錯誤' }
+                ]
+              }
+            }"
+          >
+          </app-label-input>
+          <button
+            class="button"
+            mat-raised-button
+            color="primary"
+            (click)="add()"
+            [disabled]="detail.hasDefaultReply"
+          >
+            新增
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+
+  <p class="text1 mt-16">已選通知對象</p>
+  <div
+    class="text mt-10"
+    *ngFor="let mail of notificationMail; let index = index"
+  >
+    <div>{{ mail }}</div>
+    <div class="delete" *ngIf="index !== 0" (click)="delete(index)">刪除</div>
+  </div>
+
+  <footer class="dialog-footer">
+    <section class="footer-wrapper">
+      <button class="button" mat-stroked-button (click)="cancel()" [disabled]="detail.hasDefaultReply">取消</button>
+      <button class="button" mat-raised-button color="primary" (click)="save()" [disabled]="detail.hasDefaultReply">
+        確認
+      </button>
+    </section>
+  </footer>
+</app-header-layout>

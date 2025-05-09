@@ -1,0 +1,85 @@
+<div class="data">
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container
+      *ngFor="let content of children; let i = index"
+      [matColumnDef]="content.column.key"
+      [sticky]="content.column.sticky"
+    >
+      <mat-header-cell
+        class="header-cell"
+        [ngClass]="
+          content.column.width ? 'table-column-' + content.column.width : ''
+        "
+        [ngStyle]="{
+          'justify-content': content.column.headerAlign
+            ? content.column.headerAlign
+            : 'left'
+        }"
+        *matHeaderCellDef
+      >
+        <div
+          class="cell"
+          [ngStyle]="{
+            'text-align': content.column.headerAlign
+              ? content.column.headerAlign
+              : 'left'
+          }"
+          [ngClass]="{
+            'cell-icon': !!content.column.icon
+          }"
+        >
+          {{ content.column.title }}
+        </div>
+        <div
+          class="icon-wrapper"
+          (click)="handleDialog(content.column.modalOption)"
+          *ngIf="!!content.column.icon"
+        >
+          <app-icon [iconName]="content.column.icon!"></app-icon>
+        </div>
+      </mat-header-cell>
+
+      <mat-cell
+        class="data-cell"
+        [ngClass]="
+          content.column.width ? 'table-column-' + content.column.width : ''
+        "
+        *matCellDef="let element; let i = index"
+      >
+        <div
+          class="cell"
+          [ngStyle]="{
+            'text-align': content.column.cellAlign
+              ? content.column.cellAlign
+              : 'left'
+          }"
+        >
+          <ng-container
+            *ngTemplateOutlet="
+              content.templateRef;
+              context: {
+                $implicit: {
+                  cell: element[content.column.key],
+                  row: element,
+                  index: i
+                }
+              }
+            "
+          ></ng-container>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row
+      class="header"
+      *matHeaderRowDef="displayedColumns"
+    ></mat-header-row>
+    <mat-row
+      class="row"
+      *matRowDef="let row; columns: displayedColumns"
+    ></mat-row>
+    <div class="mat-row" *matNoDataRow>
+      <div class="no-result">{{ noDataCaption }}</div>
+    </div>
+  </mat-table>
+</div>

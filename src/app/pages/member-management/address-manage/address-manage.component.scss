@@ -1,0 +1,240 @@
+@import "responsive";
+
+::ng-deep .breadcrumb {
+  background-color: #FFFFFF;
+  padding-left: 40px !important;
+}
+
+.status_other {
+  width: 115px;
+  height: 24px;
+  padding: 2px 12px 3px;
+  background: #eff2f4;
+  border-radius: 20px;
+  color: #a2a9b1;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.status_available {
+  width: 50px;
+  height: 24px;
+  padding: 2px 12px 3px;
+  background: #c9e6db;
+  border-radius: 20px;
+  color: #007b55;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.default_tag {
+  background: #ffdada;
+  border-radius: 4px;
+  color: #ed1c24;
+  margin-left: 8px;
+}
+
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  background-color: #eff2f4;
+  padding-bottom: 8px;
+  @include pad {
+    background-color: #fff;
+  }
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+}
+
+.default-address-wrapper {
+  border: 1px solid #d6d6d6;
+  border-radius: 10px;
+  margin: 0px 16px;
+  background: #fff;
+  @include pad {
+    border: none;
+    margin: 0px;
+  }
+}
+
+.address-title.expand {
+  border-bottom: 1px solid #d6d6d6;
+  padding-bottom: 12px;
+}
+
+.address-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
+  padding: 13px 8px 12px 16px;
+
+  @include pad {
+    border-bottom: 1px solid #ebebeb;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 12px;
+    border-bottom: none;
+    padding: 12px 8px 16px 0px;
+    .expand-icon {
+      display: none;
+    }
+  }
+
+  mat-icon {
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+  }
+}
+
+.address-form.expand {
+  padding: 16px;
+}
+
+.address-form {
+  @include pad {
+    border: none;
+    background: transparent;
+    margin: 0px;
+  }
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0px;
+  }
+  .address-input-layout {
+    @include pad {
+      border-radius: 6px;
+      border: 1px solid #ebebeb;
+      padding: 24px;
+    }
+  }
+  .address-wrapper {
+    display: flex;
+    flex-direction: column;
+    @include pad {
+      flex-direction: row;
+    }
+    .address-item {
+      display: flex;
+      flex-direction: column;
+      border-radius: 4px;
+      @include pad {
+        width: 50%;
+        padding: 16px;
+        background: #f5f5f5;
+        &:first-child {
+          margin-right: 16px;
+        }
+      }
+    }
+  }
+}
+
+.address-footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 16px;
+  .footer-wrapper {
+    display: flex;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 24px;
+    height: 36px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+
+.address-select {
+  @include pad {
+    margin-bottom: 16px;
+  }
+
+  ::ng-deep .label_top {
+    padding-bottom: 5px;
+    color: #000 !important;
+  }
+}
+
+.link {
+  display: inline-block;
+  line-height: 13px;
+  cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+}
+
+.custom-address-wrapper {
+  background: #fff;
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+
+  .custom-address-button {
+    padding: 16px;
+  }
+  @include pad {
+    border: none;
+    margin: 0px;
+  }
+}
+
+.address-tab {
+  position: relative;
+
+  @include pad {
+    margin-bottom: 16px;
+  }
+}
+
+app-status-filter > .filter {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  @include pad {
+    display: block;
+  }
+}
+
+body .add-address-button {
+  position: absolute;
+  top: -43px;
+  right: 16px;
+
+  @include pad {
+    top: 0;
+    right: 0;
+  }
+}
+.read-only{
+  pointer-events: none;
+  opacity: 0.5;
+}
+.read-only-hidden{
+  display: none;
+}

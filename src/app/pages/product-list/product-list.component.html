@@ -1,0 +1,535 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-product-list-layout>
+    <div class="product-list-wrapper">
+      <app-breadcrumb></app-breadcrumb>
+      <div class="container">
+        <div
+          [ngClass]="{ active: isFilterOpen }"
+          class="filter-form-backdrop"
+        ></div>
+        <app-filter-form
+          (clear)="clearData()"
+          (paramsChange)="filterDataChange($event)"
+          (close)="toggleFilter(false)"
+          class="filter-form"
+          [isSearchPage]="isSearchPage"
+          [isWelfare]="isWelfare"
+          [isSpecialEvent]="isSpecialEvent"
+          [ngClass]="{ active: isFilterOpen }"
+          [brandIdList]="brandIdList"
+          [type1IdList]="type1IdList"
+          [type2IdList]="type2IdList"
+        >
+          <div class="box">
+            <span class="main-title">篩選</span>
+            <button class="close-filter-button" (click)="toggleFilter(false)">
+              <app-icon iconName="close"></app-icon>
+            </button>
+          </div>
+        </app-filter-form>
+        <div class="content" [ngClass]="{ fixed: isFilterOpen }">
+          <div class="slide-wrapper">
+            <div *ngIf="isSearchPage && !isWelfare && !showPeriodPromotion">
+              全部類別中搜尋 "{{ keyword }}"({{ totalItems }}項結果)
+            </div>
+            <div *ngIf="isSearchPage && !isWelfare && showPeriodPromotion">
+              特定期間促銷商品 ({{ totalItems }} 項結果)
+            </div>
+            <app-product-header-slideshow></app-product-header-slideshow>
+            <app-product-list-filter-mobile
+              [type]="type"
+              (toggle)="toggleFilter(true)"
+              (change)="changePageStyle($event)"
+            ></app-product-list-filter-mobile>
+            <div class="list-filter">
+              <app-product-list-filter
+                [type]="type"
+                (dataChange)="pageDataChange($event)"
+                (layoutChange)="changePageStyle($event)"
+              ></app-product-list-filter>
+            </div>
+            <div class="product-list" *ngIf="type === 1">
+              <ng-container *ngIf="data">
+                <div
+                  *ngFor="
+                    let element of data
+                      | paginate
+                        : {
+                            itemsPerPage: pageData.pageSize,
+                            currentPage: pageData.page,
+                            totalItems
+                          };
+                    let index = index
+                  "
+                  class="product-item"
+                  [ngClass]="{
+                    'top-left': index === 0,
+                    'top-right':
+                      index === 2 || (index === 0 && data.length === 1),
+                    'bottom-left':
+                      (data.length % 3 === 0 && index === data.length - 3) ||
+                      (data.length % 3 === 2 && index === data.length - 2) ||
+                      (data.length % 3 === 1 && index === data.length - 1),
+                    'bottom-right':
+                      (data.length % 3 === 0 && index === data.length - 1) ||
+                      (data.length % 3 === 1 && index === data.length - 1) ||
+                      (data.length % 3 === 1 && index === data.length - 2) ||
+                      (data.length % 3 === 2 && index === data.length - 1) ||
+                      (data.length % 3 === 2 && index === data.length - 3),
+                    top: index < 3,
+                    left: index % 3 === 0
+                  }"
+                >
+                  <a
+                    routerLink="/Product"
+                    target="_blank"
+                    [queryParams]="{ itemId: element.itemId, dealerView: dealerView, source: this.source, sourceId: this.sourceId }"
+                  >
+                    <app-product-card-column>
+                      <img img class="img" [src]="element.prodImg" alt="" />
+                      <ng-container
+                        *ngIf="element.promoInfos"
+                        ngProjectAs="[tag]"
+                      >
+                        <ng-container
+                          *ngFor="
+                            let tag of element.promoInfos | productListPromos
+                          "
+                        >
+                          <app-product-card-tag
+                            class="tags"
+                            *ngIf="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color"
+                            [color]="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color"
+                          >
+                            {{
+                              currentScreenSize !== "small"
+                                ? promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text
+                                : promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text.slice(
+                                    0,
+                                    1
+                                  )
+                            }}
+                          </app-product-card-tag>
+                        </ng-container>
+                      </ng-container>
+
+                      <app-product-card-badge
+                        [productTag]="getBadgeByProductDetail(element)"
+                        position="left"
+                        color="purple"
+                        badge
+                        *ngIf="getBadgeByProductDetail(element)"
+                      ></app-product-card-badge>
+                      <app-product-card-badge
+                        productTag="補貨中"
+                        position="right"
+                        badge
+                        *ngIf="getProductIsEmpty(element)"
+                      ></app-product-card-badge>
+                      <!-- <app-product-card-tag tag *ngFor="let tag of element.tags" [color]="tag.color">{{ tag.value }}</app-product-card-tag> -->
+                      <app-product-card-title class="home-card-title" title>
+                        {{ element.itemName }}
+                      </app-product-card-title>
+                      <app-product-card-sub-title class="sub-title" subTitle>
+                        {{ element.description }}
+                      </app-product-card-sub-title>
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <app-product-card-price *ngIf="element.unitPrice != 999999999" class="price" price>
+                        {{ element.unitPrice | tax : true }}
+                      </app-product-card-price>
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <app-product-card-price *ngIf="element.unitPrice == 999999999" class="price" price>
+                        {{ '暫不提供' | tax : true }}
+                      </app-product-card-price>
+                      <app-product-card-old-price
+                        *ngIf="pageData.isUnitPrice"
+                        oldPrice
+                      ></app-product-card-old-price>
+                      <app-product-card-footer
+                        *ngIf="element.isHot"
+                        footer
+                        [border]="false"
+                      >
+                        <div class="warning">
+                          <span class="hot">HOT</span>
+                          <span class="warning-text">此商品即將售完</span>
+                        </div>
+                      </app-product-card-footer>
+                    </app-product-card-column>
+                  </a>
+                  <div class="cart-wrapper">
+                    <button
+                      (click)="routeToProduct(element.itemId)"
+                      class="action-button"
+                      *ngIf="((element.subinventory[0] && element.subinventory[0].qty) != 0
+                      || (element.subinventory[1] && element.subinventory[1].qty != 0)) && element.productDisplayStatus === 0"
+                    >
+                      <app-icon
+                        class="action-icon"
+                        iconName="cart"
+                        #tooltip="matTooltip"
+                        matTooltip="我要訂購"
+                      ></app-icon>
+                    </button>
+
+                    <button
+                      (click)="dialogservice.arrivalNoticeDialog(element)"
+                      class="action-button"
+                      *ngIf="element.productDisplayStatus === 1"
+                    >
+                      <app-icon
+                        class="action-icon ring"
+                        iconName="ring"
+                        #tooltip="matTooltip"
+                        matTooltip="貨到通知我"
+                      ></app-icon>
+                    </button>
+
+                    <button
+                      (click)="dialogservice.contactBusinessDialog(element)"
+                      class="action-button"
+                      *ngIf="element.productDisplayStatus === 2"
+                    >
+                      <app-icon
+                        class="action-icon call"
+                        iconName="call"
+                        #tooltip="matTooltip"
+                        matTooltip="請洽業務"
+                      ></app-icon>
+                    </button>
+
+                    <button class="action-button" (click)="onCompare(element)">
+                      <app-icon
+                        class="action-icon"
+                        [iconName]="
+                          isCompareAddOrRemove(element)
+                            ? 'compare'
+                            : 'compare_checked'
+                        "
+                        #tooltip="matTooltip"
+                        [matTooltip]="
+                          isCompareAddOrRemove(element) ? '比較' : '移除比較'
+                        "
+                      ></app-icon>
+                    </button>
+                    <button class="action-button">
+                      <app-icon
+                        class="action-icon"
+                        [iconName]="element.favorite ? 'heart_red' : 'heart'"
+                        (click)="toggleFavorite(element)"
+                        #tooltip="matTooltip"
+                        matTooltip="加入我的追蹤"
+                      ></app-icon>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="column" *ngIf="type === 2">
+              <ng-container *ngIf="data && data.length > 0">
+                <div
+                  *ngFor="
+                    let element of data
+                      | paginate
+                        : {
+                            itemsPerPage: pageData.pageSize,
+                            currentPage: pageData.page,
+                            totalItems
+                          };
+                    let index = index
+                  "
+                  class="product-item-column"
+                >
+                  <!-- <div>
+                  <button class="action-button">
+                    <app-product-card-badge [productTag]="element.productTag" color="purple" badge
+                      *ngIf="element.productTag"></app-product-card-badge>
+                  </button>
+                </div> -->
+
+                  <app-product-card-row
+                    class="card-row"
+                    [imgWidth]="currentScreenSize === 'small' ? 100 : 170"
+                  >
+                    <img img
+                      class="column-img"
+                      [src]="element.prodImg"
+                      alt=""
+                      [ngStyle]="getBadgeByProductDetail(element) ? { 'margin-top': '10px' } : {}"
+                    />
+                    <app-product-card-badge
+                      [productTag]="getBadgeByProductDetail(element)"
+                      position="left"
+                      color="purple"
+                      badge
+                      *ngIf="getBadgeByProductDetail(element)"
+                    ></app-product-card-badge>
+                    <app-product-card-badge
+                      productTag="補貨中"
+                      position="right"
+                      badge
+                      *ngIf="getProductIsEmpty(element)"
+                    ></app-product-card-badge>
+                    <app-product-card-title class="card-title" title>
+                      <a
+                        routerLink="/Product"
+                        target="_blank"
+                        [queryParams]="{ itemId: element.itemId, dealerView: dealerView, source: this.source, sourceId: this.sourceId }"
+                      >
+                        <span class="title">{{ element.itemName }}</span>
+                      </a>
+                    </app-product-card-title>
+                    <app-product-card-sub-title class="sub-title" subTitle>
+                      <span class="sub-title">{{ element.description }}</span>
+                    </app-product-card-sub-title>
+                    <div
+                      *ngIf="
+                        element.promoInfos && element.promoInfos.length > 0
+                      "
+                      class="description-wrapper"
+                      content
+                    >
+                      <div
+                        class="description"
+                        *ngFor="
+                          let tag of element.promoInfos | productListPromos
+                        "
+                      >
+                        <ng-container
+                          *ngIf="
+                            promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text.slice(0, 1)
+                          "
+                        >
+                          <app-product-card-tag
+                            [gap]="false"
+                            [color]="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color"
+                          >
+                            {{
+                              promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text.slice(0, 1)
+                            }}
+                          </app-product-card-tag>
+                          <div>{{ tag.name }}</div>
+                        </ng-container>
+                      </div>
+                    </div>
+                    <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                    <app-product-card-price
+                      *ngIf="currentScreenSize === 'small' && element.unitPrice != 999999999"
+                      class="column-price"
+                      price
+                    >
+                      {{ element.unitPrice | tax : true }}
+                    </app-product-card-price>
+                    <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                    <app-product-card-price
+                      *ngIf="element.unitPrice == 999999999"
+                      class="column-price"
+                      price
+                      >
+                      {{ '暫不提供' | tax : true }}
+                    </app-product-card-price>
+                    <app-product-card-old-price
+                      *ngIf="
+                        currentScreenSize === 'small' && pageData.isUnitPrice
+                      "
+                      class="column-old-price"
+                      oldPrice
+                    ></app-product-card-old-price>
+                    <app-product-card-icon icon>
+                      <app-icon
+                        [iconName]="
+                          isCompareAddOrRemove(element)
+                            ? 'compare'
+                            : 'compare_checked'
+                        "
+                        (click)="onCompare(element)"
+                        #tooltip="matTooltip"
+                        [matTooltip]="
+                          isCompareAddOrRemove(element) ? '比較' : '移除比較'
+                        "
+                      ></app-icon>
+                      <app-icon
+                        class="trash-can"
+                        [iconName]="element.favorite ? 'heart_red' : 'heart'"
+                        #tooltip="matTooltip"
+                        (click)="toggleFavorite(element)"
+                        matTooltip="加入我的追蹤"
+                      ></app-icon>
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <button
+                      (click)="routeToProduct(element.itemId)"
+                        class="action-button action-button-mobile-card-icon"
+                        *ngIf="
+                          ((element.subinventory[0] && element.subinventory[0].qty) != 0
+                      || (element.subinventory[1] && element.subinventory[1].qty != 0)) &&
+                          element.productDisplayStatus === 0 &&
+                          currentScreenSize === 'small' && element.price != 999999999
+                        "
+                      >
+                        <app-icon
+                          class="action-icon"
+                          iconName="cart"
+                          matTooltip="我要訂購"
+                        ></app-icon>
+                      </button>
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <button
+                        (click)="dialogservice.arrivalNoticeDialog(element)"
+                        class="action-button action-button-mobile-card-icon"
+                        *ngIf="
+                          element.productDisplayStatus === 1 &&
+                          currentScreenSize === 'small' && element.price != 999999999
+                        "
+                      >
+                        <app-icon
+                          class="action-icon ring"
+                          iconName="ring"
+                          #tooltip="matTooltip"
+                          matTooltip="貨到通知我"
+                        ></app-icon>
+                      </button>
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <button
+                        (click)="dialogservice.contactBusinessDialog(element)"
+                        class="action-button action-button-mobile-card-icon"
+                        *ngIf="
+                          ((!element.subinventory[0] || element.subinventory[0].qty === 0)
+                          && (!element.subinventory[1] || element.subinventory[1].qty === 0)) &&
+                          currentScreenSize === 'small' && element.price != 999999999
+                        "
+                      >
+                        <app-icon
+                          class="action-icon call"
+                          iconName="call"
+                          #tooltip="matTooltip"
+                          matTooltip="請洽業務"
+                        ></app-icon>
+                      </button>
+                    </app-product-card-icon>
+                  </app-product-card-row>
+                  <div
+                    *ngIf="element.promoInfos"
+                    class="description-wrapper-mobile"
+                    content
+                  >
+                    <div
+                      class="description"
+                      *ngFor="let tag of element.promoInfos | productListPromos"
+                    >
+                      <app-product-card-tag
+                        [gap]="false"
+                        [color]="promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.color"
+                      >
+                        {{ promoTagLabel[promoTagLabelIndexModify(tag.promoCategory)][promoTagLabelIndexModify(tag.promoMethod)]?.text?.slice(0, 1) }}
+                      </app-product-card-tag>
+                      <div>{{ tag.name }}</div>
+                    </div>
+                  </div>
+
+                  <div class="price-wrapper">
+                    <div class="price">
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <app-product-card-price class="column-price" price *ngIf="element.unitPrice != 999999999">
+                        {{ element.unitPrice | tax : true }}
+                      </app-product-card-price>
+                      <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                      <app-product-card-price class="column-price" price *ngIf="element.unitPrice == 999999999">
+                        {{ '暫不提供' | tax : true }}
+                      </app-product-card-price>
+                      <app-product-card-old-price
+                        *ngIf="pageData.isUnitPrice"
+                        class="column-old-price"
+                        oldPrice
+                      ></app-product-card-old-price>
+                    </div>
+                    <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                    <a
+                      *ngIf="((element.subinventory[0] && element.subinventory[0].qty) != 0
+                      || (element.subinventory[1] && element.subinventory[1].qty != 0)) && element.productDisplayStatus === 0 && element.price != 999999999"
+                      class="cart-button"
+                      [routerLink]="['/Product']"
+                      target="_blank"
+                      [queryParams]="{ itemId: element.itemId, dealerView: dealerView, source: this.source, sourceId: this.sourceId }"
+                    >
+                      <button
+                        style="
+                          border: none;
+                          background: none;
+                          padding: 0;
+                          margin: 0;
+                          font: inherit;
+                          cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+                          outline: inherit;
+                        "
+                      >
+                        我要訂購
+                      </button>
+                    </a>
+                    <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                    <button
+                      *ngIf="element.productDisplayStatus === 1 && element.price != 999999999"
+                      class="cart-button ring"
+                      (click)="dialogservice.arrivalNoticeDialog(element)"
+                    >
+                      <app-icon
+                        class="cart-button-icon"
+                        iconName="ring"
+                      ></app-icon>
+                      貨到通知我
+                    </button>
+                    <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+                    <button
+                      *ngIf="element.productDisplayStatus === 2 && element.price != 999999999"
+                      class="cart-button call"
+                      (click)="dialogservice.contactBusinessDialog(element)"
+                    >
+                      <app-icon
+                        class="cart-button-icon"
+                        iconName="call"
+                      ></app-icon>
+                      請洽業務
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div
+              class="column"
+              *ngIf="data == undefined || data.length === 0"
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
+              <ng-container *ngIf="(data == undefined || data.length === 0) && !isLoading">
+                很抱歉，目前找不到您要的商品。
+              </ng-container>
+            </div>
+            <pagination-controls
+              *ngIf="data && data.length > 0"
+              (pageChange)="onPageChange($event)"
+              [maxSize]="10"
+              [directionLinks]="true"
+              [autoHide]="!data.length"
+              [responsive]="true"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+            >
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-product-list-layout>
+
+  <app-product-comparison
+    #comparison
+    [currentScreenSize]="currentScreenSize"
+  ></app-product-comparison>
+</ng-container>
+<!-- <app-fixed-nav [compareItems]="compareItems" class="fixed-nav"></app-fixed-nav> -->

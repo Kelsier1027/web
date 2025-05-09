@@ -1,0 +1,38 @@
+@import "responsive";
+
+.table-container {
+  border: 1px solid #ebebeb;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.no-data-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  gap: 16px;
+  background: #ffffff;
+  margin-bottom: 10px;
+}
+
+.hint {
+  margin: 16px 16px 0px;
+  @include pad {
+    margin-left: 0px;
+    margin-bottom: 10px;
+  }
+  font-size: 13px;
+  color: #858585;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  .hint-icon-wrapper {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) saturate(100%) invert(56%) sepia(5%) saturate(20%)
+      hue-rotate(59deg) brightness(93%) contrast(93%);
+  }
+}

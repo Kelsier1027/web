@@ -1,0 +1,13 @@
+.countDown {
+    font-size: 16px;
+    font-weight: bolder;
+    margin-bottom: 15px;
+
+    ::ng-deep .timeUnit {
+        background-color: #333333;
+        color: #fff;
+        font-size: 20px;
+        border-radius: 4px;
+        padding: 0 15px;
+    }
+}

@@ -1,0 +1,32 @@
+.tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  border-radius: 6px;
+  margin: 14px 24px 14px 0px;
+
+  &.Valid,
+  &.Trade,
+  &.ValidCustomer {
+    color: #1b806a;
+    background: rgba(54, 179, 126, 0.16);
+  }
+  &.New {
+    color: #b76e00;
+    background: rgba(255, 171, 0, 0.16);
+  }
+  &.Invalid,
+  &.InvalidCustomer {
+    color: #b71d18;
+    background: rgba(255, 86, 48, 0.16);
+  }
+  &.Search {
+    color: #212b36;
+    background: rgba(145, 158, 171, 0.16);
+  }
+}

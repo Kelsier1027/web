@@ -1,0 +1,9 @@
+<div class='home-layout' *ngIf="(layoutService.layoutChanges$ | async) as currentScreenSize">
+  <app-home-header-slideshow [isShowCard]="true"></app-home-header-slideshow>
+  <main class='content'>
+    <ng-content>
+    </ng-content>
+  </main>
+  <app-home-footer></app-home-footer>
+  <app-footer-mobile-nav *ngIf="currentScreenSize === 'small'"></app-footer-mobile-nav>
+</div>

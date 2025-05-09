@@ -1,0 +1,28 @@
+<app-header-inline-close-layout [data]="data">
+  <section class="content">
+    <p class="text" [innerHTML]="data.text"></p>
+  </section>
+  <section class="detail">
+    <div class="serial-title">
+      <p>序號</p>
+    </div>
+    <div class="serial-detail" *ngFor="let s of data.serial">
+      <div>{{ s }}</div>
+      <button
+        class="copy"
+        (mouseup)="this.clipboard(s)"
+        [cdkCopyToClipboard]="copyText"
+      >
+        <app-icon [iconName]="'ic_copy'"></app-icon>
+        複製
+      </button>
+    </div>
+  </section>
+  <footer class="dialog-footer">
+    <section class="footer-wrapper">
+      <button class="button" mat-raised-button mat-dialog-close color="primary">
+        關閉
+      </button>
+    </section>
+  </footer>
+</app-header-inline-close-layout>

@@ -1,0 +1,59 @@
+@import "/src/styles/responsive";
+.slide-card {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: calc(100% - 32px);
+  z-index: 999;
+  background: #fff;
+  border-radius: 6px;
+  margin: 16px 2.1%;
+  padding: 7px 0px 14px;
+  width: 25%;
+  min-width: 200px;
+  overflow: hidden;
+  .slide-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ebebeb;
+    padding: 0px 7px 7px 16px;
+    .arrows {
+      display: flex;
+      .mat-stroked-button {
+        width: 28px;
+        height: 24px;
+        min-width: 28px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .mat-icon {
+          width: 28px;
+          height: 24px;
+        }
+        &:last-child {
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+  @include pad {
+    display: block;
+  }
+  .slide-card-body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.banner-sub-title {
+  font-size: 14px;
+  padding-bottom: 20px;
+  display: block;
+}
+
+.cursor-pointer {
+  cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+}

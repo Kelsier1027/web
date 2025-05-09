@@ -1,0 +1,17 @@
+@import "/src/styles/responsive";
+
+.product-layout {
+  display: flex;
+  justify-content: center;
+
+  .body {
+    width: 100%;
+  }
+  .right {
+    display: none;
+    @include pad {
+      display: flex;
+      height: 100%;
+    }
+  }
+}

@@ -1,0 +1,87 @@
+<app-header-inline-close-layout [data]="data">
+    <form
+      class="advanced-search-form"
+      [formGroup]="advancedSearchForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <ul class="address-layout">
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+        <form [formGroup]="advancedSearchForm">
+            <app-icon-select
+            class="select"
+            [isBindForm]="false"
+            [field]="{
+                type: 'iconSelect',
+                label: '主分類',
+                inputType: 'text',
+                name: 'mainCategory',
+                styleMargin: '0px 0px 0px 0px',
+                options: type1List,
+                value: selectedType1 ?? '',
+                class: '',
+                placeholder: '所有分類',
+                validations: {
+                  hasErrorMessage: true,
+                  errorMessage: [
+                  ]
+                }
+              }"
+              (valueChange)="onSelectType1($event)"
+            >
+           </app-icon-select>
+           <app-icon-select
+           class="select"
+           [isBindForm]="false"
+            [disabled]="selectedType1 == null"
+           [field]="{
+               type: 'iconSelect',
+               label: '次分類',
+               inputType: 'text',
+               name: 'subCategory',
+               styleMargin: '0px 0px 0px 0px',
+               options: type2List,
+               value: selectedType2 ?? '',
+               class: '',
+               placeholder: '請先選擇主分類',
+               validations: {
+                 hasErrorMessage: true,
+                 errorMessage: [
+                 ]
+               }
+             }"
+              (valueChange)="onSelectType2($event)"
+            >
+          </app-icon-select>
+          <app-label-input
+            [field]="{
+              type: 'input',
+              label: '關鍵字',
+              labelPosition: 'top',
+              inputType: 'text',
+              name: 'keyword',
+              placeholder: '請輸入關鍵字或品號',
+              hint: '',
+              class: '',
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [
+                ]
+              }
+            }"
+          >
+          </app-label-input>
+        </form>
+      </ul>
+      <footer class="dialog-footer">
+        <section class="footer-wrapper">
+          <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+          <button type="submit" class="button" mat-raised-button color="primary">
+            搜尋
+          </button>
+        </section>
+      </footer>
+    </form>
+    </app-header-inline-close-layout>
+    

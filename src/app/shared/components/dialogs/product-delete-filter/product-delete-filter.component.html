@@ -1,0 +1,15 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-header-layout
+    [confirm]="delete.bind(this)"
+    [data]="data"
+    *ngIf="currentScreenSize !== 'small'"
+  >
+    <div class="content">
+      <div class="description-wrapper">
+        <div class="description">
+          請確認是否刪除「{{this.data.filterName}}」？刪除後篩選將不會留存。
+        </div>
+      </div>
+    </div>
+  </app-header-layout>
+</ng-container>

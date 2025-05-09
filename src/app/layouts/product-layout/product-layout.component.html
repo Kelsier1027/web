@@ -1,0 +1,10 @@
+<ng-container *ngIf="(layoutService.layoutChanges$ | async) as currentScreenSize">
+  <div class='product-layout' [ngStyle]="{'gap': gap}">
+    <div class='body'>
+      <ng-content select="[body]"></ng-content>
+    </div>
+    <div class='right'>
+      <ng-content select="[right]"></ng-content>
+    </div>
+  </div>
+</ng-container>

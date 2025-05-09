@@ -1,0 +1,40 @@
+@import "responsive";
+
+.address-layout,
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.advanced-search-form {
+  .input-wrapper {
+    .label_top {
+      color: #333333;
+    }
+  }
+  .password-wrapper {
+    margin-top: 20px;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-top: 16px;
+  .footer-wrapper {
+    display: flex;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 24px;
+    height: 36px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}

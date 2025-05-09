@@ -1,0 +1,39 @@
+@import "/src/styles/responsive";
+.notice-col {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1060b4;
+  color: #fff;
+  padding: 7px;
+
+  &.error {
+    background: #b42010;
+  }
+
+  &.fixed {
+    background: #37b410;
+  }
+
+  .notice-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+  }
+  .notice {
+    display: flex;
+    margin: 0px;
+  }
+  .more {
+    position: absolute;
+    display: none;
+    justify-content: flex-end;
+    align-items: center;
+    line-height: 22px;
+    right: 44.5px;
+    @include pad {
+      display: flex;
+    }
+  }
+}

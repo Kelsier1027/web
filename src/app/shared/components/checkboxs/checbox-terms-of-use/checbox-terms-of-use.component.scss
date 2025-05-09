@@ -1,0 +1,28 @@
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .link-bar {
+    display: flex;
+  }
+
+  .error {
+    ::ng-deep.mat-checkbox-frame,
+    .mat-checkbox-background {
+      border-color: #ff4646 !important;
+    }
+    ::ng-deep.mat-checkbox-background,
+    .mat-checkbox-frame {
+      background-color: rgba(255, 70, 70, 0.2) !important;
+    }
+  }
+}
+
+.label-checkbox {
+  .error {
+    &.message {
+      padding-left: 1.7em;
+    }
+  }
+}

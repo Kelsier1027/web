@@ -1,0 +1,352 @@
+@import "/src/styles/responsive";
+
+* {
+  box-sizing: border-box;
+}
+
+::ng-deep.cdk-overlay-pane.dark {
+  .cdk-dialog-container {
+    background: rgba(34, 34, 34, 0.9);
+  }
+
+  .close-button {
+    height: 24px;
+    width: 24px;
+  }
+
+  .title,
+  .dialog-message,
+  .text {
+    color: white;
+  }
+}
+
+.main {
+  padding: 0px 40px;
+}
+
+.section-recommended-products,
+.section-guess-you-like {
+  padding-top: 40px;
+  .list-header-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0px;
+    .list-header-primary {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 29px;
+      color: #333333;
+    }
+  }
+
+  .list-product {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px 24px;
+
+    .item-product {
+      min-width: 20%;
+      flex: 1;
+    }
+
+    &::ng-deep.product-card {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+    }
+
+    &::ng-deep.row-wrapper {
+      align-items: end;
+    }
+
+    &::ng-deep.product-card-sub-title-wrapper {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .title-product,
+    .price-product {
+      margin-top: 8px;
+      display: block;
+    }
+  }
+}
+
+.container.order-complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 720px;
+  margin: 0 auto;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    .header-text {
+      margin-bottom: 0;
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 36px;
+      color: #333333;
+    }
+
+    .header-icon {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  .body {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .notification {
+      border-radius: 6px;
+      background: #f5f5f5;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 22px;
+      color: #333333;
+      padding: 12px 84px;
+      text-align: center;
+
+      .text-hint {
+        color: #ed1c24;
+      }
+    }
+
+    > span {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 22px;
+      color: #5c5c5c;
+      display: block;
+      margin-top: 16px;
+    }
+
+    .list-bank {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .item-bank {
+      padding: 24px 32px;
+      border: 1px solid #ebebeb;
+      flex: 1;
+
+      .header {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+
+        .icon {
+          width: 36px;
+          height: 36px;
+        }
+
+        .text {
+          font-size: 20px;
+          font-weight: 500;
+          line-height: 29px;
+          color: #333333;
+        }
+      }
+
+      .body {
+        padding: 16px 0px 16px 48px;
+        .label-account {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 22px;
+          color: #858585;
+        }
+
+        .number-account {
+          font-size: 22px;
+          font-weight: 700;
+          line-height: 24px;
+          color: #333333;
+        }
+
+        .list-account-info {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .item-account-info {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+
+            .label {
+              background: #ebebeb;
+              border-radius: 4px;
+              font-size: 13px;
+              font-weight: 400;
+              line-height: 19px;
+              color: #858585;
+              padding: 2px 6px;
+            }
+
+            .text {
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 22px;
+              color: #5c5c5c;
+            }
+          }
+        }
+      }
+    }
+
+    .item-bank:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+    }
+
+    .item-bank:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+  }
+
+  .footer-container {
+    width: 100%;
+    display: flex !important;
+    justify-content: end;
+    @include pad{
+      display: flex;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 10px;
+      button {
+        width: 104px;
+        height: 44px;
+        box-shadow: none;
+      }
+
+      .border {
+        border: 1px solid #858585;
+      }
+    }
+  }
+}
+
+.section-guess-you-like {
+  padding-bottom: 100px;
+}
+
+.mt32 {
+  margin-top: 32px;
+}
+
+.mt24 {
+  margin-top: 24px;
+}
+
+.mt16 {
+  margin-top: 16px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mt8 {
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .container.order-complete {
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+
+      .header-text {
+        margin-bottom: 0;
+        font-size: 26px;
+        font-weight: 500;
+        line-height: 36px;
+        color: #333333;
+      }
+
+      .header-desc {
+        font-size: 9px;
+        font-weight: 400;
+        line-height: 23px;
+        color: #3D5066;
+      }
+
+      .header-icon {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    .body {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .notification {
+        padding: 12px 12px;
+      }
+
+      .list-bank {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .footer-container {
+      width: 100%;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+
+  .section-recommended-products,
+  .section-guess-you-like {
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+
+    .list-product {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      .item-product {
+        flex: 1 1;
+      }
+
+      &::ng-deep.product-card {
+        border: 0px;
+      }
+
+
+      &::ng-deep.product-card-sub-title-wrapper {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        word-break: break-all;
+      }
+    }
+  }
+}

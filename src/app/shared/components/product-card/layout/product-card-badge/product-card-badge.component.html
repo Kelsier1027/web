@@ -1,0 +1,8 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <div class="wrapper" [ngClass]="[ colorName, position ]" >
+    <app-icon *ngIf="currentScreenSize !== 'small' || keepIcon" [iconName]="badgeConfig[colorName]"></app-icon>
+    <div class="text" [ngClass]="keepIcon ? 'keep-icon' : ''">
+      {{ productTag }}
+    </div>
+  </div>
+</ng-container>

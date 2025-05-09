@@ -1,0 +1,350 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu active="帳單查詢"></app-member-menu>
+      <main class="content">
+        <app-title>帳單查詢</app-title>
+        <app-search-bar (reset)="reset()">
+          <ng-container ngProjectAs="[left]">
+            <form class="form" [formGroup]="filterForm">
+              <div class="datepicker-wrapper">
+                <app-date-input
+                  [field]="{
+                    class: '',
+                    inputType: 'text',
+                    type: 'dateInput',
+                    label: '日期',
+                    name: 'payableDate',
+                    minCreateDate: '',
+                    placeholder: '應付日期',
+                    value: ''
+                  }"
+                ></app-date-input>
+                <app-date-input
+                  [field]="{
+                    class: '',
+                    inputType: 'text',
+                    type: 'dateInput',
+                    label: '日期',
+                    name: 'dueDate',
+                    minCreateDate: '',
+                    placeholder: '到期日',
+                    value: ''
+                  }"
+                ></app-date-input>
+              </div>
+              <app-search-input
+                class="search"
+                [placeholder]="'搜尋出貨單號、發票號碼、Po No.'"
+                (searchChange)="onSearchChange($event)"
+                [inputValue]="filterForm.get('keyword')?.value"
+              >
+              </app-search-input>
+            </form>
+          </ng-container>
+          <ng-container ngProjectAs="[right]">
+            <button
+              type="submit"
+              class="export-button"
+              mat-raised-button
+              color="primary"
+              *ngIf="currentScreenSize !== 'small'"
+              (click)="exportExcel()"
+            >
+              匯出清單
+            </button>
+            <button
+              type="submit"
+              class="list-button"
+              mat-raised-button
+              color="primary"
+              (click)="handlePrepayModal()"
+            >
+              預付清單
+            </button>
+          </ng-container>
+        </app-search-bar>
+        <app-table-container
+          [topping]="true"
+          *ngIf="currentScreenSize !== 'small'"
+        >
+          <app-table
+            [dataSource]="
+              dataSource
+                | paginate
+                  : { itemsPerPage: 10, currentPage: pagination?.currentPage, totalItems: pagination?.total }
+            "
+            [noDataCaption]="'查無您的帳單紀錄。'"
+          >
+            <ng-template
+              [column]="{ key: 'payableDate', 
+                headerAlign: 'center',
+                cellAlign: 'center',
+                title: '應付日期', width: 100 }"
+              let-value
+            >
+              {{ value.cell | date : "yyyy/MM/dd" }}
+            </ng-template>
+            <ng-template
+              [column]="{ key: 'orderNumber', 
+                headerAlign: 'center',
+                cellAlign: 'center',
+                title: '訂單編號', width: 110 }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'shipNumber',
+                title: '出貨單號',
+                headerAlign: 'center',
+                cellAlign: 'center',
+                width: 90
+              }"
+              let-value
+            >
+              <p
+                class="link"
+                [routerLink]="['/Member/Bill/', value.cell]"
+                [queryParams]="this.dealerView ? { dealerView: this.dealerView } : {}"
+                queryParamsHandling="merge"
+                style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;"
+              >
+                {{ value.cell }}
+              </p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'taxAmount',
+                title: '稅金',
+                headerAlign: 'center',
+                cellAlign: 'right',
+                width: 90
+              }"
+              let-value
+            >
+
+            <p>{{value.cell | currency : "" : "symbol" : "1.0-0"}}</p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'trxAmount',
+                title: '金額 (含)',
+                headerAlign: 'center',
+                cellAlign: 'right',
+                width: 90
+              }"
+              let-value
+            >
+            <p>{{value.cell | currency : "" : "symbol" : "1.0-0"}}</p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'trxRemaining',
+                title: '未付金額',
+                headerAlign: 'center',
+                cellAlign: 'right',
+                width: 90
+              }"
+              let-value
+            >
+            <p>{{value.cell | currency : "" : "symbol" : "1.0-0"}}</p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'invoiceNo',
+                title: '發票號碼',
+                headerAlign: 'center',
+                cellAlign: 'center',
+                width: 130
+              }"
+              let-value
+            >
+              <p class="invoiceTitle">
+                {{ value.cell }}
+              </p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'poNo',
+                title: 'Po No.',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <p>{{ value.cell }}</p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'buyerName',
+                title: '採購人',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <p>{{ value.cell }}</p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'dueDate',
+                title: '到期日',
+                headerAlign: 'center',
+                cellAlign: 'center',
+                width: 100
+              }"
+              let-value
+            >
+              <p>{{ value.cell | date : "yyyy/MM/dd" }}</p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'dummy',
+                title: '操作',
+                headerAlign: 'center',
+                cellAlign: 'center',
+                width: 100
+              }"
+              let-value
+            >
+              <p class="action">
+                <span
+                  class="link"
+                  (click)="handleSendModal(value.index)"
+                  *ngIf="billList[value.index].invoiceNo"
+                  >寄送</span
+                >
+                <a
+                  class="link"
+                  *ngIf="billList[value.index].invoiceFile"
+                  (click)="getInvoiceFile(billList[value.index].invoiceFile)"
+                  target="_blank"
+                  >PDF</a
+                >
+              </p>
+            </ng-template>
+          </app-table>
+        </app-table-container>
+        <pagination-controls
+          class="pagination"
+          (pageChange)="onPageChange($event)"
+          [maxSize]="10"
+          [directionLinks]="true"
+          [autoHide]="!dataSource?.length"
+          [responsive]="true"
+          previousLabel="上一頁"
+          nextLabel="下一頁"
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page"
+          style="text-align: center"
+        >
+        </pagination-controls>
+        <ng-container *ngIf="currentScreenSize === 'small'">
+          <app-mobile-table-container
+            *ngIf="dataSource?.length; else noDataMobile"
+          >
+            <app-mobile-table-item
+              *ngFor="
+                let data of dataSource
+                  | paginate
+                    : {
+                        itemsPerPage: 10,
+                        currentPage: pagination?.currentPage,
+                        totalItems: pagination?.total
+                      };
+                let last = last;
+                let index = index
+              "
+              [isLast]="last"
+            >
+              <app-status-card [shortenedHeight]="166">
+                <ng-template #headerTitle>
+                  <div class="product">
+                    <app-status-type color="blue">訂單編號</app-status-type>
+                    {{ data.orderNumber }}
+                  </div>
+                </ng-template>
+                <ng-template [statusItem]="{ title: '應付時間' }">{{
+                  data.payableDate | date : "yyyy/MM/dd"
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '出貨單號' }">
+                  <p
+                    class="link"
+                    [routerLink]="['/Member/Bill/', data.shipNumber]"
+                    [queryParams]="this.dealerView ? { dealerView: this.dealerView } : {}"
+                    queryParamsHandling="merge"
+                    style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;"
+                  >
+                    {{ data.shipNumber }}
+                  </p></ng-template
+                >
+                <ng-template [statusItem]="{ title: '稅金' }">
+                  ${{ data.taxAmount | number }}
+                </ng-template>
+                <ng-template [statusItem]="{ title: '金額 (含)' }"
+                  >${{ data.trxAmount | number }}</ng-template
+                >
+                <ng-template [statusItem]="{ title: '未付金額' }"
+                  >${{ data.trxRemaining | number }}</ng-template
+                >
+                <ng-template [statusItem]="{ title: '發票號碼' }">{{
+                  data.invoiceNo
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '發票' }">
+                  <p class="action">
+                    <span
+                      class="link"
+                      (click)="handleSendModal(index)"
+                      *ngIf="billList[index].invoiceNo"
+                      >寄送</span
+                    >
+                    <a
+                      class="link"
+                      *ngIf="billList[index].invoiceFile"
+                      (click)="getInvoiceFile(billList[index].invoiceFile)"
+                      target="_blank"
+                      >PDF</a
+                    >
+                  </p>
+                </ng-template>
+                <ng-template [statusItem]="{ title: 'Po No.' }">{{
+                  data.poNo
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '採購人' }">{{
+                  data.buyerName
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '到期日' }">{{
+                  data.dueDate | date : "yyyy/MM/dd"
+                }}</ng-template>
+              </app-status-card>
+            </app-mobile-table-item>
+            <pagination-controls
+              (pageChange)="onPageChange($event)"
+              [maxSize]="10"
+              [directionLinks]="true"
+              [autoHide]="!dataSource?.length"
+              [responsive]="true"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+            >
+            </pagination-controls>
+          </app-mobile-table-container>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>
+
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的帳單紀錄。</div>
+</ng-template>

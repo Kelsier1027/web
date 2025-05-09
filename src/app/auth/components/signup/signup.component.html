@@ -1,0 +1,45 @@
+<app-main-layout [config]="{'className': 'center'}">
+  <mat-card web class="slide-card">
+    <form class="login-form" [formGroup]="signupForm" (ngSubmit)="register()">
+      <h2 class="title">註冊會員</h2>
+      <ul class="login-input-layout">
+        <!-- authorization -->
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+
+        <ng-container *ngFor="let field of signupformConfigs" appDynamicField [field]="field" [group]="signupForm">
+        </ng-container>
+      </ul>
+      <p class="hint">
+        <a class="back" (click)="goLogin()">
+          <mat-icon>keyboard_backspace</mat-icon>
+          <span>返回登入</span>
+        </a>
+      </p>
+    </form>
+  </mat-card>
+  <mat-card mobile class="slide-card-mobile">
+    <form class="login-form" [formGroup]="signupForm" (ngSubmit)="register()">
+      <h2 class="title">註冊會員</h2>
+      <ul class="login-input-layout">
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+        <ng-container
+          *ngFor="let field of signupformConfigs"
+          appDynamicField
+          [field]="field"
+          [group]="signupForm"
+        >
+        </ng-container>
+      </ul>
+      <p class="hint">
+        <a class="back" (click)="goLogin()">
+          <mat-icon>keyboard_backspace</mat-icon>
+          <span>返回登入</span>
+        </a>
+      </p>
+    </form>
+  </mat-card>
+</app-main-layout>

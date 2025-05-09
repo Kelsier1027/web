@@ -1,0 +1,32 @@
+<app-header-layout
+  [data]="data"
+  [cancel]="data.cancel"
+  [confirm]="data.confirm"
+>
+  <section class="simple-dialog" style="flex: 1">
+    <p>取消原因</p>
+    <div
+    class="container-textarea"
+  >
+    <textarea
+      matInput
+      class="textarea"
+      placeholder="請輸入取消訂單的原因"
+      [(ngModel)]="form.commentInfo.comment"
+      [ngClass]="{error: error.commentInfo.comment}"
+      maxlength="60"
+    >
+    </textarea>
+    <mat-hint class="input-hint">
+      {{ form.commentInfo.comment.length }} / 60
+    </mat-hint>
+  </div>
+  <span [ngClass]="{ 'text-error': error.commentInfo.comment }">
+    {{ error.commentInfo.comment }}
+  </span>
+  <footer>
+    <button [ngClass]="{ 'btn-error': error.commentInfo.comment }" (click)="cancel()">取消</button>
+    <button [ngClass]="{ 'btn-error': error.commentInfo.comment }" class="dialog-blue" (click)="cancelPreOrder()">確認</button>
+  </footer>
+  </section>
+</app-header-layout>

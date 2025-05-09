@@ -1,0 +1,27 @@
+<div *ngIf="imgs" class='slider-wrapper'>
+  <swiper #swiper [config]="config" (swiper)="onSwiper($event)" (slideChange)="onSlideChange()">
+    <ng-container *ngFor="let slide of imgs; index as i">
+      <ng-template swiperSlide>
+        <div class="card">
+          <div class="images-wrapper">
+            <img src="{{ slide }}" />
+          </div>
+        </div>
+      </ng-template>
+    </ng-container>
+  </swiper>
+  <div class="swiper-pagination"></div>
+  <div class="buttons" *ngIf="imgs.length > 1">
+    <button class="prev-button" (click)="slidePrev()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <button class="next-button" (click)="slideNext()">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+  <div class='images-bar' *ngIf="imgs.length > 1">
+    <div (click)="thumbnailClick(i)" class='thumbnail' *ngFor="let slide of imgs; index as i">
+      <img src="{{ slide }}" />
+    </div>
+  </div>
+</div>

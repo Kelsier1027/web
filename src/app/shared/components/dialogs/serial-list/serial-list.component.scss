@@ -1,0 +1,55 @@
+.user-wrapper {
+  border: 1px solid #c2c2c2;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 10px;
+  .mat-radio-label-content {
+    color: #5c5c5c;
+  }
+  .mat-select-value-text {
+    color: #333;
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-top: 16px;
+  .footer-wrapper {
+    display: flex;
+  }
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 24px;
+    height: 36px;
+    &:first-child {
+      margin-right: 10px;
+    }
+  }
+}
+.account-form {
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 7px !important;
+  }
+  .radio-wrapper .mat-radio-button {
+    margin: 0px 12px 18px 0px;
+  }
+  .prompt-wrapper {
+    margin-bottom: 16px;
+  }
+}
+
+.mat-error {
+  padding: 0px !important;
+}
+
+.content {
+  .text {
+    margin: 8px 0px 32px;
+    color: #5c5c5c;
+  }
+}

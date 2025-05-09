@@ -1,0 +1,87 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <div
+    class="layout no-print"
+    (scroll)="onWindowScroll()"
+    [ngStyle]="{
+      position:
+        (isCategoryLayout$ | async) && currentScreenSize == 'small'
+          ? 'fixed'
+          : 'relative',
+      'z-index': layoutZIndex
+    }"
+  >
+    <app-member-header-mobile-nav
+      (action)="toggleMenuType(false)"
+      *ngIf="
+        (isHomePage &&
+          (isCategoryLayout$ | async) &&
+          currentScreenSize == 'small') ||
+        (isProductPage &&
+          currentScreenSize === 'small' &&
+          (isCategoryLayout$ | async)) ||
+        (isMemberPage &&
+          currentScreenSize === 'small' &&
+          (isCategoryLayout$ | async)) ||
+        (isWishlistPage &&
+          currentScreenSize === 'small' &&
+          (isCategoryLayout$ | async))
+      "
+      title="所有類別"
+    ></app-member-header-mobile-nav>
+    <app-home-header-notice
+      *ngIf="
+        (isHomePage && currentScreenSize !== 'small') ||
+        (isHomePage && !(isCategoryLayout$ | async))
+      "
+    ></app-home-header-notice>
+    <app-home-header-action
+      [scrollToHide]="scrollToHide"
+      class="header-action"
+      *ngIf="(isHomePage || isProductPage || isMemberPage || isCustomerService) && !(isCategoryLayout$ | async)"
+    ></app-home-header-action>
+    <app-home-header-search
+      [currentScreenSize]="currentScreenSize"
+      [isHomePage]="isHomePage"
+      [scrollToHide]="scrollToHide"
+      [ngClass]="{ 'p-fixed': false }"
+      class="header-search"
+      (fixedProductChange)="fixedProductCol($event)"
+      *ngIf="
+        currentScreenSize !== 'small' ||
+        isProductPage || 
+        (isHomePage && !(isCategoryLayout$ | async))
+      "
+    ></app-home-header-search>
+    <app-home-header-product
+      [currentScreenSize]="currentScreenSize"
+      [isCategoryLayout]="(isCategoryLayout$ | async) || false"
+      (layoutChange)="toggleMenuType($event)"
+      [isProductPage]="isProductPage"
+      *ngIf="
+        isHomePage ||
+        (isProductPage &&
+          (isCategoryLayout$ | async) &&
+          currentScreenSize === 'small') ||
+        currentScreenSize != 'small' ||
+        (isMemberPage &&
+          currentScreenSize === 'small' &&
+          (isCategoryLayout$ | async)) ||
+        (isWishlistPage &&
+          currentScreenSize === 'small' &&
+          (isCategoryLayout$ | async))
+      "
+      [fixedProduct]="scrollToHide ? fixedProduct : false"
+    ></app-home-header-product>
+  </div>
+</ng-container>
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-fixed-nav  *ngIf="currentScreenSize == 'small'" [compareItems]="compareItems" class="fixed-nav"></app-fixed-nav>
+  <div *ngIf="currentScreenSize !== 'small'" class="fixed">
+    <app-fixed-nav
+      (layoutZIndexChange)="layoutZIndexChange($event)"
+    ></app-fixed-nav>
+  </div>
+</ng-container>

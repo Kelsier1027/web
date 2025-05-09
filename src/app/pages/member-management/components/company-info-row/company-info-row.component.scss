@@ -1,0 +1,207 @@
+@import "responsive";
+
+.company-info {
+  display: flex;
+  // justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  background: #eff2f4;
+  border-radius: 6px;
+  padding: 16px;
+
+  @include pad {
+    height: 218px;
+    padding: 24px;
+    flex-direction: row;
+  }
+
+  .info-left {
+    background: #ffffff;
+    border: 1px solid #d2dbe7;
+    border-radius: 6px;
+    padding: 16px 24px 20px;
+
+    @include pad {
+      width: 40%;
+      margin-right: 80px;
+    }
+
+    .company {
+      display: flex;
+      align-items: center;
+
+      .company-name {
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 29px;
+        color: #0972e3;
+        margin-right: 16px;
+
+        @include pad {
+          margin-right: 20px;
+        }
+      }
+
+      .level {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 60px;
+        border: 1px solid #ebebeb;
+        color: #333333;
+        width: auto;
+        height: auto;
+        padding: 6px 16px 6px 14px;
+
+        .icon {
+          display: inline-block;
+          vertical-align: middle;
+          width: 24px;
+          height: 24px;
+
+          .mat-icon {
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+          }
+        }
+      }
+    }
+
+    .company-id {
+      margin-bottom: 32px;
+    }
+
+    .credit {
+      display: flex;
+
+      .credit-item {
+        padding: 0px 24px;
+        border-right: 1px solid #ebebeb;
+
+        &:first-of-type {
+          padding-left: 0px;
+        }
+
+        &:last-child {
+          padding-right: 0px;
+          border-right: none;
+        }
+
+        .credit-title {
+          color: #858585;
+          margin-bottom: 0px;
+          line-height: 23px;
+        }
+
+        .credit-text {
+          font-weight: 700;
+          font-size: 16px;
+          line-height: 23px;
+          color: #333333;
+          margin: 0px;
+        }
+      }
+    }
+  }
+
+  // Modify by Tako At 2024/11/06 For 2024023106
+  .info-middle {
+    display: flex;
+    color: #333333;
+    padding: 24px;
+
+    @include pad {
+      padding: 14px 0px 16px;
+      width: 30%;
+    }
+
+    .sales {
+      padding-right: 32px;
+
+      @include pad {
+        padding-right: 28px;
+      }
+
+      .my-sales {
+        margin-bottom: 0px;
+      }
+
+      .sales-name {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 29px;
+        margin-bottom: 0px;
+      }
+    }
+
+    .sales-info {
+      .sales-info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .icon {
+          display: inline-block;
+          width: 28px;
+          height: 28px;
+          margin-right: 8px;
+        }
+
+        &.email {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  // Add by Tako At 2024/11/07 For 2024023106
+  .mat-expansion-panel-header {
+    font-size: 14px;
+  }
+
+  .info-right {
+
+    @include pad {
+      width: 28%;
+    }
+
+    .op-info {
+      display: flex;
+      margin-bottom: 20px;
+      padding: 0px 8px 0px;
+
+      .op {
+        padding-right: 32px;
+
+        .op-name {
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 29px;
+          margin-bottom: 0px;
+        }
+      }
+
+      .op-info-item {
+        li {
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+
+        .icon {
+          display: inline-block;
+          width: 28px;
+          height: 28px;
+          margin-right: 8px;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      .info-expand {
+        padding: 16px;
+      }
+    }
+  }
+}

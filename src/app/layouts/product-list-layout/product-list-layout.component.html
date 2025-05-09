@@ -1,0 +1,18 @@
+<ng-container *ngIf="(layoutService.layoutChanges$ | async) as currentScreenSize">
+  <div class='member-layout'>
+    <ng-container *ngIf="(mobileMenuService.title$ | async) as title">
+      <app-member-header-mobile-nav
+        *ngIf="currentScreenSize === 'small'"
+        (action)="goHome()"
+        [title]="title"
+      ></app-member-header-mobile-nav>
+    </ng-container>
+
+    <ng-content></ng-content>
+    <app-home-footer></app-home-footer>
+    <!-- <app-fixed-nav class="fixed-nav" *ngIf="currentScreenSize !== 'small'"></app-fixed-nav> -->
+    <app-footer-mobile-nav *ngIf="(!isProductPage && currentScreenSize === 'small')"></app-footer-mobile-nav>
+  </div>
+</ng-container>
+
+

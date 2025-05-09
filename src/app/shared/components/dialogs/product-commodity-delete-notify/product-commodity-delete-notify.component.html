@@ -1,0 +1,21 @@
+<app-header-layout [data]="data">
+  <section class="product-commodity-change-wrapper">
+    <span *ngIf='data.isIcon' class='wrapper'>
+      <app-icon [iconName]="'warning'"></app-icon>
+    </span>
+
+    <p class="text" [innerHTML]="data.text"></p>
+  </section>
+
+  <footer class="dialog-footer">
+    <section class="footer-wrapper">
+      <button class="button" mat-stroked-button (click)="cancel()">
+        刪除
+      </button>
+      <button class="button" mat-raised-button color="primary" (click)="save()">
+        貨到通知
+      </button>
+    </section>
+  </footer>
+</app-header-layout>
+

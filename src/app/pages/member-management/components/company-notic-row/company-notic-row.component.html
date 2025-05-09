@@ -1,0 +1,11 @@
+<section class="notic">
+  <p class="notic-title">
+    <mat-icon class="icon">info</mat-icon>
+    <span>{{ field.title }}</span>
+  </p>
+  <ul class="notic-content">
+    <ng-container *ngFor="let listItem of field.list">
+      <li class="notic-item" [innerHTML]="listItem"></li>
+    </ng-container>
+  </ul>
+</section>

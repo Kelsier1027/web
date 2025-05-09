@@ -1,0 +1,15 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-header-layout
+    [data]="data"
+    *ngIf="currentScreenSize !== 'small'"
+  >
+    <div class="content">
+      <div class="description-wrapper">
+        <div class="description">
+          篩選條件已達上限，若要新增篩選請先刪除現有篩選條件。
+        </div>
+      </div>
+    </div>
+  </app-header-layout>
+</ng-container>
+

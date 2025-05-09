@@ -1,0 +1,141 @@
+<div [ngClass]="{ 'order-card': defaultStyle }">
+  <div class="order-header">{{ detail.header }}</div>
+  <div class="order-body">
+    <div *ngIf="this.remark">{{this.remark}}</div>
+    <div class="mobile-synology" *ngIf="this.isMobileSynology">
+      <div class="row">
+          選擇品牌
+          <span
+          *ngFor="let item of brandOptionsForMobileSynology; let idx = index"
+          class="product-button"
+          [ngClass]="{
+            active: item.selected
+          }"
+          (click)="selectBrand(idx)"
+        >
+          {{ item.name }}
+        </span>
+      </div>
+      <div class="row">
+          選擇容量
+          <span
+            *ngFor="
+              let item of capacityOptionsForMobileSynology;
+              let idx = index
+            "
+            class="product-button"
+            [ngClass]="{
+              active: item.selected
+            }"
+            (click)="selectCapacity(idx)"
+          >
+            {{ item.name }}
+          </span>
+      </div>
+    </div>
+    <!-- <ng-component *ngIf="(this.isMobileSynology && checkProductNumberOptions(this.productNumberOptionsForMobileSynology)) || !this.isMobileSynology">
+     -->
+    <div *ngIf="(this.isMobileSynology && checkProductNumberOptions(this.productNumberOptionsForMobileSynology)) || !this.isMobileSynology">
+    <div
+      class="order-inner-body"
+      *ngFor="let product of detail.products; let idx = index"
+    >
+      <div *ngIf="this.isMobileSynology">
+        <mat-radio-button  [value]="product.itemName" [checked]="checkProductNumberOptions(this.productNumberOptionsForMobileSynology) == true? this.productNumberOptionsForMobileSynology[idx].selected :false" (click)="onRadioButtonClick(product,idx)"></mat-radio-button>
+      </div>
+      <!-- <div class="order">{{ idx+1 }}</div> -->
+      <div class="order-product-body">
+        <div class="order-product-header">{{ product.itemName }}</div>
+        <div class="order-product-desc">{{ product.description }}</div>
+        <div class="order-product-prices" *ngIf="showPrice && !product.promoPrice">
+          <span class="order-product-unit-price">{{
+            product.unitPrice?.toLocaleString("zh-TW", {
+              currency: "TWD",
+              style: "currency",
+                maximumFractionDigits : 0
+            })
+          }}</span>
+          <span class="order-product-price-with-tax"
+            >{{
+              product.priceWithTax?.toLocaleString("zh-TW", {
+                currency: "TWD",
+                style: "currency",
+                maximumFractionDigits : 0
+              })
+            }} </span
+          ><span class="order-product-price-tip">(未)</span>
+        </div>
+        <div
+          class="order-product-prices"
+          *ngIf="
+            showPrice &&
+            product.promoPrice &&
+            productTag !== '預購' &&
+            subMethod !== SubMethodEnum.ChosenAdditional"
+        >
+          <span class="order-product-unit-price">
+            {{
+              product.promoPrice?.toLocaleString("zh-TW", {
+                currency: "TWD",
+                style: "currency",
+                maximumFractionDigits : 0
+              })
+            }}
+          </span>
+          <span class="order-product-price-with-tax">
+            {{
+              product.unitPrice?.toLocaleString("zh-TW", {
+                currency: "TWD",
+                style: "currency",
+                maximumFractionDigits : 0
+              })
+            }}
+          </span>
+          <span class="order-product-price-tip">(未)</span>
+        </div>
+        <div
+          class="order-product-prices"
+          *ngIf="
+            showPrice &&
+            subMethod === SubMethodEnum.ChosenAdditional"
+        >
+          <span class="order-product-unit-price">
+            {{
+              (
+                (product.unitPrice ?? 0)).toLocaleString("zh-TW", {
+                currency: "TWD",
+                style: "currency",
+                maximumFractionDigits : 0
+              })
+            }}
+          </span>
+          <span class="order-product-promo-price">
+            {{
+              (
+                (product.promoPrice ?? 0)).toLocaleString("zh-TW", {
+                currency: "TWD",
+                style: "currency",
+                maximumFractionDigits : 0
+              })
+            }}
+          </span>
+          <span class="order-product-price-tip">(未)</span>
+        </div>
+      </div>
+      <div class="order">{{ 'x' + ( product.ratio ?? 1 ) }}</div>
+    </div>
+  </div>
+  </div>
+  <footer class="order-footer">
+    活動期間 {{ detail.startDate | date : "yyyy/MM/dd" }}~{{
+      detail.endDate | date : "yyyy/MM/dd"
+    }}
+    <br>
+    <div *ngIf="shippingStartDate && shippingEndDate">
+      預計出貨日～出貨終日 {{ shippingStartDate }}~{{ shippingEndDate }}
+    </div>
+    <div *ngIf="detail.shippingDate">
+      預計出貨日 {{ detail.shippingDate | date: "yyyy/MM/dd" }}
+    </div>
+  </footer>
+</div>

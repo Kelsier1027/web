@@ -1,0 +1,593 @@
+@import "src/styles/responsive";
+
+.promo-methods {
+  margin: 0 4px 4px 0;
+  height: 26px;
+  &.style-1 {
+    color: #dd130d;
+    border: 1px solid #dd130d;
+    border-radius: 5px;
+    padding: 0 5px;
+    background: #ff000036;
+  }
+  &.style-2 {
+    color: #197b55;
+    border: 1px solid #197b55;
+    border-radius: 5px;
+    padding: 0 5px;
+    background: #197b552a;
+  }
+  &.style-3 {
+    color: #4442bb;
+    border: 1px solid #4442bb;
+    border-radius: 5px;
+    padding: 0 5px;
+    background: #4442bb33;
+  }
+  &.style-4 {
+    color: #ffc700;
+    border: 1px solid #ffc700;
+    border-radius: 5px;
+    padding: 0 5px;
+    background: #ffc80028;
+  }
+  &.style-5 {
+    background: #cee3f9;
+    border: 1px solid rgba(9, 114, 227, 0.6);
+    color: #0972e3;
+    border-radius: 5px;
+    padding: 0 5px;
+  }
+}
+.saleBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 21px;
+  background: #ed1c24;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.salesTitle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #fff;
+  margin: 0 -20px 0 -20px;
+  padding: 16px 20px;
+  @include pad {
+    background: none;
+    margin: 0 0 16px 0;
+    padding: 0;
+  }
+}
+
+.sales {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 10px;
+
+  @include pad {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 24px;
+    margin-bottom: 24px;
+  }
+  .box {
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 0;
+    border: 1px solid #e2e6e9;
+    box-shadow: none;
+    margin: 0 -20px 0px -20px;
+    position: relative;
+    @include pad {
+      border-radius: 6px;
+      border: 1px solid #ebebeb;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 0;
+
+      &:hover > .cart-wrapper {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s;
+      }
+    }
+
+    .warning {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      .warning-text {
+        font-size: 13px;
+        color: #ed1c24;
+      }
+
+      .hot {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 16px;
+        background: #ed1c24;
+        border-radius: 20px;
+        font-size: 10px;
+        color: #fff;
+      }
+    }
+
+    .notHot {
+      color: #858585;
+    }
+
+    .cart-wrapper {
+      display: none;
+      @include pad {
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s 0.3s;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        gap: inherit;
+        padding-bottom: 0;
+      }
+    }
+  }
+}
+
+.salesButton {
+  width: auto;
+  height: 36px;
+  font-size: 14px;
+  background-color: #eff2f4;
+  border: none;
+  border-radius: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding: 0px 10px;
+  @include pad {
+    min-width: 221px;
+    max-width: 50vw;
+    height: 56px;
+    font-size: 16px;
+    background-color: #fff;
+    border: 1px solid #d6d6d6;
+    border-radius: 28px;
+  }
+}
+
+.salesToAll {
+  display: flex; // 讓查看更多按鈕可以自由伸縮
+  background: #fff;
+  margin: 0 -20px 0 -20px;
+  padding: 20px;
+  @include pad {
+    background: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.pomotion-col {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 24px 0px;
+  gap: 16px;
+
+  .pomotion-image {
+    display: block;
+    margin: 0px 0px 10px 0px;
+
+    @include pad{
+      width: 343px;
+      height: 120px;
+    }
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+  img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+  @include pad {
+    // padding: 56px 40px;
+    flex-direction: row;
+    gap: 24px;
+
+    .pomotion-image {
+      width: 100%;
+      height: auto;
+      margin: 0px 24px 0px 0px;
+
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+}
+
+.price {
+  font-size: 22px;
+}
+
+.home-card-title {
+  font-size: 16px;
+  display: block;
+  padding-top: 10px;
+}
+
+.navButtons {
+  width: 100%;
+  padding: 10px 0px 0px 0px;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 5px;
+  justify-content: center;
+
+  @include pad {
+    display: flex;
+    padding: 20px 0px 0px 0px;
+    gap: 14px;
+  }
+
+  > button {
+    align-items: center;
+    padding: 2px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+
+    @include pad {
+      padding: 5px 10px;
+      font-size: 22px;
+    }
+
+    > span {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 23px;
+    }
+  }
+  .saleButton {
+    background-color: #bfbfbf;
+    .badge {
+      font-size: 8px;
+      background-color: #ed1c24;
+      color: #fff;
+      border-radius: 20px;
+      padding: 5px 5px;
+      margin-left: 2px;
+      display: none;
+
+      @include pad {
+        display: inline;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .purchaseButton {
+    background-color: #f6d8be;
+  }
+  
+  .promoButton {
+    background-color: #dbe0ff;
+  }
+
+  .flashButton {
+    background-color: #ffc700;
+    .badge {
+      background-color: #ed1c24;
+      border-radius: 100%;
+      color: #fff;
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      display: none;
+      @include pad {
+        display: inline;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+
+  .specialButton {
+    background-color: #D7E4BD;
+  }
+
+  .groupButton {
+    color: #fff;
+    background-color: #0972e3;
+  }
+}
+
+.incentiveActivities {
+  .incentiveActivitiesTitle {
+    display: flex;
+    justify-content: space-between;
+
+    h3 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.purchase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 15px;
+
+  .box {
+    border-radius: 6px;
+    width: 343px;
+    height: 120px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include pad {
+      padding: 30px;
+    }
+
+    .title {
+      font-size: 19px;
+      font-weight: 500;
+      color: #333333;
+      @include pad {
+        font-size: 26px;
+        font-weight: bolder;
+      }
+    }
+
+    p:not(.title) {
+      font-size: 13px;
+      @include pad {
+        font-size: 14px;
+      }
+    }
+
+    button {
+      width: 109px;
+      height: 27px;
+      font-size: 13px;
+      background-color: #333333;
+      color: #fff;
+      border-radius: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+      @include pad {
+        width: 131px;
+        height: 37px;
+        font-size: 16px;
+        margin-top: 24px;
+      }
+    }
+
+    img {
+      height: 104px;
+      width: auto;
+
+      @include pad {
+        height: 180px;
+      }
+    }
+
+    &.anyPurchase {
+      background-color: #f6d8be;
+      margin-bottom: 15px;
+      @include pad {
+        margin-bottom: 0;
+      }
+    }
+
+    &.promotion {
+      background-color: #dbe0ff;
+    }
+
+    @include pad {
+      width: 588px;
+      height: 180px;
+    }
+  }
+
+  @include pad {
+    flex-direction: row;
+    padding: 25px 40px;
+  }
+}
+
+.flashSale {
+  background-color: #ffc700;
+
+  .flashSaleTitle {
+    display: flex;
+    justify-content: space-between;
+
+    h3 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      span {
+        display: inline-block;
+        background-color: #ed1c24;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
+
+      .red-icon {
+        color: #fff;
+        font-size: 32px;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .salesButton {
+    background: none;
+    border: 1px solid #33333366;
+  }
+}
+
+.strongDiscount {
+  background-color: #d2dbe7;
+
+  .inner {
+    padding: 50px 30px;
+    border-radius: 6px;
+    border: 1px solid #ebebeb;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+
+    h1 {
+      margin-bottom: 24px;
+
+      span {
+        color: #0972e3;
+      }
+    }
+  }
+}
+
+h1 {
+  font-size: 22px;
+  @include pad {
+    font-size: 30px;
+  }
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.p-20px {
+  padding: 20px;
+}
+
+.p-pad-30px {
+  @include pad {
+    padding: 15px 30px;
+  }
+}
+
+.px-lweb-320px {
+  @include large-web {
+    padding: 30px 320px;
+  }
+}
+
+.d-none {
+  display: none !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.d-pad-none {
+  @include pad {
+    display: none;
+  }
+}
+
+.d-pad-flex {
+  @include pad {
+    display: flex !important;
+  }
+}
+
+.mb-10px {
+  margin-bottom: 10px;
+}
+
+.me-pad-24px {
+  @include pad {
+    margin-right: 24px;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.bg-pad-white {
+  @include pad {
+    background-color: #fff;
+  }
+}
+.w-100 {
+  width: 100%;
+}
+.purchase .box .w-50 img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+.purchase .box .w-100 img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+.small-cart-wrapper .product-control {
+  flex-direction: column;
+  display: block;
+  @include pad {
+    display: none;
+  }
+}
+
+.cart-wrapper .product-control {
+  flex-direction: row;
+}
+.p-20px.p-pad-30px.px-lweb-320px img {
+  cursor: url(../../../assets/icons/cursor_click.svg), pointer  !important;
+}
+
+.flashSale img {
+  cursor: url(../../../assets/icons/cursor_click.svg), pointer  !important;
+}
+
+.strongDiscount img {
+  cursor: url(../../../assets/icons/cursor_click.svg), pointer  !important;
+}
+.flashSaleTitle img {
+  cursor: url(../../../assets/icons/cursor_click.svg), pointer  !important;
+}
+
+
+

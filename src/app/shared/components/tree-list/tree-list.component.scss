@@ -1,0 +1,64 @@
+.example-tree-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  color: #637381;
+  cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+
+  .tag {
+    border: 1px solid #ff4842;
+    color: #ff4842;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 6px;
+    margin: 0px 5px;
+  }
+  &.paddingLeft {
+    padding-left: 0px !important;
+  }
+  &.menu {
+    padding-left: 14px !important;
+  }
+
+  &.tree-header {
+    padding-left: 14px !important;
+    font-weight: 700 !important;
+    margin: 28px 0px !important;
+    color: #212b36;
+    &:hover {
+      background: transparent;
+      cursor: default;
+    }
+  }
+
+  &:hover {
+    transition: 0.3s all ease-in;
+    background: rgba(0, 171, 85, 0.08);
+    .title {
+      color: #00ab55;
+      font-weight: 600;
+    }
+  }
+  &.active {
+    .title {
+      font-weight: 600;
+      color: #212b36;
+    }
+    .mat-icon {
+      color: #00ab55;
+    }
+
+    // child css overlay
+    .dot {
+      .prefix-wrapper {
+        .prefix {
+          transition: 0.3s all ease-in-out;
+          background-color: #00ab55 !important;
+          scale: 2;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+%IconNone {
+  .title {
+    width: 100%;
+    padding-left: 0px;
+  }
+  .mat-icon {
+    display: none;
+  }
+}
+
+.icon-lable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .title {
+    margin: 0px;
+    width: calc(100% - 24px);
+    padding-left: 16px;
+  }
+  .custom-icon-wrapper {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.icon-none {
+    @extend %IconNone;
+  }
+
+  &.dot {
+    @extend %IconNone;
+    .title {
+      width: calc(100% - 28px);
+    }
+    .prefix-wrapper {
+      display: inline-block;
+      text-align: center;
+      width: 24px;
+      height: 24px;
+      margin: auto;
+      margin-right: 20px;
+      .prefix {
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        background-color: #637381;
+        border-radius: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+<li
+  class="input-wrapper"
+  [ngClass]="{
+    outside: field['labelPosition'] === 'outside',
+    iconInput: field['class'] === 'iconInput'
+  }"
+  [ngStyle]="{ padding: field.stylePadding, margin: field.styleMargin }"
+>
+  <mat-label
+    class="label"
+    *ngIf="field.labelPosition === 'outside'"
+    [innerHTML]="field['label']"
+  ></mat-label>
+  <div class="input-box">
+    <mat-label class="label_top" *ngIf="field.labelPosition === 'top'"
+      ><span [innerHTML]="field.label"></span>
+      <button *ngIf="field.isModal" class="reason link" (click)="handleModal()">
+        <mat-icon>add</mat-icon>常用原因
+      </button>
+    </mat-label>
+    <mat-form-field
+      class="input no-wrapper"
+      [formGroup]="group"
+      floatLabel="never"
+      appearance="outline"
+    >
+      <textarea
+        matInput
+        [formControlName]="field.name"
+        [placeholder]="field.placeholder"
+        [maxlength]="field['count']"
+      ></textarea>
+      <span class="count" matSuffix
+        >{{ group.value[field.name].length ?? 0 }}/ {{ field["count"] }}</span
+      >
+    </mat-form-field>
+    <ng-container *ngFor="let valids of field.validations.errorMessage">
+      <div
+        *ngIf="
+          field.validations.hasErrorMessage &&
+          group.get(field.name)?.invalid &&
+          group.get(field.name)?.touched
+        "
+      >
+        <mat-error
+          class="error"
+          *ngIf="group.get(field['name'])?.hasError(valids['type'])"
+        >
+          {{ valids["message"] }}</mat-error
+        >
+      </div>
+    </ng-container>
+    <div class="hint" *ngIf="field['hint'] !== ''">
+      <mat-hint>{{ field["hint"] }}</mat-hint>
+    </div>
+  </div>
+</li>

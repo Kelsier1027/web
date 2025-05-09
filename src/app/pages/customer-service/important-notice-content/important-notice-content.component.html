@@ -1,0 +1,92 @@
+<div class="noticeContent">
+    <div class="title">重要公告</div>
+
+    <div class="data-content" *ngIf="dataContent">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">公告標題</th>
+                    <th scope="col" width="15%" class="tb-center">發佈時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                  <td>
+                    <div class="activy-tag" (click)="toggleDataContent(item)">
+                      <span class="tag" [class.active-status]="item.status === '活動中'"
+                            [class.finished-status]="item.status === '已結束'">{{item.status}}</span>
+                      <div class="name">
+                        <a [routerLink]="['.']" [queryParams]="{ itemId: item.name }">{{item.name}}</a>
+                        <img src="../../../../assets/icons/arrow_right.svg" alt="">
+                      </div>
+                    </div>
+                  </td>
+                  <td class="times">
+                    <span class="tb-center">
+                      {{item.time}}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+        </table>
+
+        <pagination-controls (pageChange)="p = $event" previousLabel="" nextLabel=""
+            style="text-align: center"></pagination-controls>
+
+    </div>
+
+    <div class="data-detail" *ngIf="selectedItem">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <div class="activy-tag">
+                            <span class="tag">{{selectedItem.status}}</span>
+                            <span class="name">
+                                {{selectedItem.name}}
+                            </span>
+                        </div>
+                        <span class="times">{{selectedItem.time}}</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>
+                            <span class="detail"   [innerHTML]="itemToSelectContent">
+                             
+                            </span>
+                            <!--
+                            <div class="detail-search-title">
+                                各區域配送時效查詢
+                            </div>
+                            <a class="detail-search"
+                                href="https://service.unitech.com.tw/Distribution/DistributionInfo.aspx">
+                                經銷商服務專區 > 配送時效查詢
+                            </a>
+                            <div class="detail-link">
+                                <span>
+                                    相關連結
+                                </span>
+                                <a>
+                                    https://service.unitech.com.tw/Distribution/DistributionInfo.aspx
+                                </a>
+                            </div>
+                        -->
+
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="back" (click)="dataContent = true; selectedItem = null;">
+            <img src="../../../../assets/icons/arrow-left.svg" alt="">
+            <span>
+                返回重要公告
+            </span>
+        </button>
+
+    </div>
+</div>

@@ -1,0 +1,227 @@
+<section class="member-center">
+  <div class="bg-wrapper">
+    <p class="title">會員中心</p>
+    <section class="info-col">
+      <div class="wrapper">
+        <div class="member-left">
+          <div class="member-info">
+            <div class="level">
+              <ng-container [ngSwitch]="customerClass">
+                <app-icon
+                  class="icon"
+                  *ngSwitchCase="1"
+                  iconName="gold"
+                ></app-icon>
+                <app-icon
+                  class="icon"
+                  *ngSwitchCase="2"
+                  iconName="silver"
+                ></app-icon>
+                <app-icon
+                  class="icon"
+                  *ngSwitchCase="3"
+                  iconName="bronze"
+                ></app-icon>
+                <app-icon
+                  class="icon"
+                  *ngSwitchDefault
+                  iconName="none"
+                ></app-icon>
+              </ng-container>
+              <ng-container [ngSwitch]="customerClass">
+                <span class="level-text" *ngSwitchCase="1">金級</span>
+                <span class="level-text" *ngSwitchCase="2">銀級</span>
+                <span class="level-text" *ngSwitchCase="3">銅級</span>
+                <span class="level-text" *ngSwitchDefault>未知</span>
+              </ng-container>
+            </div>
+            <p class="user">
+              <span>{{ companyName }}</span>
+              <span class="name">{{ customerName }}</span>
+            </p>
+          </div>
+          <button mat-stroked-button class="member-login" (click)="logout()">
+            登出
+          </button>
+        </div>
+        <ul class="member-right">
+          <li class="link-item" *ngIf="this.displayBonus()">
+            <a routerLink="/Member/Bonus">
+              <p class="text">{{ usableBonusPoints }}</p>
+              <span class="title">紅利點數</span>
+            </a>
+          </li>
+          <li class="link-item">
+            <a routerLink="/Member/Prize">
+              <p class="text">{{ availableAwards }}</p>
+              <span class="title">待領達成禮</span>
+            </a>
+          </li>
+          <li class="link-item">
+            <a routerLink="/Member/Wishlist">
+              <p class="text">{{ tracingItems }}</p>
+              <span class="title">我的追蹤</span>
+            </a>
+          </li>
+          <li class="link-item">
+            <a href="/Member/StockNotice">
+              <p class="text">{{ restockNotifyCount }}</p>
+              <span class="title">貨到通知</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  <ul class="member-action">
+    <li class="action-item">
+      <p class="action-title">公司資料管理</p>
+      <p class="link" [routerLink]="['/Member/Account']">
+        <app-icon
+          class="icon"
+          [iconName]="'member_center_bank_account'"
+        ></app-icon>
+        公司帳戶
+      </p>
+      <p *ngIf="authService.isAdmin" class="link" [routerLink]="['/Member/Manage']">
+        <app-icon class="icon" [iconName]="'member_center_accounts'"></app-icon>
+        帳號管理
+      </p>
+      <p class="link" [routerLink]="['/Member/AddressManage']">
+        <app-icon class="icon" [iconName]="'member_center_delivery'"></app-icon>
+        配送地址管理
+      </p>
+      <p class="link" [routerLink]="['/Member/Password']">
+        <app-icon class="icon" [iconName]="'member_center_password'"></app-icon>
+        變更密碼
+      </p>
+    </li>
+    <li class="action-item">
+      <p class="action-title">我的精技</p>
+      <p *ngIf="displayBonus()" class="link" [routerLink]="['/Member/Bonus']">
+        <app-icon class="icon" [iconName]="'member_center_point'"></app-icon>
+        紅利好康區
+      </p>
+      <p class="link" [routerLink]="['/Member/Prize']">
+        <app-icon class="icon" [iconName]="'member_center_gift'"></app-icon>
+        獎勵活動達成禮
+      </p>
+      <p class="link" [routerLink]="['/Member/Wishlist']">
+        <app-icon class="icon" [iconName]="'member_center_favorite'"></app-icon>
+        我的追蹤
+      </p>
+      <p class="link" [routerLink]="['/Member/StockNotice']">
+        <app-icon
+          class="icon"
+          [iconName]="'member_center_notification'"
+        ></app-icon>
+        貨到通知
+      </p>
+    </li>
+    <li class="action-item">
+      <p class="action-title">訂單與物流</p>
+      <p class="link" [routerLink]="['/Member/Order']">
+        <app-icon class="icon" [iconName]="'member_center_order'"></app-icon>
+        訂單查詢
+      </p>
+      <p class="link" [routerLink]="['/Member/Bill']">
+        <app-icon
+          class="icon"
+          [iconName]="'member_center_price_type'"
+        ></app-icon>
+        帳單查詢
+      </p>
+    </li>
+    <li class="action-item">
+      <p class="action-title">結帳偏好設定</p>
+      <p class="link" [routerLink]="['/Member/CommonAddress']">
+        <app-icon
+          class="icon"
+          [iconName]="'member_center_address_preset'"
+        ></app-icon>
+        常用指送地址
+      </p>
+      <p class="link" [routerLink]="['/Member/DeliveryRemark']">
+        <app-icon class="icon" [iconName]="'member_center_note'"></app-icon>
+        常用出貨備註
+      </p>
+    </li>
+  </ul>
+  <ul class="member-action-mobile">
+    <li class="action-item" [routerLink]="['/Member/Account']">
+      <div class="icon-wrapper">
+        <app-icon
+          class="icon"
+          [iconName]="'member_center_bank_account'"
+        ></app-icon>
+      </div>
+      <p>公司帳戶</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/Manage']">
+      <div class="icon-wrapper">
+        <app-icon class="icon" [iconName]="'member_center_accounts'"></app-icon>
+      </div>
+      <p>帳號管理</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/AddressManage']">
+      <div class="icon-wrapper">
+        <app-icon class="icon" [iconName]="'member_center_delivery'"></app-icon>
+      </div>
+      <p>配送地址管理</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/Password']">
+      <div class="icon-wrapper">
+        <app-icon class="icon" [iconName]="'member_center_password'"></app-icon>
+      </div>
+      <p>變更密碼</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/Order']">
+      <div class="icon-wrapper">
+        <app-icon class="icon" [iconName]="'member_center_order'"></app-icon>
+      </div>
+      <p>訂單查詢</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/Bill']">
+      <div class="icon-wrapper">
+        <app-icon
+          class="icon"
+          [iconName]="'member_center_price_type'"
+        ></app-icon>
+      </div>
+      <p>帳單查詢</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/CommonAddress']">
+      <div class="icon-wrapper">
+        <app-icon class="icon" [iconName]="'member_center_note'"></app-icon>
+      </div>
+      <p>常用指送地址</p>
+    </li>
+    <li class="action-item" [routerLink]="['/Member/DeliveryRemark']">
+      <div class="icon-wrapper">
+        <app-icon class="icon" [iconName]="'member_center_note'"></app-icon>
+      </div>
+      <p>常用出貨備註</p>
+    </li>
+  </ul>
+  <div class="member-action-mobile tax-setting">
+    <span>價格設定</span>
+    <div class="tax">
+      <div class="tax-button-wrapper">
+        <button
+          (click)="unitPriceChange(true)"
+          [ngClass]="{ active: isUnitPrice }"
+          class="tax-button active"
+        >
+          未稅價
+        </button>
+        <button
+          (click)="unitPriceChange(false)"
+          [ngClass]="{ active: !isUnitPrice }"
+          class="tax-button"
+        >
+          含稅價
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

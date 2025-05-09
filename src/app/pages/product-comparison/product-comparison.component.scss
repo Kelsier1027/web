@@ -1,0 +1,535 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "/src/styles/responsive";
+
+.layout {
+  z-index: 50;
+  position: relative;
+  display: none;
+  @include pad {
+    display: block;
+  }
+}
+
+main {
+  background-color: #fff;
+}
+.member-wrapper footer {
+  @include pad {
+    display: none;
+  }
+}
+
+.member-layout {
+  @include pad {
+    display: none;
+  }
+}
+
+.container {
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    max-width: 1210px;
+    border-top: none;
+  }
+
+  .topHeader {
+    display: none;
+    @include pad {
+      display: flex;
+      color: #858585;
+      font-size: 13px;
+      padding: 1rem 0 0 0;
+    }
+  }
+
+  .pageHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin: 1rem 0;
+    line-height: 36px;
+    @include pad {
+      color: #333333;
+      font-size: 30px;
+    }
+
+    .product-title {
+      display: block;
+      font-weight: 700;
+      line-height: 23px;
+      @include pad {
+        display: none;
+      }
+    }
+
+    .product-comparison-title {
+      display: none;
+      @include pad {
+        display: block;
+      }
+    }
+
+    .refresh-button {
+      color: #0972e3;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 22px;
+    }
+  }
+
+  .compare {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    .col-12 {
+      display: flex;
+      border-top: 1px solid #d2dbe7;
+      border-bottom: 1px solid #d2dbe7;
+      padding: 0;
+      @include pad {
+        border: 1px solid #d2dbe7;
+        padding: 0;
+        width: 98%;
+      }
+
+      .compare-col-3:last-child {
+        border-left: 1px solid #d2dbe7;
+        @include pad {
+          border-right-width: 0;
+          border-left-width: 0;
+        }
+      }
+
+      .compare-col-3 {
+        padding: 0.8rem 1rem;
+        position: relative;
+        display: grid;
+        justify-content: center;
+        @include pad {
+          height: 350px;
+          border-right: 1px solid #d2dbe7;
+          border-left-width: 0;
+          padding: 0;
+        }
+
+        .compare-delete {
+          display: none;
+          @include pad {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            display: block;
+          }
+        }
+
+        .compare-image {
+          width: 140px;
+          height: 155px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          @include pad {
+            width: auto;
+            height: auto;
+          }
+          img {
+            width: 140px;
+            height: 140px;
+            @include pad {
+              width: 160px;
+              height: 160px;
+            }
+          }
+        }
+
+        .compare-detail {
+          @include pad {
+            height: 78px;
+          }
+
+          .compare-name {
+            @include pad {
+              display: flex;
+              justify-content: space-between;
+            }
+            span {
+              @include pad {
+                width: 210px;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 23px;
+                letter-spacing: 0em;
+              }
+            }
+
+            .compare-heart {
+              display: none;
+              @include pad {
+                width: 32px;
+                height: 32px;
+                border-radius: 4px;
+                border: 1px solid #ebebeb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
+              img {
+                @include pad {
+                  width: 20px;
+                  height: 20px;
+                }
+              }
+            }
+          }
+
+          .compare-price {
+            color: #333333;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 21px;
+            margin-bottom: 0.8rem;
+            letter-spacing: 0em;
+            @include pad {
+              font-size: 22px;
+              line-height: 24px;
+              margin: 0.5rem 0;
+            }
+            span {
+              color: #858585;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 17px;
+              letter-spacing: 0em;
+
+              @include pad {
+                font-size: 14px;
+                line-height: 22px;
+              }
+            }
+          }
+        }
+
+        button {
+          width: 155px;
+          height: 36px;
+          padding: 0px 24px;
+          border-radius: 4px;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 22px;
+          letter-spacing: 0em;
+          text-align: center;
+          @include pad {
+            width: 260px;
+            height: 36px;
+          }
+          .mat-icon {
+            width: 20px;
+            height: 20px;
+            font-size: large;
+          }
+        }
+      }
+
+      .sticky-col-3:nth-child(3) {
+        border-right-width: 0;
+      }
+
+      .sticky-col-3 {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: 64px;
+        color: #333333;
+        @include pad {
+          height: 104px;
+          justify-content: flex-start;
+          border-right: 1px solid #d2dbe7;
+          border-left-width: 0;
+        }
+
+        .compare-delete {
+          display: none;
+          @include pad {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            display: block;
+          }
+        }
+
+        .compare-cart {
+          display: none;
+          @include pad {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            display: block;
+          }
+        }
+        .compare-image {
+          @include pad {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          img {
+            width: 40px;
+            height: 40px;
+            @include pad {
+              width: 80px;
+              height: 80px;
+              margin: 0 10px;
+            }
+          }
+        }
+
+        .compare-detail {
+          @include pad {
+            height: 80px;
+            display: grid;
+            align-items: center;
+          }
+
+          .compare-name {
+            display: flex;
+            justify-content: space-between;
+
+            @include pad {
+            }
+            span {
+              font-size: 13px;
+              font-weight: 700;
+              line-height: 19px;
+              letter-spacing: 0em;
+              width: 114px;
+              @include pad {
+                width: 152px;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 22px;
+              }
+            }
+          }
+
+          .compare-price {
+            display: none;
+            @include pad {
+              color: #333333;
+              font-size: 16px;
+              font-weight: 700;
+              line-height: 19px;
+              letter-spacing: 0em;
+            }
+            span {
+              @include pad {
+                color: #858585;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 17px;
+                letter-spacing: 0em;
+              }
+            }
+          }
+        }
+
+        button {
+          @include pad {
+            width: 260px;
+            height: 36px;
+            padding: 0px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 22px;
+            letter-spacing: 0em;
+            text-align: center;
+          }
+          .mat-icon {
+            width: 20px;
+            height: 20px;
+            font-size: large;
+          }
+        }
+      }
+    }
+  }
+
+  .compare.compare2 .col-12 {
+    border-top-width: 0;
+    .col-6 {
+      border-right: 1px solid #d2dbe7;
+    }
+    .col-6:last-child {
+      border-right: none;
+    }
+  }
+
+  .spec {
+    @include pad {
+      //display: inline-grid;   // Modify by Tako on 2025/03/11 for IR-114070
+      justify-content: center;
+    }
+
+    .specHeader {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 23px;
+      letter-spacing: 0em;
+      margin: 5vh 0 3vh 5px;
+      @include pad {
+        font-size: 22px;
+        font-weight: 500;
+        line-height: 31px;
+      }
+      span {
+        margin: 0 0.5rem;
+        color: #d6d6d6;
+      }
+    }
+
+    .product-spec {
+      margin: 0 -0.75rem;
+      @include pad {
+        margin: 0;
+      }
+      .spec-name {
+        background: #e8f0f6;   // Modify by Tako on 2025/03/11 for IR-114070
+        padding: 8px 16px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 23px;
+        letter-spacing: 0em;
+      }
+
+      .col-12 {
+        color: #333333;
+        display: flex;
+        .col-md-3 {
+          padding: 8px 16px;
+          border-right: 1px solid #e2e6e9;
+          @include pad {
+            padding: 20px;
+          }
+          .spec-detail {
+            @include pad {
+              font-size: 16px;
+              font-weight: 400;
+              line-height: 23px;
+              letter-spacing: 0em;
+            }
+          }
+        }
+
+        .col-md-3:last-child {
+          border-right: none;
+        }
+      }
+    }
+
+    .excel-button {
+      display: none;
+      @include pad {
+        margin-top: 3vh;
+        display: flex;
+        justify-content: center;
+      }
+      button {
+        @include pad {
+          padding: 0px 24px;
+          border-radius: 4px;
+          border: 1px solid #858585;
+          height: 36px;
+          font-size: 14px;
+          display: inline-flex;
+          align-items: center;
+          font-weight: 500;
+          line-height: 22px;
+          letter-spacing: 0em;
+        }
+      }
+    }
+  }
+}
+
+.section-recommended-products,
+.section-guess-you-like {
+
+  .list-header-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0px;
+
+    .list-header-primary {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 29px;
+      color: #333333;
+    }
+  }
+
+  .list-product {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px 24px;
+
+    .item-product {
+      min-width: 20%;
+      flex: 1;
+
+      .img-product {
+        min-width: 140px;
+        min-height: 140px;
+      }
+    }
+
+    &::ng-deep.product-card {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+    }
+
+    &::ng-deep.row-wrapper {
+      align-items: end;
+    }
+
+    &::ng-deep.product-card-sub-title-wrapper {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .title-product,
+    .price-product {
+      margin-top: 8px;
+      display: block;
+    }
+  }
+}
+
+.section-guess-you-like {
+  padding-bottom: 100px;
+}
+
+.different {
+  background-color: #fff7d9;
+}
+
+.hiddenState {
+  display: none;
+}
+
+.member-wrapper {
+  ::ng-deep app-recommended-likes-products {
+    .item-product {
+      flex-basis: 40%;
+    }
+  }
+}

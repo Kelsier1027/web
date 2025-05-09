@@ -1,0 +1,13 @@
+<app-header-layout
+  [data]="data"
+  [cancel]="data.cancel"
+  [confirm]="data.confirm"
+>
+  <section class="simple-dialog" style="flex: 1">
+    <p
+      class="text"
+      [innerHTML]="data.text"
+      [style]="{ textAlign: data.textAlign || 'initial' }"
+    ></p>
+  </section>
+</app-header-layout>

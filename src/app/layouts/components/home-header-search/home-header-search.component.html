@@ -1,0 +1,94 @@
+<section class="search-col" [ngStyle]="{'position': scrollToHide?'fixed':'static','top': scrollToHide && currentScreenSize !== 'small'?'33px':'0'}"
+(mouseenter)="this.toggleTypeListService.updateState(false)"
+>
+  <div class="wrapper">
+    <div *ngIf="scrollToHide&&!fixedProduct" class="menuButton"
+    (click)="fixedProductCol()">
+      <mat-icon>menu</mat-icon>
+    </div>
+    <div *ngIf="scrollToHide&&fixedProduct" class="menuButton"
+    (click)="fixedProductCol()">
+      <mat-icon>close</mat-icon>
+    </div>
+
+    <div [ngClass]="this.isSales() ? 'search-center' : 'search-left'">
+      <div *ngIf="this.taxIdNumber==null||this.taxIdNumber==''" class="business-logo" routerLink="/">
+        <div [ngClass]="isJingHo() ? 'logo jing-ho' : 'logo'" *ngIf="isHomePage || (currentScreenSize !== 'small')"></div>
+        <button
+        *ngIf="!isHomePage && currentScreenSize === 'small'"
+        mat-icon-button
+        class="mobile-promotion-close-button"
+      >
+        <mat-icon matSuffix>keyboard_backspace</mat-icon>
+      </button>
+      </div>
+      <div *ngIf="this.taxIdNumber!=null&&this.taxIdNumber.length>0"
+        class="business-logo" [routerLink]="['/']">
+        <div [ngClass]="isJingHo() ? 'logo jing-ho' : 'logo'" *ngIf="isHomePage || (currentScreenSize !== 'small')"></div>
+        <button
+        *ngIf="!isHomePage && currentScreenSize === 'small'"
+        mat-icon-button
+        class="mobile-promotion-close-button"
+      >
+        <mat-icon matSuffix>keyboard_backspace</mat-icon>
+      </button>
+      </div>
+      <app-search-radius-input
+        class="search"
+        [placeholder]="'請輸入關鍵字或品號'"
+        (searchChange)="searchName($event)"
+      >
+      </app-search-radius-input>
+      <p class="dealerView" *ngIf="canUseDealerView==true">
+        <span class="link" (click)="dealerViewModal()">
+          檢視經銷商
+        </span>
+        <br/>
+        <span *ngIf="taxIdNumber!=null" class="link taxIdNumber">
+          統編：{{taxIdNumber}}
+          <mat-icon class="close-icon material-icons" (click)="dealerDelete()">close</mat-icon>
+        </span>
+      </p>
+
+    </div>
+    <ul class="search-right" *ngIf="!this.isSales()">
+      <li class="link-item" *ngIf="this.displayBonus()">
+        <a routerLink="/Member/Bonus" [queryParams]="{ dealerView: this.getDealerView() }">
+          <p class="text">{{usableBonusPoints}}<span class="suffix">點</span></p>
+          <span *ngIf="!scrollToHide" class="title">可用紅利</span>
+        </a>
+      </li>
+      <li class="link-item">
+        <a routerLink="/Member/Prize">
+          <p class="text">{{availableAwards}}<span class="suffix">項</span></p>
+          <span *ngIf="!scrollToHide" class="title">待領達成禮</span>
+        </a>
+      </li>
+      <li class="link-item">
+        <a routerLink="/Member/Wishlist">
+          <p class="text favorite">
+            <app-icon class="icon" [iconName]="'favorite'"
+            matBadge="{{tracingItems}}"
+            matBadgeColor="warn"
+            ></app-icon>
+          </p>
+          <span *ngIf="!scrollToHide" class="title">我的追蹤</span>
+        </a>
+      </li>
+      <li class="link-item" *ngIf="canUseCart()">
+        <a routerLink="/ShoppingCart">
+          <p class="text">
+            <app-icon
+              class="icon"
+              [iconName]="'cart'"
+              matBadge="{{cartCount}}"
+              matBadgeColor="warn"
+            >
+            </app-icon>
+          </p>
+          <span *ngIf="!scrollToHide" class="title">購物車</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

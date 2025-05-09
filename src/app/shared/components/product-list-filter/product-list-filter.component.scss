@@ -1,0 +1,123 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  background: #F5F5F5;
+  border: 1px solid #EBEBEB;
+  border-radius: 6px;
+  padding-right: 8px;
+  overflow: hidden;
+
+  .display-type {
+    display: flex;
+    align-items: center;
+
+    .type-wrapper {
+      position: relative;
+      padding: 0 13px;
+      line-height: 0;
+
+      &:last-child:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 14px;
+        background: #C2C2C2;
+      }
+    }
+
+    .type {
+      opacity: .3;
+      line-height: 0;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+
+    .icon-wrapper {
+      display: inline-block;
+      width: 18px;
+    }
+  }
+
+  .category {
+    display: grid;
+    grid-template-columns: repeat(4, 104px);
+
+    .category-button {
+      position: relative;
+      height: 51px;
+
+      &.active {
+        background: #333333;
+        color: #fff;
+      }
+
+      &.active:before {
+        display: none;
+      }
+
+      &.active + .category-button:before {
+        display: none;
+      }
+
+      &:not(:first-child):before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 14px;
+        background: #C2C2C2;
+      }
+    }
+  }
+
+  .tax {
+    display: flex;
+    align-items: center;
+
+    .tax-button {
+      width: 74px;
+      height: 30px;
+      border-radius: 4px;
+
+      &.active {
+        background: #333333;
+        color: #fff;
+      }
+    }
+
+    .tax-button-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 154px;
+      height: 36px;
+      background: #fff;
+      border: 1px solid #D6D6D6;
+      border-radius: 4px;
+    }
+  }
+
+  .right {
+    display: flex;
+  }
+
+  .select-wrapper {
+    width: 84px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+    margin-left: 18px;
+
+    .select {
+      display: block;
+      width: 84px;
+    }
+  }
+}

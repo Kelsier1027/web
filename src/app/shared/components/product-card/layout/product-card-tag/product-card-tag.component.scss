@@ -1,0 +1,82 @@
+%tag {
+  border-radius: 4px;
+  padding: 1px 5px;
+  text-align: center;
+}
+
+.gap {
+  margin-right: 4px;
+  height: 24px
+}
+
+.wide {
+  min-width: 58px;
+}
+
+.purple {
+  background: #e6ddf8;
+  border: 1px solid rgba(94, 61, 158, 0.6);
+  color: #7653bc;
+  @extend %tag;
+}
+
+.yellow {
+  background: #fff5d7;
+  border: 1px solid rgba(183, 129, 3, 0.6);
+  color: #b78103;
+  @extend %tag;
+}
+
+.green {
+  background: #c9e6db;
+  border: 1px solid rgba(0, 123, 85, 0.6);
+  color: #007b55;
+  @extend %tag;
+}
+.lightgreen{
+  color: #229A16;
+  background: #E4F8DD;
+  border: 1px solid rgba(34, 154, 22, 0.6);
+  @extend %tag;
+}
+.red {
+  background: #fbd2d3;
+  border: 1px solid rgba(221, 5, 14, 0.6);
+  color: #dd060e;
+  @extend %tag;
+}
+
+.blue {
+  background: #cee3f9;
+  border: 1px solid rgba(9, 114, 227, 0.6);
+  color: #0972e3;
+  @extend %tag;
+}
+
+.gray {
+  background: #ffffff;
+  border: 1px solid rgba(98, 118, 148, 0.6);
+  color: #627694;
+  @extend %tag;
+}
+
+.lightblue {
+  background: #cdeaf3;
+  border: 1px solid rgba(8, 147, 193, 0.6);
+  color: #0893c1;
+  @extend %tag;
+}
+.origin {
+  background: #FFF19F;
+  border: 1px solid rgba(255, 163, 29, 0.6);
+  color: #EF510A;
+  @extend %tag;
+
+}
+
+.orange {
+  background: #ffef98;
+  border: 1px solid #e2ad4f;
+  color: #c17f32;
+  @extend %tag;
+}

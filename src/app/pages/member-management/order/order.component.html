@@ -1,0 +1,1216 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu active="訂單查詢"></app-member-menu>
+      <main class="content">
+        <app-title>訂單查詢</app-title>
+        <app-company-notic-row
+          [field]="noticationData"
+          class="notice-block"
+        ></app-company-notic-row>
+        <app-status-filter
+          class="status-filter"
+          *ngIf="currentScreenSize !== 'small'"
+          [activeIndex]="initialTabIndex"
+          (tabChange)="onTabChange($event.status)"
+        >
+          <ng-template [filterConfig]="{ value: { status: 1 } }">
+            訂單紀錄
+          </ng-template>
+          <ng-template [filterConfig]="{ value: { status: 2 } }">
+            團購紀錄
+          </ng-template>
+          <ng-template [filterConfig]="{ value: { status: 3 } }">
+            預購紀錄
+          </ng-template>
+        </app-status-filter>
+        <ng-container *ngIf="tabIndex$ | async as tabIndex">
+          <app-search-bar (reset)="reset()">
+            <ng-container ngProjectAs="[left]">
+              <form class="form" [formGroup]="filterForm">
+                <app-icon-select
+                  class="select"
+                  *ngIf="tabIndex === 1"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'status',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: [
+                      {
+                        value: '',
+                        label: '所有狀態'
+                      },
+                      {
+                        value: '受理中',
+                        label: '受理中'
+                      },
+                      {
+                        value: '已輸入',
+                        label: '已輸入'
+                      },
+                      {
+                        value: '已取消',
+                        label: '已取消'
+                      },
+                      {
+                        value: '已預訂',
+                        label: '已預訂'
+                      },
+                      {
+                        value: '已出貨',
+                        label: '已出貨'
+                      },
+                      {
+                        value: '結案',
+                        label: '結案'
+                      }
+                    ],
+                    class: '',
+                    placeholder: '所有通知狀態'
+                  }"
+                >
+                </app-icon-select>
+                <app-icon-select
+                  class="select"
+                  *ngIf="tabIndex === 2"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'groupBuyStatus',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: [
+                      {
+                        value: '',
+                        label: '所有狀態'
+                      },
+                      {
+                        value: 1,
+                        label: '團購中'
+                      },
+                      {
+                        value: 2,
+                        label: '已達成'
+                      },
+                      {
+                        value: 3,
+                        label: '未達成'
+                      },
+                      {
+                        value: 4,
+                        label: '已取消'
+                      }
+                    ],
+                    class: '',
+                    placeholder: '所有通知狀態'
+                  }"
+                >
+                </app-icon-select>
+                <app-icon-select
+                  class="select"
+                  *ngIf="tabIndex === 3"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'status',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: [
+                      {
+                        value: '',
+                        label: '所有狀態'
+                      },
+                      {
+                        value: 1,
+                        label: '預購中'
+                      },
+                      {
+                        value: 2,
+                        label: '已達成'
+                      },
+                      {
+                        value: 3,
+                        label: '已取消'
+                      }
+                    ],
+                    class: '',
+                    placeholder: '所有通知狀態'
+                  }"
+                >
+                </app-icon-select>
+                <app-date-range-filter
+                  [field]="{
+                    class: 'datepicker-wrapper',
+                    inputType: 'text',
+                    type: 'daterangefilter',
+                    label: '日期區間',
+                    start: 'startDate',
+                    end: 'endDate',
+                    minCreateDate: '',
+                    value: ''
+                  }"
+                >
+                </app-date-range-filter>
+                <app-search-input
+                  *ngIf="tabIndex === 1"
+                  class="search"
+                  [placeholder]="'搜尋訂單編號、出貨單號、Po No.、採購單號'"
+                  (searchChange)="onSearchChange($event)"
+                  [inputValue]="filterForm.get('keyword')?.value"
+                ></app-search-input>
+                <app-search-input
+                  *ngIf="tabIndex === 2 || tabIndex === 3"
+                  class="search"
+                  [placeholder]="'搜尋採購單號'"
+                  (searchChange)="onSearchChange($event)"
+                  [inputValue]="filterForm.get('keyword')?.value"
+                ></app-search-input>
+              <mat-error style="text-wrap: nowrap;" *ngIf="filterForm.hasError('dateRange')">
+                起日應小於等於迄日！
+              </mat-error>
+              </form>
+            </ng-container>
+            <ng-container ngProjectAs="[right]">
+              <button
+                type="button"
+                class="export-button"
+                mat-raised-button
+                color="primary"
+                *ngIf="currentScreenSize !== 'small'"
+                (click)="exportExcel(tabIndex)"
+              >
+                匯出清單
+              </button>
+            </ng-container>
+          </app-search-bar>
+          <app-table-container
+            [topping]="true"
+            *ngIf="currentScreenSize !== 'small'"
+          >
+            <app-table
+              [dataSource]="
+                dataSource
+                  | paginate
+                    : { itemsPerPage: pagination?.pageSize, currentPage: pagination?.currentPage }
+              "
+              *ngIf="tabIndex === 1"
+              [noDataCaption]="'查無您的訂單紀錄。'"
+            >
+              <ng-template
+                [column]="{
+                  key: 'creationDate',
+                  width: 130,
+                  title: '下單日期',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell | date : "yyyy/MM/dd" }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'orderStatus',
+                  width: 120,
+                  title: '狀態',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  icon: 'info',
+                  modalOption: {
+                    modalName: 'order-status-description',
+                    modalConfig: {
+                      data: {
+                        title: '訂單狀態'
+                      },
+                      position: { top: '230px' },
+                      width: '784px',
+                      height: '518px',
+                      hasBackdrop: true,
+                      autoFocus: false,
+                      enterAnimationDuration: '300ms',
+                      exitAnimationDuration: '300ms',
+                      panelClass: ''
+                    }
+                  }
+                }"
+                let-value
+              >
+                <p>{{ value.cell }}</p>
+                <p *ngIf="orderList[value.index].deliveryCompany">
+                  {{ "(" + orderList[value.index].deliveryCompany + ")" }}
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'orderNumber',
+                  title: '訂單編號',
+                  width: 150,
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p>
+                  {{ value.cell }}
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'shipNumber',
+                  width: 150,
+                  headerAlign: 'center',
+                  title: '出貨單號'
+                }"
+                let-value
+              >
+                <p>
+                  {{ value.cell }}
+                  <span
+                    *ngIf="orderList[value.index].proofOfDelivery"
+                    class="sign"
+                  >
+                    簽
+                  </span>
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'subInventory',
+                  width: 120,
+                  title: '出貨倉',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'poNo',
+                  title: 'Po No.',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'purchaseNumber',
+                  width: 150,
+                  title: '採購單號',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p
+                  class="link"
+                  [routerLink]="['/Member/Order/', value.cell]"
+                  [queryParams]="{ dealerView: this.dealerView }"
+                  style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;"
+                >
+                  {{ value.cell }}
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'amountWithoutTax',
+                  width: 130,
+                  title: '訂單總價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                ${{ value.cell | number }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'buyerName',
+                  width: 120,
+                  title: '採購人',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'ticket',
+                  width: 120,
+                  title: '發票',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="action">
+                  <span
+                    class="link"
+                    (click)="handleSendModal(value.index)"
+                    *ngIf="orderList[value.index].invoiceNo"
+                  >
+                    寄送
+                  </span>
+                  <!--
+                    <a class="link" *ngIf="orderList[value.index].invoiceNo" [href]="orderList[value.index].invoiceNo"
+                    target="_blank">PDF</a>
+                  -->
+                  <a
+                    class="link"
+                    *ngIf="orderList[value.index].invoiceFile"
+                    (click)="
+                      downloadInvoiceFile(
+                        orderList[value.index].invoiceFile,
+                        value.index
+                      )
+                    "
+                  >
+                    PDF
+                  </a>
+                </p>
+              </ng-template>
+            </app-table>
+            <app-table
+              [dataSource]="groupDataSource | paginate : groupPaginateArgs"
+              *ngIf="tabIndex === 2"
+              [noDataCaption]="'查無您的團購紀錄。'"
+            >
+              <ng-template
+                [column]="{
+                  key: 'orderDate',
+                  width: 98,
+                  title: '下單日期',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell | date : "yyyy/MM/dd" }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'groupBuyStatusName',
+                  width: 120,
+                  title: '團購狀態',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="link">{{ value.cell }}</p>
+                <!-- <p *ngIf="orderList[value.index].deliveryCompany">
+                  {{ "(" + orderList[value.index].deliveryCompany + ")" }}
+                </p> -->
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'orderStatus',
+                  width: 120,
+                  title: '訂單狀態',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  icon: 'info',
+                  modalOption: {
+                    modalName: 'order-status-description',
+                    modalConfig: {
+                      data: {
+                        title: '訂單狀態'
+                      },
+                      position: { top: '230px' },
+                      width: '784px',
+                      height: '518px',
+                      hasBackdrop: true,
+                      autoFocus: false,
+                      enterAnimationDuration: '300ms',
+                      exitAnimationDuration: '300ms',
+                      panelClass: ''
+                    }
+                  }
+                }"
+                let-value
+              >
+                <p class="link">{{ groupOrderList[value.index].groupBuyStatusName === '已達成' ? value.cell : '' }}</p>
+                <!-- <p *ngIf="orderList[value.index].deliveryCompany">
+                  {{ "(" + orderList[value.index].deliveryCompany + ")" }}
+                </p> -->
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'shipNumber',
+                  width: 114,
+                  title: '出貨單號'
+                }"
+                let-value
+              >
+                <p  class="link">
+                  {{ value.cell }}
+                  <!-- <span
+                    *ngIf="orderList[value.index].proofOfDelivery"
+                    class="sign"
+                  >
+                    簽
+                  </span> -->
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'purchaseNo',
+                  width: 124,
+                  title: '採購單號',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p
+                  class="link"
+                  [routerLink]="['/Member/GroupOrder/', value.cell]"
+                  [queryParams]="{ dealerView: this.dealerView }"
+                  style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;"
+                >
+                  {{ value.cell }}
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'itemName',
+                  title: '商品',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'amountWithoutTax',
+                  width: 114,
+                  title: '總價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                ${{ value.cell | number }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'shippingStartDate',
+                  width: 114,
+                  title: '預計出貨日',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ groupOrderList[value.index].orderStatus === '已取消' ? '' : (groupOrderList[value.index].shippingStartDate | date : "yyyy/MM/dd") + '~' + (groupOrderList[value.index].shippingEndDate | date: "yyyy/MM/dd") }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'invoiceNo',
+                  title: '發票',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="action">
+                  <span
+                    class="link"
+                    (click)="handleSendModal(value.index)"
+                    *ngIf="groupOrderList[value.index].invoiceNo"
+                  >
+                    寄送
+                  </span>
+                  <a
+                    class="link"
+                    *ngIf="groupOrderList[value.index].invoiceFile"
+                    (click)="
+                      downloadInvoiceFile(
+                        orderList[value.index].invoiceFile,
+                        value.index
+                      )
+                    "
+                  >
+                    PDF
+                  </a>
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'operate',
+                  title: '操作',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="action">
+                  <a
+                    class="link"
+                    *ngIf="groupOrderList[value.index].canCancel && !this.isDealerViewMode()"
+                    (click)="cancelGroupOrder(groupOrderList[value.index].purchaseNo)"
+                    target="_blank"
+                  >
+                    取消訂單
+                  </a>
+                </p>
+              </ng-template>
+            </app-table>
+            <app-table
+              [dataSource]="preOrderDataSource | paginate : preOrderPaginateArgs"
+              *ngIf="tabIndex === 3"
+              [noDataCaption]="'查無您的預購紀錄。'"
+            >
+              <ng-template
+                [column]="{
+                  key: 'orderDate',
+                  width: 98,
+                  title: '下單日期',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell | date : "yyyy/MM/dd" }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'preorderStatusName',
+                  width: 120,
+                  title: '預購狀態',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="link">{{ value.cell }}</p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'orderStatus',
+                  width: 120,
+                  title: '訂單狀態',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  icon: 'info',
+                  modalOption: {
+                    modalName: 'order-status-description',
+                    modalConfig: {
+                      data: {
+                        title: '訂單狀態'
+                      },
+                      position: { top: '230px' },
+                      width: '784px',
+                      height: '518px',
+                      hasBackdrop: true,
+                      autoFocus: false,
+                      enterAnimationDuration: '300ms',
+                      exitAnimationDuration: '300ms',
+                      panelClass: ''
+                    }
+                  }
+                }"
+                let-value
+              >
+                <p class="link">{{ (preOrderList[value.index].preorderStatusName === '預購中' || preOrderList[value.index].preorderStatusName === '已取消') ? '-' : value.cell }}</p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'shipNumber',
+                  width: 114,
+                  title: '出貨單號'
+                }"
+                let-value
+              >
+                <p>
+                  {{ value.cell }}
+                  <span
+                    *ngIf="preOrderList[value.index].shipNumber"
+                    class="sign"
+                  >
+                    簽
+                  </span>
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'purchaseNo',
+                  width: 124,
+                  title: '採購單號',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p
+                  class="link"
+                  [routerLink]="['/Member/PreOrder/', value.cell]"
+                  [queryParams]="{ dealerView: this.dealerView }"
+                  style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;"
+                >
+                  {{ value.cell }}
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'itemName',
+                  title: '商品',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'amountWithoutTax',
+                  width: 114,
+                  title: '總價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                ${{ value.cell | number }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'shippingDate',
+                  width: 114,
+                  title: '預計出貨日',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ preOrderList[value.index].orderStatus === '已取消' ? '' : (value.cell | date : "yyyy/MM/dd") }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'invoiceNo',
+                  title: '發票',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="action">
+                  <span
+                    class="link"
+                    (click)="handleSendModal(value.index)"
+                    *ngIf="preOrderList[value.index].invoiceNo"
+                  >
+                    寄送
+                  </span>
+                  <a
+                    class="link"
+                    *ngIf="preOrderList[value.index].invoiceFile"
+                    (click)="
+                      downloadInvoiceFile(
+                        checkInvoiceFileNotIsnull(value.index),
+                        value.index
+                      )
+                    "
+                  >
+                    PDF
+                  </a>
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'canCancel',
+                  title: '操作',
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <p class="action">
+                  <a
+                    class="hide-border-right link"
+                    *ngIf="preOrderList[value.index].canCancel && !this.isDealerViewMode()"
+                    (click)="opencancelPreOrder(preOrderList[value.index].purchaseNo)"
+                    target="_blank"
+                  >
+                    取消訂單
+                  </a>
+                </p>
+              </ng-template>
+            </app-table>
+            </app-table-container>
+
+            <pagination-template
+              #p="paginationApi"
+              (pageChange)="onPageChange($event)"
+              [maxSize]="10"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+            >
+              <div class="app-pagination">
+                <div
+                  class="pagination-previous"
+                  [class.disabled]="p.isFirstPage()"
+                >
+                  <a (click)="p.previous()">
+                    <mat-icon fontIcon="chevron_left"></mat-icon>
+                  </a>
+                </div>
+
+                <ul>
+                  <li
+                    *ngFor="let page of p.pages"
+                    [class.current]="p.getCurrent() === page.value"
+                  >
+                    <div *ngIf="p.getCurrent() === page.value">
+                      <span>{{ page.label }}</span>
+                    </div>
+                    <a
+                      (click)="p.setCurrent(page.value)"
+                      *ngIf="p.getCurrent() !== page.value"
+                    >
+                      <span>{{ page.label }}</span>
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="pagination-next" [class.disabled]="p.isLastPage()">
+                  <a *ngIf="p.isLastPage()">
+                    <mat-icon fontIcon="chevron_right"></mat-icon>
+                  </a>
+                  <a *ngIf="!p.isLastPage()" (click)="p.next()">
+                    <mat-icon fontIcon="chevron_right"></mat-icon>
+                  </a>
+                </div>
+
+                <div class="count-per-page">
+                  <mat-form-field appearance="outline">
+                    <mat-select (selectionChange)="onPageCountChange($event)" [(value)]="perPageCount">
+                      <mat-option value="10">10筆</mat-option>
+                      <mat-option value="50">50筆</mat-option>
+                      <mat-option value="100">100筆</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </pagination-template>
+        </ng-container>
+
+        <app-status-filter
+          class="status-filter"
+          *ngIf="currentScreenSize === 'small'"
+          (tabChange)="onTabChange($event.status)"
+        >
+          <ng-template [filterConfig]="{ value: { status: 1 } }">
+            訂單紀錄
+          </ng-template>
+          <ng-template [filterConfig]="{ value: { status: 2 } }">
+            團購紀錄
+          </ng-template>
+          <ng-template [filterConfig]="{ value: { status: 3 } }">
+            預購紀錄
+          </ng-template>
+        </app-status-filter>
+        <ng-container *ngIf="tabIndex$ | async as tabIndex">
+          <div *ngIf="currentScreenSize === 'small'">
+            <app-mobile-table-container
+              *ngIf="dataSource?.length; else noDataMobile"
+            >
+              <div *ngIf="tabIndex === 1">
+                <app-mobile-table-item
+                  *ngFor="
+                    let data of dataSource
+                      | paginate
+                        : {
+                            itemsPerPage: pagination?.pageSize,
+                            currentPage: pagination?.currentPage
+                          };
+                    let last = last;
+                    let index = index
+                  "
+                  [isLast]="last"
+                >
+                  <app-status-card [shortenedHeight]="106">
+                    <ng-template #headerTitle>
+                      <div class="product">
+                        <app-status-type color="blue">訂單</app-status-type>
+                        <span
+                          class="link"
+                          (click)="handleShippingNoModal(index)"
+                        >
+                          {{ data.orderNumber }}
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '下單日期' }">
+                      {{ data.creationDate | date : "yyyy/MM/dd" }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '狀態' }">
+                      <div>
+                        <p>
+                          <span class="link f-left">{{ data.orderStatus }}</span>
+                          <span *ngIf="orderList[index].deliveryCompany">
+                            {{ "(" + orderList[index].deliveryCompany + ")" }}
+                          </span>
+                        </p>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '訂單總價 (未)' }">
+                      ${{ data.amountWithoutTax | number }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '出貨單號' }">
+                      <p>
+                        {{ data.shipNumber }}
+                        <span
+                          *ngIf="orderList[index].proofOfDelivery"
+                          class="sign"
+                        >
+                          簽
+                        </span>
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '出貨倉' }">
+                      {{ data.subInventory }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: 'Po No.' }">
+                      {{ data.poNo }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '採購單號' }">
+                      <p
+                        class="link"
+                        [routerLink]="['/Member/Order/', data.purchaseNumber]"
+                        [queryParams]="{ dealerView: this.dealerView }"
+                      >
+                        {{ data.purchaseNumber }}
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '採購人' }">
+                      {{ data.buyerName }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '發票' }">
+                      <p class="action">
+                        <span
+                          class="link"
+                          (click)="handleSendModal(index)"
+                          *ngIf="orderList[index].invoiceNo"
+                        >
+                          寄送
+                        </span>
+                        <a
+                          class="link"
+                          *ngIf="orderList[index].invoiceFile"
+                          (click)="
+                            downloadInvoiceFile(
+                              orderList[index].invoiceFile,
+                              index
+                            )
+                          "
+                        >
+                          PDF
+                        </a>
+                      </p>
+                    </ng-template>
+                  </app-status-card>
+                </app-mobile-table-item>
+              </div>
+
+              <div *ngIf="tabIndex === 2">
+                <app-mobile-table-item
+                  *ngFor="
+                    let data of groupDataSource
+                      | paginate
+                        : {
+                            itemsPerPage: pagination?.pageSize,
+                            currentPage: pagination?.currentPage
+                          };
+                    let last = last;
+                    let index = index
+                  "
+                  [isLast]="last"
+                >
+                  <app-status-card [shortenedHeight]="140">
+                    <ng-template #headerTitle>
+                      <div class="product">
+                        <app-status-type color="blue">採購單號</app-status-type>
+                        <span
+                          class="link"
+                          [routerLink]="['/Member/GroupOrder/', data.purchaseNo]"
+                          [queryParams]="{ dealerView: this.dealerView }"
+                        >
+                          {{ data.purchaseNo }}
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '下單日期' }">
+                      {{ data.orderDate | date : "yyyy/MM/dd" }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '團購狀態' }">
+                      <div>
+                        <p>
+                          <span class="link f-left">{{ data.groupBuyStatusName }}</span>
+                        </p>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '訂單狀態' }">
+                      <div>
+                        <p>
+                          <span class="link f-left">{{ data.orderStatus }}</span>
+                        </p>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '總價 (未)' }">
+                      ${{ data.amountWithoutTax | number }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '出貨單號' }">
+                      <p>
+                        {{ data.shipNumber }}
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '採購單號' }">
+                      <p
+                        class="link"
+                        [routerLink]="['/Member/GroupOrder/', data.purchaseNo]"
+                        [queryParams]="{ dealerView: this.dealerView }"
+                      >
+                        {{ data.purchaseNo }}
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '商品' }">
+                      <p>
+                        {{ data.itemName }}
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '預計出貨日' }">
+                      {{ data.shippingStartDate | date : "yyyy/MM/dd" }}~
+                      {{ data.shippingEndDate | date : "yyyy/MM/dd" }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '發票' }">
+                      <p class="action">
+                        <span
+                          class="link"
+                          (click)="handleSendModal(index)"
+                          *ngIf="orderList[index].invoiceNo"
+                          style="color: blue;"
+                        >
+                          寄送
+                        </span>
+                        <a
+                          class="link"
+                          *ngIf="orderList[index].invoiceFile"
+                          (click)="
+                            downloadInvoiceFile(
+                              orderList[index].invoiceFile,
+                              index
+                            )
+                          "
+                          style="color: blue;"
+                        >
+                          PDF
+                        </a>
+                      </p>
+                    </ng-template>
+                    <ng-template *ngIf="data.orderStatus != '已取消'" [statusItem]="{ title: 'RWD按鈕' }">
+                      <div>
+                        <button
+                          mat-button
+                          color="primary"
+                          class="cancel-btn"
+                          *ngIf="groupOrderList[index].canCancel && !this.isDealerViewMode()"
+                          (click)="cancelGroupOrder(data.purchaseNo)"
+                        >
+                          取消訂單
+                        </button>
+                      </div>
+                    </ng-template>
+                  </app-status-card>
+                </app-mobile-table-item>
+              </div>
+
+              <div *ngIf="tabIndex === 3">
+                <app-mobile-table-item
+                  *ngFor="
+                    let data of preOrderDataSource
+                      | paginate
+                        : {
+                            itemsPerPage: pagination?.pageSize,
+                            currentPage: pagination?.currentPage
+                          };
+                    let last = last;
+                    let index = index
+                  "
+                  [isLast]="last"
+                >
+                  <app-status-card [shortenedHeight]="140">
+                    <ng-template #headerTitle>
+                      <div class="product">
+                        <app-status-type color="blue">採購單號</app-status-type>
+                        <span
+                          class="link"
+                          [routerLink]="['/Member/PreOrder/', data.purchaseNo]"
+                          [queryParams]="{ dealerView: this.dealerView }"
+                        >
+                          {{ data.purchaseNo }}
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '下單日期' }">
+                      {{ data.orderDate | date : "yyyy/MM/dd" }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '預購狀態' }">
+                      <div>
+                        <p>
+                          <span class="link f-left">{{ data.preorderStatusName }}</span>
+                        </p>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '訂單狀態' }">
+                      <div>
+                        <p>
+                          <span class="link f-left">{{ data.orderStatus }}</span>
+                        </p>
+                      </div>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '總價 (未)' }">
+                      ${{ data.amountWithoutTax | number }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '出貨單號' }">
+                      <p>
+                        {{ data.shipNumber }}
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '採購單號' }">
+                      <p
+                        class="link"
+                        [routerLink]="['/Member/PreOrder/', data.purchaseNo]"
+                        [queryParams]="{ dealerView: this.dealerView }"
+                      >
+                        {{ data.purchaseNo }}
+                      </p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '商品' }">
+                      <p>{{ data.itemName }}</p>
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '預計出貨日' }">
+                      {{ data.shippingDate | date : "yyyy/MM/dd" }}
+                    </ng-template>
+                    <ng-template [statusItem]="{ title: '發票' }">
+                      <p class="action">
+                        <span
+                          class="link"
+                          (click)="handleSendModal(index)"
+                          *ngIf="orderList[index].invoiceNo"
+                        >
+                          寄送
+                        </span>
+                        <a
+                          class="link"
+                          *ngIf="orderList[index].invoiceFile"
+                          (click)="
+                            downloadInvoiceFile(
+                              orderList[index].invoiceFile,
+                              index
+                            )
+                          "
+                        >
+                          PDF
+                        </a>
+                      </p>
+                    </ng-template>
+                    <ng-template *ngIf="data.orderStatus != '已取消'" [statusItem]="{ title: 'RWD按鈕' }">
+                      <div>
+                        <button mat-button color="primary" *ngIf="preOrderList[index].canCancel && !this.isDealerViewMode()" class="cancel-btn">取消訂單</button>
+                      </div>
+                    </ng-template>
+                  </app-status-card>
+                </app-mobile-table-item>
+              </div>
+
+              <pagination-template
+                #p="paginationApi"
+                (pageChange)="onPageChange($event)"
+                [maxSize]="5"
+                previousLabel="上一頁"
+                nextLabel="下一頁"
+                screenReaderPaginationLabel="Pagination"
+                screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page"
+                style="text-align: center"
+              >
+                <div class="app-pagination">
+                  <div
+                    class="pagination-previous"
+                    [class.disabled]="p.isFirstPage()"
+                  >
+                    <a (click)="p.previous()">
+                      <mat-icon fontIcon="chevron_left"></mat-icon>
+                    </a>
+                  </div>
+
+                  <ul>
+                    <li
+                      *ngFor="let page of p.pages"
+                      [class.current]="p.getCurrent() === page.value"
+                    >
+                      <div *ngIf="p.getCurrent() === page.value">
+                        <span>{{ page.label }}</span>
+                      </div>
+                      <a
+                        (click)="p.setCurrent(page.value)"
+                        *ngIf="p.getCurrent() !== page.value"
+                      >
+                        <span>{{ page.label }}</span>
+                      </a>
+                    </li>
+                  </ul>
+
+                  <div
+                    class="pagination-next"
+                    [class.disabled]="p.isLastPage()"
+                  >
+                    <a *ngIf="p.isLastPage()">
+                      <mat-icon fontIcon="chevron_right"></mat-icon>
+                    </a>
+                    <a *ngIf="!p.isLastPage()" (click)="p.next()">
+                      <mat-icon fontIcon="chevron_right"></mat-icon>
+                    </a>
+                  </div>
+
+                  <div class="count-per-page">
+                    <mat-form-field appearance="outline">
+                      <mat-select (selectionChange)="onPageCountChange($event)" [(value)]="perPageCount">
+                        <mat-option value="10">10筆</mat-option>
+                        <mat-option value="50">50筆</mat-option>
+                        <mat-option value="100">100筆</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </pagination-template>
+            </app-mobile-table-container>
+          </div>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>
+
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的訂單紀錄。</div>
+</ng-template>

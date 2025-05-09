@@ -1,0 +1,196 @@
+@import "responsive";
+
+::ng-deep .breadcrumb {
+  background-color: #FFFFFF;
+  padding-left: 40px !important;
+}
+
+.datepicker-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 12px;
+  @include pad {
+    grid-template-columns: repeat(2, 140px);
+    margin-bottom: 0;
+  }
+}
+
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  background-color: #eff2f4;
+
+  .form {
+    @include pad {
+      display: grid;
+      align-items: center;
+      grid-template-columns: 272px 340px;
+      column-gap: 30px;
+    }
+  }
+
+  .mobile-table {
+    background-color: #fff;
+    padding: 16px;
+  }
+
+  .mobile-table-item {
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+
+  @include pad {
+    background-color: #fff;
+  }
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+
+  .pagination ::ng-deep.ngx-pagination {
+    margin-top: 32px;
+  }
+}
+
+.bill-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px 16px 12px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 23px;
+  border-bottom: 1px solid #ebebeb;
+  @include pad {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 12px;
+    border-bottom: none;
+    .expand-icon {
+      display: none;
+    }
+  }
+}
+
+.table-container {
+  border: 1px solid #ebebeb;
+  .mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: 0px;
+    padding: 0px;
+  }
+  .mat-form-field {
+    width: 100%;
+  }
+
+  .search-bar {
+    padding: 19px 14px;
+    @include pad {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .search {
+      margin-bottom: 10px;
+      @include pad {
+        margin-bottom: 0px;
+      }
+    }
+  }
+  .left {
+    display: flex;
+    flex-direction: column;
+    background: #eff2f4;
+    padding: 16px;
+    @include pad {
+      background: none;
+      flex-direction: row;
+      padding: 0px;
+    }
+    .refresh-icon {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      color: #0972e3;
+      margin-left: 18px;
+      .icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        .mat-icon {
+          width: 100%;
+          height: 100%;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  .right {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    @include pad {
+      padding: 0px;
+    }
+    .export-button {
+      display: none;
+      @include pad {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    }
+  }
+  .invoiceTitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .expand-icon {
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    margin-left: 5px;
+  }
+}
+
+.action {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  margin-right: auto;
+  .link {
+    margin-top: 4px;
+    line-height: 12px;
+    cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+  }
+  :first-child {
+    border-right: 1px solid #c2c2c2;
+    margin-right: 8px;
+    padding-right: 8px;
+  }
+}
+
+.no-data-mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 16px;
+  gap: 16px;
+  background: #ffffff;
+  margin-bottom: 10px;
+}

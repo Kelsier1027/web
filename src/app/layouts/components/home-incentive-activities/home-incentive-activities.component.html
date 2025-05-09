@@ -1,0 +1,93 @@
+<div class='slide-card'>
+    <div class="slide-for-desktop">
+        <section class='slide-card-body'>
+            <swiper #swiper [config]="config" (slideChange)="onSlideChange(swiper)">
+                <ng-container *ngFor="let slide of slidesOption">
+                    <ng-template swiperSlide>
+                        <div class="box">
+                            <div class="inner">
+                                <h1 *ngIf="slide.points!==''" class="points mb-5px">
+                                    {{slide.points}}
+                                </h1>
+                                <h1 *ngIf="slide.points==''&&slide.title!=null" class="points mb-5px">
+                                    {{slide.title}}
+                                </h1>
+                                <span class="type mb-5px">{{slide.type}}</span>
+                                <p class="description">{{slide.description}}</p>
+                                <p class="gray">{{slide.date}} </p>
+                            </div>
+
+                            <div class="divide"></div>
+
+                            <div class="inner">
+                                <a [href]="slide.detailUrl" target="_blank">
+                                  <!-- // 精技新增 Add by Kelsier at 2024/11/07 for No.2024035201 -->
+                                  <p class="gray" *ngIf="slide.targetReward != ''">
+                                    {{ slide.targetReward }}
+                                  </p>
+                                  <!-- // 精技新增 End add by Kelsier at 2024/11/07 for No.2024035201 -->
+                                  <div class="progressBar">
+                                      <mat-progress-bar [color]="color" [mode]="mode" [value]="slide.condition">
+                                      </mat-progress-bar>
+                                      <div class="conditionText"
+                                          [style.background-image]="updateGradient(slide.condition)">
+                                          <span>
+                                              {{slide.conditionText}}
+                                          </span>
+
+
+                                      </div>
+                                  </div>
+                                </a>
+                                <p class="gray">
+                                    {{slide.conditionStatus}}
+                                </p>
+                            </div>
+
+                        </div>
+                    </ng-template>
+                </ng-container>
+            </swiper>
+        </section>
+    </div>
+
+    <div class="slide-for-mobile">
+        <ng-container *ngFor="let slide of slidesOption">
+            <div class="box">
+                <div class="inner">
+                    <h1 *ngIf="slide.points!==''" class="points mb-5px">
+                        {{slide.points}}
+                    </h1>
+                    <h1 *ngIf="slide.points===''&&slide.title!=null" class="points mb-5px">
+                        {{slide.title}}
+                    </h1>
+                    <span class="type mb-5px">{{slide.type}}</span>
+                    <p class="mb-5px">{{slide.description}}</p>
+                    <p class="gray">{{slide.date}}</p>
+                </div>
+
+                <div class="divide"></div>
+
+                <div class="inner">
+                    <a [href]="slide.detailUrl" target="_blank">
+                      <div class="progressBar">
+                          <mat-progress-bar [color]="color" [mode]="mode" [value]="slide.condition">
+                          </mat-progress-bar>
+                          <div class="conditionText" [style.background-image]="updateGradient(slide.condition)">
+                              <span>
+                                  {{slide.conditionText}}
+                              </span>
+
+
+                          </div>
+                      </div>
+                    </a>
+                    <p class="gray">
+                        {{slide.conditionStatus}}
+                    </p>
+                </div>
+
+            </div>
+        </ng-container>
+    </div>
+</div>

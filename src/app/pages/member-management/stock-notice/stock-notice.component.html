@@ -1,0 +1,413 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu active="貨到通知"></app-member-menu>
+      <main class="content">
+        <app-title>貨到通知</app-title>
+        <p class="hint">
+          <span class="hint-icon-wrapper">
+            <app-icon [iconName]="'info'"></app-icon> </span
+          >目前僅提供過去90天的貨到通知商品。
+        </p>
+        <app-search-bar (reset)="reset()">
+          <ng-container ngProjectAs="[left]">
+            <form class="form" [formGroup]="filterForm">
+              <div class="form-select">
+                <app-icon-select
+                  class="select"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'processStatus',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: [
+                      {
+                        value: '',
+                        label: '所有通知狀態'
+                      },
+                      {
+                        value: '已通知',
+                        label: '已通知'
+                      },
+                      {
+                        value: '未通知',
+                        label: '未通知'
+                      },
+                      {
+                        value: '已過期',
+                        label: '已過期'
+                      }
+                    ],
+                    class: '',
+                    placeholder: '所有通知狀態'
+                  }"
+                >
+                </app-icon-select>
+                <app-icon-select
+                  class="select"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'notificationStatus',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: [
+                      {
+                        value: '',
+                        label: '所有到貨狀態'
+                      },
+                      {
+                        value: '無法到貨',
+                        label: '無法到貨'
+                      },
+                      {
+                        value: '已到貨',
+                        label: '已到貨'
+                      }
+                    ],
+                    class: '',
+                    placeholder: '所有到貨狀態'
+                  }"
+                >
+                </app-icon-select>
+              </div>
+              <app-search-input
+                class="search"
+                [placeholder]="'搜尋品號或品名'"
+                (searchChange)="onSearchChange($event)"
+                [inputValue]="filterForm.get('itemNumber')?.value"
+              >
+              </app-search-input>
+            </form>
+          </ng-container>
+        </app-search-bar>
+        <app-table-container
+          [topping]="true"
+          *ngIf="currentScreenSize !== 'small'"
+        >
+          <app-table
+            [dataSource]="
+              dataSource
+                | paginate
+                  : {
+                        itemsPerPage: pagination?.pageSize ?? 10,
+                        currentPage: pagination?.currentPage ?? 1,
+                        totalItems: pagination?.total ?? dataSource?.length
+                  }
+            "
+            [noDataCaption]="'查無您的貨到通知紀錄。'"
+          >
+            <ng-template
+              [column]="{
+                key: 'creationDate',
+                width: 120,
+                title: '申請日期',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell | date : "yyyy/MM/dd" }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'lastName',
+                width: 120,
+                title: '申請人',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{ key: 'product', title: '品號/品名' }"
+              let-value
+            >
+              <p class="link">
+                {{ value.row.itemSeg }} / {{ value.row.description }}
+              </p>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'itemQty',
+                width: 70,
+                title: '數量',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <div class="warning">{{ value.cell }}</div>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'notificationMail',
+                width: 90,
+                title: '通知對象',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <div class="notifiedPersonCount">
+                {{ value.cell.length + "位" }}
+                <div class="icon-wrapper">
+                  <app-icon
+                    class="info-icon"
+                    [iconName]="'info'"
+                    #tooltip="matTooltip"
+                    matTooltip="{{ value.cell.join('\r\n') }}"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipClass]="'above'"
+                  ></app-icon>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'processStatus',
+                title: '狀態',
+                width: 120,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <app-status-tag
+                [color]="value.cell === '已通知' ? 'green' : 'grey'"
+                >{{ value.cell }}</app-status-tag
+              >
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'notificationDeadline',
+                title: '預期通知',
+                width: 120,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell | date : "yyyy/MM/dd" }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'notificationDate',
+                title: '通知日期',
+                width: 120,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell | date : "yyyy/MM/dd" }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'notificationStatus',
+                title: '通知結果',
+                width: 120,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <div class="notifiedPersonCount">
+                {{ value.cell ? value.cell.split(";")[0] : value.cell }}
+                <div
+                  class="icon-wrapper cart"
+
+                  *ngIf="
+                    value.cell
+                      ? value.cell.split(';')[0] === '已到貨'
+                      : value.cell
+                  "
+                >
+                <a
+                class="cart-button"
+                [routerLink]="['/Product']"
+                [queryParams]="{ itemId: value.row.itemId }"
+              >
+              <app-icon [iconName]="'shopping_cart'"></app-icon>
+            </a>
+              <!--
+                <a routerLink="/Member/Wishlist">
+                  <app-icon [iconName]="'cart'"> </app-icon>
+                </a>
+              -->
+                </div>
+                <div
+                  class="icon-wrapper"
+                  *ngIf="
+                    value.cell
+                      ? value.cell.split(';')[0] === '無法到貨'
+                      : value.cell
+                  "
+                >
+                  <app-icon
+                    class="info-icon"
+                    [iconName]="'info'"
+                    #tooltip="matTooltip"
+                    matTooltip="{{ value.cell.split(';')[1] }}"
+                    [matTooltipPosition]="'above'"
+                    [matTooltipClass]="'above'"
+                    matTooltipTouchGestures="auto"
+                  ></app-icon>
+                </div>
+              </div>
+            </ng-template>
+          </app-table>
+          </app-table-container>
+          <pagination-controls
+            class="pagination"
+            (pageChange)="onPageChange($event)"
+            [maxSize]="10"
+            [directionLinks]="true"
+            [autoHide]="!dataSource?.length"
+            [responsive]="true"
+            previousLabel="上一頁"
+            nextLabel="下一頁"
+            screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page"
+            style="text-align: center"
+          >
+        </pagination-controls>
+        <ng-container *ngIf="currentScreenSize === 'small'">
+          <app-mobile-table-container
+            *ngIf="dataSource?.length; else noDataMobile"
+          >
+            <app-mobile-table-item
+              *ngFor="
+                let data of dataSource
+                  | paginate
+                    : {
+                        itemsPerPage: pagination?.pageSize ?? 10,
+                        currentPage: pagination?.currentPage ?? 1,
+                        totalItems: pagination?.total ?? dataSource?.length
+                      };
+                let last = last
+              "
+              [isLast]="last"
+            >
+              <app-status-card [isActive]="data.processStatus === '已通知'">
+                <ng-template #headerTitle>
+                  <div class="product">
+                    <app-status-type color="blue">品號</app-status-type>
+                    <span class="product-title">
+                      {{ data.itemSeg }} / {{ data.description }}
+                    </span>
+                  </div>
+                </ng-template>
+                <ng-template #headerEnd>
+                  <app-status-tag
+                    [color]="data.processStatus === '已通知' ? 'green' : 'grey'"
+                    >{{ data.processStatus }}</app-status-tag
+                  >
+                </ng-template>
+                <ng-template [statusItem]="{ title: '申請日期' }">{{
+                  data.creationDate
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '申請人' }">{{
+                  data.lastName
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '數量' }">{{
+                  data.itemQty
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '通知對象' }">
+                  <div class="notifiedPersonCount">
+                    {{ data.notificationMail.length + "位" }}
+                    <div class="icon-wrapper">
+                      <button
+                        #tooltip="matTooltip"
+                        (click)="toggleToolTip(tooltip)"
+                        matTooltip="{{ data.notificationMail.join('\r\n') }}"
+                        matTooltipPosition="above"
+                        aria-label="Button that shows a tooltip"
+                      >
+                        <app-icon [iconName]="'info'" class="info-icon"></app-icon>
+                      </button>
+                    </div></div
+                ></ng-template>
+                <ng-template [statusItem]="{ title: '預期通知' }">{{
+                  data.notificationDeadline
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '通知日期' }">{{
+                  data.notificationDate
+                }}</ng-template>
+                <ng-template [statusItem]="{ title: '通知結果' }"
+                  ><div class="notifiedPersonCount">
+                    {{
+                      data.notificationStatus
+                        ? data.notificationStatus.split(";")[0]
+                        : data.notificationStatus
+                    }}
+                    <div
+                      class="icon-wrapper"
+                      *ngIf="
+                        data.notificationStatus
+                          ? data.notificationStatus.split(';')[0] === '無法到貨'
+                          : data.notificationStatus
+                      "
+                    >
+                      <button
+                        #tooltip="matTooltip"
+                        (click)="toggleToolTip(tooltip)"
+                        matTooltip="{{ data.notificationStatus.split(';')[1] }}"
+                        matTooltipPosition="above"
+                        aria-label="Button that shows a tooltip"
+                      >
+                        <app-icon [iconName]="'info'" class="info-icon"></app-icon>
+                      </button>
+                    </div>
+                    </div
+                >
+              </ng-template>
+              <ng-template [statusItem]="{ title: 'RWD按鈕' }"
+                >
+                <div
+                class="cart-btn"
+                routerLink="/Product"
+                [queryParams]="{ itemId: data.itemId }"
+                *ngIf="
+                  data.notificationStatus
+                    ? data.notificationStatus.split(';')[0] === '已到貨'
+                    : data.notificationStatus
+                "
+              >
+              <div class="cart-btn-text">我要訂購</div>
+              </div>
+            </ng-template>
+
+              </app-status-card>
+            </app-mobile-table-item>
+            <pagination-controls
+              (pageChange)="onPageChange($event)"
+              [maxSize]="10"
+              [directionLinks]="true"
+              [autoHide]="!pagination?.total"
+              [responsive]="true"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+            >
+            </pagination-controls>
+          </app-mobile-table-container>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>
+
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的貨到通知紀錄。</div>
+</ng-template>

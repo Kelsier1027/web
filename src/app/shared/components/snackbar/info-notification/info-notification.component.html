@@ -1,0 +1,19 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <div class="custom-notification">
+    <span
+      class="close"
+      (click)="snackBarRef.dismiss()"
+      *ngIf="currentScreenSize !== 'small'"
+    >
+      <mat-icon>{{ data.button }}</mat-icon>
+    </span>
+    <span class="message">{{ data.message }}</span>
+    <span
+      class="close"
+      (click)="snackBarRef.dismiss()"
+      *ngIf="currentScreenSize === 'small'"
+    >
+      <mat-icon>{{ data.button }}</mat-icon>
+    </span>
+  </div>
+</ng-container>

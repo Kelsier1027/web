@@ -1,0 +1,28 @@
+<app-header-layout [data]="data" [cancel]="data.cancel" [confirm]="onConfirm">
+  <section class="simple-dialog" style="flex: 1">
+    <p
+      class="text"
+      [innerHTML]="data.text"
+      [style]="{ textAlign: data.textAlign || 'initial' }"
+    ></p>
+    <label>配送方式</label>
+    <mat-radio-group name="shippingMethod" [(ngModel)]="shippingMethod">
+      <mat-radio-button
+        color="primary"
+        *ngFor="let item of shippingMethods"
+        [value]="item.value"
+      >{{ item.label }}</mat-radio-button>
+    </mat-radio-group>
+    <div class="footer">
+      <button class="button" mat-stroked-button mat-dialog-close>返回</button>
+      <button
+        class="button"
+        mat-raised-button
+        color="primary"
+        (click)="onConfirm()"
+      >
+        確定
+      </button>
+    </div>
+  </section>
+</app-header-layout>

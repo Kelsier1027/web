@@ -1,0 +1,80 @@
+<article class="slide-card">
+  <section class="slide-card-body">
+    <swiper #swiper [config]="config">
+      <ng-container>
+        <ng-template swiperSlide *ngFor="let slide of this.slidesData">
+          <div class="box" *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+            <a routerLink="/Product" target="_blank" [queryParams]="{ itemId: slide.itemId, source: 'prime-sale', sourceId: slide.promoId }">
+              <app-product-card-column>
+                <app-product-card-badge [productTag]="slide.productTag" [keepIcon]="true" badge
+                  *ngIf="slide.productTag">
+                </app-product-card-badge>
+                <img img class="img" [src]="slide.imgSrc" alt="" />
+
+                <app-product-card-title class="home-card-title" title>
+                  {{ slide.mainTitle }}
+                </app-product-card-title>
+                <app-product-card-sub-title class="sub-title" subTitle>
+                  {{ slide.subTitle }}
+                </app-product-card-sub-title>
+                <app-product-card-price class="price mb-10px" price>
+                  {{ slide.price | tax }}
+                </app-product-card-price>
+                <app-product-card-old-price class="mb-10px" oldPrice>
+                  {{ slide.oldPrice | tax : true }}
+                </app-product-card-old-price>
+                <app-product-control
+                  class="product-control-column"
+                  [isCompareAddOrRemove]="isCompareAddOrRemove(slide)"
+                  [isAddToWishList]="isAddToWishList(slide)"
+                  (addToCart)="addToCart.emit(slide)"
+                  (addToWishList)="addToWishList(slide)"
+                  (addToComparison)="addToComparison.emit(slide)"
+                  *ngIf="currentScreenSize === 'small'"
+                  cart
+                >
+                </app-product-control>
+
+
+                <app-product-card-footer footer [border]="true">
+                  <div class="progressBar text-center">
+                    <mat-progress-bar [mode]="mode" [value]="slide.condition"></mat-progress-bar>
+                    <div class="conditionText" [style.background-image]="updateGradient(slide.condition)">
+                      <span>{{ slide.conditionText }}</span>
+                    </div>
+                  </div>
+                  <p class="gray text-center">
+                    即日起 - {{ slide.conditionStatus }}
+                  </p>
+                </app-product-card-footer>
+              </app-product-card-column>
+            </a>
+            <div class="cart-wrapper">
+              <app-product-control
+                class="column"
+                [displayStatus]="0"
+                [isCompareAddOrRemove]="isCompareAddOrRemove(slide)"
+                [isAddToWishList]="isAddToWishList(slide)"
+                (addToCart)="addToCart.emit(slide)"
+                (addToComparison)="addToComparison.emit(slide)"
+                (addToWishList)="addToWishList(slide)"
+                *ngIf="currentScreenSize !== 'small'"
+              >
+              </app-product-control>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </swiper>
+  </section>
+
+  <div class="controllButton">
+    <button class="slideButton left" type="button" (click)="slidePrev()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    <span class="page"></span>
+    <button class="slideButton right" type="button" (click)="slideNext()">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+</article>

@@ -1,0 +1,457 @@
+@import "responsive";
+
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+}
+
+.content {
+  flex: 1 1 100%;
+  @include pad {
+    padding: 0px;
+  }
+
+  .wrapper {
+    @include pad {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .title {
+    display: none;
+    font-size: 26px;
+    line-height: 36px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+}
+
+.back {
+  display: none;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 13px;
+  line-height: 19px;
+  cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+  @include pad {
+    display: flex;
+  }
+}
+.bill-title {
+  padding: 12px 16px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 29px;
+  @include pad {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 8px 16px 0px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+    border-bottom: 1px solid #ebebeb;
+  }
+  .title-and-button {
+    display: flex;
+    align-items: center;
+    
+    .bill-no-title {
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 25px;
+      padding-right: 10px;
+      @include pad {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 26px;
+      }
+    }
+
+    .print-button {
+      margin-left: auto;
+      margin-right: 0;
+      @include pad {
+        display: inline-block;
+        margin-left: 16px;
+        margin-right: auto;
+      }
+    }
+  }
+  .sub-title {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    color: #858585;
+    padding: 0px;
+    @include pad {
+      display: flex;
+      color: #333;
+    }
+    .sub-name {
+      margin-right: 8px;
+    }
+  }
+  @include pad {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 26px;
+    color: #333333;
+    margin-bottom: 12px;
+    border-bottom: none;
+    .expand-icon {
+      display: none;
+    }
+  }
+}
+
+.bill-info-section {
+  background-color: #eff2f4;
+  border: 1px solid #d2dbe7;
+  border-radius: 6px;
+  padding: 32px 24px;
+  margin-bottom: 16px;
+  @include pad {
+    padding: 36px 48px 32px;
+    margin-bottom: 24px;
+  }
+}
+
+.table-container {
+  border: 1px solid #ebebeb;
+}
+
+.price-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0px 16px 16px;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  @include pad {
+    margin: 0px;
+    border-radius: 0px;
+  }
+  .price-subtotal {
+    width: 100%;
+    padding: 16px 16px 11px;
+    .price-subtotal-item {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+  .price-total {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 17px 16px 17px;
+    border-top: 1px solid #ebebeb;
+    .total-amount {
+      font-family: "Lato";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+      text-align: right;
+      color: #0972e3;
+    }
+  }
+}
+
+.cancel-button {
+  padding-top: 10px;
+  text-align: right;
+
+  button {
+    border: solid 1px #999;
+    padding: 10px;
+  }
+
+  button:disabled {
+    border: solid 1px #ccc;
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+  }
+}
+
+.shipping-wrapper {
+  background: #eff2f4;
+  padding: 8px 0px 8px;
+  @include pad {
+    margin-top: 32px;
+    padding: 0px;
+  }
+  .shipping-detail {
+    padding: 24px 16px 16px;
+    background: #ffffff;
+    @include pad {
+      padding: 0px;
+    }
+    .bill-no-title {
+      margin-bottom: 16px;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 25px;
+      @include pad {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 26px;
+      }
+    }
+    .shipping-image-wrapper {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+      @include pad {
+        padding: 24px;
+      }
+    }
+    .shipping-image {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+      height: 100vw;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+}
+
+.operate {
+  font-size: 13px;
+  height: 19px;
+  .link {
+    display: inline-block;
+    line-height: 13px;
+    cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  :nth-child(even) {
+    border-left: 1px solid #c2c2c2;
+    padding-left: 12px;
+    margin-left: 12px;
+  }
+}
+
+.order-tracking {
+  @include pad {
+    margin-bottom: 24px;
+  }
+  .tracking {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px;
+    gap: 4px;
+    background: #eff2f4;
+    .order-status {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 26px;
+      color: #333333;
+    }
+    .date {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      color: #5c5c5c;
+    }
+  }
+}
+
+.order-data {
+  background-color: #f5f5f5;
+  padding: 18px;
+  margin: 1rem 1rem 1rem 1rem;
+  border-radius: 6px;
+  display: grid;
+  gap: 10px;
+  @include pad {
+    margin: 0 0 24px 0;
+    border-radius: none;
+    display: flex;
+  }
+
+  .status {
+    width: 58px;
+    height: 26px;
+    padding: 1px 8px;
+    margin-right: 1rem;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #ed1c24;
+    color: #ed1c24;
+    background-color: #fff;
+    border-radius: 4px;
+  }
+  .status-blue {
+    width: 58px;
+    height: 26px;
+    padding: 1px 8px;
+    margin-right: 1rem;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #0972e3;
+    color: #0972e3;
+    background-color: #fff;
+    border-radius: 4px;
+  }
+
+  .status-red {
+    width: 58px;
+    height: 26px;
+    padding: 1px 8px;
+    margin-right: 1rem;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #f17c80;
+    color: #f17c80;
+    background-color: #fff;
+    border-radius: 4px;
+  }
+
+  .order-detail {
+    color: #333333;
+    display: grid;
+    gap: 10px;
+    .name {
+      font-size: 18px;
+      font-weight: 500;
+    }
+    .detail {
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .time {
+      display: none;
+      color: #5c5c5c;
+      font-size: 13px;
+      font-weight: 400;
+      @include pad {
+        display: block;
+      }
+    }
+    .time-mobile {
+      display: contents;
+      color: #5c5c5c;
+      font-size: 13px;
+      font-weight: 400;
+      @include pad {
+        display: none;
+      }
+    }
+  }
+
+  .order-status {
+    background-color: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 6px;
+    display: flex;
+    padding: 1rem;
+    @include pad {
+      width: 288px;
+    }
+    .icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 1rem;
+    }
+    .content {
+      display: grid;
+      gap: 7px;
+      .status-text {
+        color: #333333;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .status-detail {
+        @include pad {
+          color: #5c5c5c;
+          font-size: 14px;
+          font-weight: 400;
+        }
+      }
+      .progress-detail {
+        display: flex;
+        gap: 15px;
+        .progress-message {
+          @include pad {
+            color: #0972E3;
+            font-size: 14px;
+            font-weight: 400;
+          }
+        }
+
+        .progress-status {
+          @include pad {
+            width: 68px;
+            color: #858585;
+            font-size: 12px;
+            font-weight: 400;
+          }
+        }
+
+      }
+
+      .progressBar {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        height: 30px;
+        position: relative;
+        width: 100%;
+
+        .mat-progress-bar {
+          height: 20px;
+          border-radius: 20px;
+          border: 1px solid #D6D6D6;
+          margin-right: 5px;
+          ::ng-deep .mat-progress-bar-buffer {
+            background-color: #fff;
+          }
+        }
+
+        .text-progressbar {
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 22px;
+          color: #5c5c5c;
+        }
+      }
+    }
+  }
+
+  .order-group {
+    gap: 10px;
+    display: grid;
+    @include pad {
+      display: inline-flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+}
+
+.send-later {
+    width: 66px;
+    height: 24px;
+
+    color: #FFF;
+    background: #A2A9B1;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+    font-size: 13px;
+
+    text-align: center;    
+}

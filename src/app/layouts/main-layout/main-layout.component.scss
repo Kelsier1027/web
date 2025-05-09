@@ -1,0 +1,206 @@
+@import "/src/styles/responsive";
+
+.layout {
+  height: 100%;
+  overflow: scroll;
+
+  @include pad {
+    overflow: hidden;
+  }
+
+  .main {
+    height: 100%;
+    @include pad {
+      min-height: calc(100vh - 68px);
+      max-height: calc(100% - 68px);
+    }
+  }
+
+  .content {
+    background-color: #eff2f4;
+    @include pad {
+      background-color: transparent;
+    }
+  }
+}
+
+// override
+::ng-deep .no-wrapper .mat-form-field-wrapper {
+  margin: 0 !important;
+  padding: 0;
+}
+
+::ng-deep.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  border-radius: 5px;
+}
+::ng-deep.mat-checkbox-frame {
+  border-color: #9d9fa2 !important;
+  border-width: 1px !important;
+}
+::ng-deep.mat-checkbox-background,
+.mat-checkbox-frame {
+  border-radius: 5px !important;
+}
+::ng-deep.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-width: 1px !important;
+  border-radius: 5px !important;
+  color: #e2e2e2;
+}
+
+// mat-input icon color
+::ng-deep.mat-form-field-appearance-outline {
+  color: #4b4b4b !important;
+}
+// selected input color
+// ::ng-deep.mat-form-field-appearance-outline.mat-focused
+//   .mat-form-field-outline-thick {
+//   color: #267dff !important;
+// }
+
+::ng-deep.mat-form-field-empty.mat-form-field-label {
+  color: #919eab;
+}
+::ng-deep.mat-checkbox-layout .mat-checkbox-label {
+  color: #4b4b4b !important;
+  cursor: url(../../../assets/icons/cursor_click.svg),pointer  !important;
+}
+::ng-deep.mat-checkbox-layout .mat-checkbox-inner-container {
+  cursor: url(../../../assets/icons/cursor_click.svg),pointer  !important;
+}
+::ng-deep .mat-input-element::placeholder {
+  color: #d0d0d0 !important;
+}
+
+::ng-deep .mat-form-field-required-marker {
+  display: none;
+}
+
+// mat-input error outline color
+// ::ng-deep.mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid
+//   .mat-form-field-outline-thick {
+//   color: #ff4646 !important;
+// }
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.59em;
+}
+
+::ng-deep .mat-typography p {
+  margin: 0px;
+}
+
+.center {
+  background-color: transparent;
+  background-image: none;
+  justify-content: center;
+}
+
+
+.slideshow {
+  position: relative;
+  background-color: #c4c4c4;
+  overflow: hidden;
+
+  @include web {
+    display: block;
+  }
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: calc(100vh - 146px); // 頂部條跟底部條各 73px
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: 40% center;
+  }
+
+  .swiper {
+    width: 100%;
+  }
+
+  .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  
+  .action {
+    position: absolute;
+    display: flex;
+    width: 62px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.2);
+    bottom: 12px;
+    right: 12px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    z-index: 99;
+
+    @include pad {
+      bottom: 32px;
+      left: 80px;
+      width: 140px;
+      height: 40px;
+      padding: 8px 20px;
+    }
+
+    span {
+      display: inline-block;
+      margin: auto;
+      font-size: 16px;
+      color: white;
+
+      &:nth-child(2) {
+        margin-left: 7px;
+        margin-right: 7px;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      margin-left: 5px;
+
+      .mat-icon {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.emptybackground{
+  background: #EFF2F4;
+  height: calc(100vh - 60px);
+  width: 100%;
+  // aspect-ratio: 16 / 9;
+  // object-fit: cover;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+
+  .logo {
+    padding-top: 35px;
+    width: 190px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

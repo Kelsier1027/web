@@ -1,0 +1,22 @@
+<div class="product-detail-card">
+  <div class="body">
+    <p *ngIf="data.promoName" class="promoName" style="white-space: pre-line;">
+      {{ data.promoName }}
+    </p>
+    <div *ngIf="data.promoRemark" class="promoRemark">
+      {{ data.promoRemark }}
+    </div>
+    <div class="break"></div>
+    <div class="left" [ngClass]="{ border: border }">
+      <img class="img" [src]="data.imgUrl" [alt]="data.title" />
+      <span *ngIf="simple" class="discount">{{ data.discount }}</span>
+      <span *ngIf="simple" class="price">{{ data.price }}</span>
+    </div>
+    <div *ngIf="!simple" class="right">
+      <ng-content select="[body]"></ng-content>
+    </div>
+  </div>
+  <footer *ngIf="!simple" class="hint">
+    <ng-content select="[footer]"></ng-content>
+  </footer>
+</div>

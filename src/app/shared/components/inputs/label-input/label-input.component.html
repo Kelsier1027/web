@@ -1,0 +1,72 @@
+<li class="input-wrapper" [ngClass]="{
+    outside: field['labelPosition'] === 'outside'
+  }" [ngStyle]="{ padding: field.stylePadding, margin: field.styleMargin }">
+  <mat-label class="label" *ngIf="field.labelPosition === 'outside'">{{
+    field.label
+    }}</mat-label>
+  <div class="input-box">
+    <mat-label
+      class="label_top"
+      *ngIf="field.labelPosition === 'top'"
+      [ngClass]="{
+        errorTitle:
+          field.validations.hasErrorMessage &&
+          group.get(field.name)?.invalid &&
+          group.get(field.name)?.touched
+      }"
+    >
+      {{ field.label }}
+    </mat-label>
+    <mat-form-field appearance="outline" class="input no-wrapper" [formGroup]="group">
+      <mat-label class="label" *ngIf="field['labelPosition'] === 'inside'">
+        {{field["label"] }}
+      </mat-label>
+        <div class="input-wrapper">
+          <input
+            matInput
+            [maxlength]="!field.isaddr && field.count ? field.count : null"
+            [placeholder]="field.placeholder"
+            [type]="field['inputType']"
+            [name]="field['name']"
+            [formControlName]="field.name"
+            (ngModelChange)="getAddrLength($event)"
+          />
+          <span *ngIf="field.showCount === true" class="count" matSuffix>
+            {{ getLength() }}/{{ field["count"] }}
+          </span>
+        </div>
+
+      <span matPrefix *ngIf="field['labelPosition'] === 'fixed'" class='fixed'>{{ field.label }}</span>
+      <!-- <button
+        type="button"
+        *ngIf="group.get(field['name'])?.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="group.get(field['name'])?.setValue('')"
+      >
+        <mat-icon>cancel</mat-icon>
+      </button> -->
+    </mat-form-field>
+    <ng-container *ngFor="let valids of field.validations.errorMessage">
+      <div *ngIf="
+          field.validations.hasErrorMessage &&
+          group.get(field.name)?.invalid &&
+          group.get(field.name)?.touched
+        ">
+        <mat-error class="error" *ngIf="group.get(field['name'])?.hasError(valids['type'])">
+          {{ valids["message"] }}</mat-error>
+      </div>
+    </ng-container>
+    <div class="hint" *ngIf="
+        field['hint'] !== '' &&
+        !(
+          field.validations.hasErrorMessage &&
+          group.get(field.name)?.invalid &&
+          group.get(field.name)?.touched
+        )
+      ">
+      <mat-hint>{{ field["hint"] }}</mat-hint>
+    </div>
+  </div>
+</li>

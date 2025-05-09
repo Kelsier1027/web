@@ -1,0 +1,46 @@
+<app-main-layout [config]="{ className: '' }">
+  <app-loading-mask
+  [showIf]="isLoading"
+  >
+  </app-loading-mask>
+  <mat-card web class="slide-card">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+      <h2 class="title">登入帳號</h2>
+      <ul class="login-input-layout">
+        <!-- authorization -->
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+        <ng-container
+          *ngFor="let field of loginformConfigs"
+          appDynamicField
+          [field]="field"
+          [group]="loginForm"
+        >
+        </ng-container>
+      </ul>
+      <p class="hint">
+        尚未加入 iOrder 會員？<a class="link" (click)="goSignup()">加入會員</a>
+      </p>
+    </form>
+  </mat-card>
+  <mat-card mobile class="slide-card-mobile">
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+      <h2 class="title">登入帳號</h2>
+      <ul class="login-input-layout">
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+        <ng-container
+          *ngFor="let field of loginformConfigs"
+          appDynamicField
+          [field]="field"
+          [group]="loginForm"
+        ></ng-container>
+      </ul>
+      <p class="hint">
+        尚未加入 iOrder 會員？<a class="mobileLink" (click)="goSignup()">加入會員</a>
+      </p>
+    </form>
+  </mat-card>
+</app-main-layout>

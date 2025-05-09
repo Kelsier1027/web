@@ -1,0 +1,111 @@
+<!-- TODO desktop時 #bank-info 跳轉會被nav bar遮住-->
+<section class="bank-box" id="bank-info">
+  <div class="bank-wrapper">
+    <div class="bank-name">
+      匯款銀行資訊
+      <div class="icon-wrapper">
+        <app-icon class="custom-icon" [iconName]="'info'" #tooltip="matTooltip" #infoTooltip="matTooltip"
+          [matTooltip]="'交易匯總資訊為貴公司於精' + (isJingHo() ? '豪' : '技') + '電腦的所有交易，意即業務單位人工建單以及iOrder下單。而交易匯總資訊為含稅金額。'"
+          [matTooltipPosition]="'above'" [matTooltipClass]="'above'" (click)="displayTooltip()"></app-icon>
+      </div>
+    </div>
+    <div class="bank-table" *ngIf="!isJingHo()">
+      <!-- <div class="col">
+        <p class="col-title">
+          <span class="images"
+            ><img src="../../../../assets/images/bank_1.svg" alt="" /></span
+          >兆豐國際商業銀行
+        </p>
+        <div class="col-item-wrapper">
+          <div class="col-item">
+            <p class="col-text account-name">匯款帳號</p>
+            <p class="col-text account">77777-{{ taxReference }}-0</p>
+            <p class="col-text">
+              <span class="tag">戶名</span>精技電腦股份有限公司
+            </p>
+            <p class="col-text">
+              <span class="tag">分行</span>東內湖分行 (金融機構代碼 017)
+            </p>
+          </div>
+        </div>
+      </div> -->
+      <div class="col">
+        <p class="col-title">
+          <span class="images"><img src="../../../../assets/images/bank_2.svg" alt="" /></span>第一商業銀行
+        </p>
+        <div class="col-item-wrapper">
+          <div class="col-item">
+            <p class="col-text account-name">匯款帳號</p>
+            <!-- Modify by Tako on 2025/02/11 For No.2024037103 -->
+            <p class="col-text account">55988-{{ taxReference === '12215548' ? personCustNo : taxReference + '-0' }}</p>
+            <p class="col-text">
+              <span class="tag">戶名</span>精技電腦股份有限公司
+            </p>
+            <p class="col-text">
+              <span class="tag">分行</span>民權分行 (金融機構代碼 007)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bank-table" *ngIf="isJingHo()">
+      <div class="col">
+        <p class="col-title">
+          <span class="images"><img src="../../../../assets/images/bank_2.svg" alt="" /></span>第一商業銀行
+        </p>
+        <div class="col-item-wrapper">
+          <div class="col-item">
+            <p class="col-text account-name">匯款帳號</p>
+            <!-- Modify by Tako on 2025/02/11 For No.2024037103 -->
+            <p class="col-text account">52668-{{ taxReference === '12215548' ? personCustNo : taxReference + '-0' }}</p>
+            <p class="col-text">
+              <span class="tag">戶名</span>精豪電腦股份有限公司
+            </p>
+            <p class="col-text">
+              <span class="tag">分行</span>民權分行 (金融機構代碼 007)
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-wrapper">
+    <p class="contact-name">電子商務部聯繫方式</p>
+    <div class="contact">
+      <div class="contact-item">
+        <div class="contact-icon-wrapper">
+          <div class="contact-icon">
+            <app-icon [iconName]="'phone'"></app-icon>
+          </div>
+        </div>
+        <div class="contact-info">
+          <p class="contact-title">(02)2796-2345</p>
+          <p class="contact-subtitle">分機 829, 830, 833, 835</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrapper">
+          <div class="contact-icon">
+            <app-icon [iconName]="'skype'"></app-icon>
+          </div>
+        </div>
+        <div class="contact-info">
+          <p class="contact-title">Skype</p>
+          <p class="contact-subtitle">ut_iorder</p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrapper">
+          <div class="contact-icon">
+            <app-icon [iconName]="'line'"></app-icon>
+          </div>
+        </div>
+        <div class="contact-info">
+          <p class="contact-title">Line</p>
+          <p class="contact-subtitle">&#64;unitech.tw</p>
+        </div>
+      </div>
+    </div>
+    <p class="tip">服務時間：週一至週五 8:30~12:00 / 13:30~18:00</p>
+  </div>
+</section>

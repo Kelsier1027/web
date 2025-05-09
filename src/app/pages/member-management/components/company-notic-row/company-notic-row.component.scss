@@ -1,0 +1,33 @@
+@import "responsive";
+
+.notic {
+  background: #e3eeff;
+  padding: 12px;
+  border: 1px solid #b6cbec;
+  border-radius: 4px;
+  margin: 24px 16px;
+  @include pad {
+    margin: 12px 0px;
+  }
+  .notic-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 7px;
+    .icon {
+      color: #0972e3;
+      margin-right: 9px;
+    }
+  }
+  .notic-content {
+    color: #5c5c5c;
+    list-style: disc;
+    margin-left: 20px;
+    font-size: 13px;
+    .link {
+      display: block;
+      @include pad {
+        display: inline;
+      }
+    }
+  }
+}

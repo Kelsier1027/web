@@ -1,0 +1,32 @@
+<app-header-inline-close-layout [data]="data">
+  <div class="table-container">
+    <app-table
+      [dataSource]="dataSource"
+    >
+      <ng-template
+        [column]="{
+          key: 'status',
+          title: '訂單狀態',
+          width: 108,
+          headerAlign: 'center',
+          cellAlign: 'center'
+        }"
+        let-value
+      >
+        {{ value.cell }}
+      </ng-template>
+      <ng-template
+        [column]="{
+          key: 'description',
+          title: '狀態說明',
+          width: 619,
+          headerAlign: 'left',
+          cellAlign: 'left'
+        }"
+        let-value
+      >
+        <div [innerHTML]="value.cell"></div>
+      </ng-template>
+    </app-table>
+  </div>
+</app-header-inline-close-layout>

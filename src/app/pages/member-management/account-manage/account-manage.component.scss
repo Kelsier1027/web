@@ -1,0 +1,21 @@
+@import "responsive";
+.member-wrapper {
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #ebebeb;
+  @include pad {
+    padding: 24.5px 40px;
+  }
+  p {
+    margin: 0px;
+  }
+}
+
+::ng-deep .breadcrumb {
+  background-color: #FFFFFF;
+  padding-left: 40px !important;
+}
+
+.content {
+  flex: 1 1 100%;
+}

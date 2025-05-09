@@ -1,0 +1,26 @@
+<section class="promotion-card">
+  <div class="left">
+    <header>
+      <ng-content select="[promotion-header]"></ng-content>
+    </header>
+    <div>
+      <ng-content select="[promotion-body]"></ng-content>
+    </div>
+  </div>
+
+  <div class="right" *ngIf="price || priceCurrency">
+    <p class="wrapper">
+      <span class="price">{{
+        (priceCurrency
+          ? priceCurrency
+          : price)
+          | tax
+      }}
+      </span>
+      <span class="bulk-price-text" *ngIf="bulk">起</span>
+      <span *ngIf="!isWelfare" class="discount">
+        {{ discount | tax : true }}
+    </span>
+    </p>
+  </div>
+</section>

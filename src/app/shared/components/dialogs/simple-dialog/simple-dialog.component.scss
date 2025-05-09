@@ -1,0 +1,16 @@
+.simple-dialog-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.text {
+  color: #5c5c5c;
+  //padding: 24px 0px;
+}
+
+.dialog-content {
+  padding-bottom: 16px;
+}

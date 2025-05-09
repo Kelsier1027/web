@@ -1,0 +1,36 @@
+<app-header-inline-close-layout [data]="data">
+  <div class="table-wrapper">
+    <app-table [dataSource]="dataSource" [noDataCaption]="this.noDataCaption">
+      <ng-template
+        [column]="{
+          key: 'expireDate',
+          title: '到期日期',
+          cellAlign: 'center',
+          headerAlign: 'center'
+        }"
+        let-value
+      >
+        {{ value.cell }}
+      </ng-template>
+      <ng-template
+        [column]="{
+          key: 'expireQuantity',
+          title: '到期紅利點數',
+          headerAlign: 'center',
+          cellAlign: 'center'
+        }"
+        let-value
+      >
+        {{ value.cell }}
+      </ng-template>
+    </app-table>
+  </div>
+
+  <footer class="dialog-footer">
+    <section class="footer-wrapper">
+      <button class="button" mat-raised-button mat-dialog-close color="primary">
+        關閉
+      </button>
+    </section>
+  </footer>
+</app-header-inline-close-layout>

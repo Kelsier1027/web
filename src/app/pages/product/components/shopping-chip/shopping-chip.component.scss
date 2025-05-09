@@ -1,0 +1,22 @@
+:host {
+  display: inline-block;
+}
+
+.icon-wrapper {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+}
+
+:host > span {
+  display: flex;
+  padding: 4px 8px;
+  border-radius: 30px;
+  color: #fff;
+  background-color: #ff5555;
+  align-items: center;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 500;
+}

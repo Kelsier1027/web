@@ -1,0 +1,8 @@
+<div class="prompt" [ngClass]="{
+  error: hint['type'] === 'error',
+  info: hint['type'] === 'info',
+  outline: mode === 'outline'
+}">
+  <mat-icon>info</mat-icon>
+  <span class="message">{{ hint['message'] }}</span>
+</div>

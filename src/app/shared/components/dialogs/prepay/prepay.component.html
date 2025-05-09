@@ -1,0 +1,91 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-header-inline-close-layout [data]="data">
+    <div class="table-container" *ngIf="currentScreenSize !== 'small'">
+      <app-table
+        [dataSource]="data.dataSource"
+        [noDataCaption]="'查無您的預付清單。'"
+      >
+        <ng-template
+          [column]="{
+            key: 'trxDate',
+            title: '入金日期',
+            width: 182,
+            headerAlign: 'center',
+            cellAlign: 'center'
+          }"
+          let-value
+        >
+          {{ value.cell | date : "yyyy/MM/dd" }}
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'trxNumber',
+            title: '入金單號',
+            width: 182,
+            headerAlign: 'center',
+            cellAlign: 'center'
+          }"
+          let-value
+          >{{ value.cell }}
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'trxAmount',
+            title: '入金金額',
+            width: 182,
+            headerAlign: 'center',
+            cellAlign: 'center'
+          }"
+          let-value
+          >${{ value.cell | number }}
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'trxRemaining',
+            title: '未沖銷金額',
+            width: 182,
+            headerAlign: 'center',
+            cellAlign: 'center'
+          }"
+          let-value
+        >
+          -${{ value.cell | number }}
+        </ng-template>
+      </app-table>
+    </div>
+    <ng-container *ngIf="currentScreenSize === 'small'">
+      <ng-container *ngIf="data.dataSource?.length; else noDataMobile">
+        <app-table-container *ngFor="let prepay of data.dataSource">
+          <div class="wrapper">
+            <div>
+              <app-detail-item [title]="'入金日期'">{{
+                prepay.trxDate | date : "yyyy/MM/dd"
+              }}</app-detail-item>
+              <app-detail-item [title]="'入金單號'">{{
+                prepay.trxNumber
+              }}</app-detail-item>
+              <app-detail-item [title]="'入金金額'"
+                >${{ prepay.trxAmount | number }}</app-detail-item
+              >
+              <app-detail-item
+                [border]="currentScreenSize === 'small' ? true : false"
+                [title]="'未沖銷金額'"
+              >
+                -${{ prepay.trxRemaining | number }}</app-detail-item
+              >
+            </div>
+          </div>
+        </app-table-container>
+      </ng-container>
+    </ng-container>
+    <p class="hint">
+      <span class="hint-icon-wrapper">
+        <app-icon [iconName]="'info'"></app-icon> </span
+      >資料時間 {{ data.serverTime | date : "yyyy/MM/dd" }}
+    </p>
+  </app-header-inline-close-layout>
+</ng-container>
+
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的預付清單。</div>
+</ng-template>

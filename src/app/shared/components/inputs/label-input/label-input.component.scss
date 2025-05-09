@@ -1,0 +1,65 @@
+.input-wrapper {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  &.outside {
+    .input-box {
+      width: calc(100% - 4rem - 16px);
+    }
+  }
+
+  .label_top {
+    color: #333333;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .fixed {
+    position: relative;
+    top: -0.35em;
+    color: #5c5c5c;
+    padding-right: 16px;
+  }
+
+  .input {
+    margin-top: 4px;
+    width: 100%;
+    background-color: #fff;
+  }
+  .input-box {
+    width: 100%;
+  }
+  .error {
+    margin-top: 4px;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .hint {
+    margin-top: 4px;
+    font-size: 12px;
+  }
+
+  .count {
+    width: fit-content;
+    line-height: 0;
+    font-size: 13px;
+    color: #999;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: white;
+  }
+}
+
+@media (max-width: 576px) {
+  .input-wrapper .count {
+    font-size: 12px;
+  }
+}

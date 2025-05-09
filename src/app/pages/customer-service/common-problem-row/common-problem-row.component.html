@@ -1,0 +1,84 @@
+<div class="common-problem-row">
+    <div class="common-problem title">
+        <span class="title">iOrder小幫手</span>
+    </div>
+
+    <div class="common-problem shortcut">
+        <span class="title2" *ngIf="!this.isSales()">常用捷徑</span>
+    </div>
+
+    <div class="common-problem-content">
+        <div class="container" *ngIf="!this.isSales()">
+            <div class="col-3 item-content" routerLink="/Member/Order"><img src="../../../../../assets/images/orderQuery.png" />訂單查詢</div>
+            <div class="col-3 item-content" routerLink="/Member/Bill"><img src="../../../../../assets/images/billingQuery.png" />帳單查詢</div>
+            <div class="col-3 item-content" routerLink="/Member/Manage"><img src="../../../../../assets/images/accountManage.png" />帳號管理</div>
+            <div class="col-3 item-content" routerLink="/Member/Bonus"><img src="../../../../../assets/images/bonusQuery.png" />紅利查詢</div>
+            <div class="col-3 item-content" routerLink="/Member/Prize"><img src="../../../../../assets/images/giftQuery.png" />活動達成禮查詢</div>
+        </div>
+
+        <div class="container common-content">
+            <div class="common-problem">
+                <span class="title2">常見問題</span>
+            </div>
+
+            <div *ngFor="let type of list" class="common-list">
+                <div>
+                    <div class="problem-header">{{type.questionType}}</div>
+                </div>
+                <div class="item" *ngFor="let item of type.questionList">
+                    <div class="problem-title" (click)="toggleContent(item)">
+                        <span>{{ item.title }}</span>
+                        <img
+                            [src]="item.isContentVisible ? '../../../../../assets/icons/minus.svg' : '../../../../../assets/icons/add.svg'" />
+                    </div>
+
+                    <div class="problem-content" [hidden]="!item.isContentVisible">
+                        <div [innerHTML]="item.content"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="item padding-mobile">
+                <div class="problem-title" style="color: red;">本網站未提供鑑賞期退貨服務</div>
+            </div>
+            <hr class="hr-mobile">
+            <div class="common-problem">
+                <span class="title2">聯絡我們</span>
+            </div>
+
+            <div class="contact">
+                <div class="col-2 contact-info">
+                    <img src="../../../../../assets/images/phone.png" />
+                    <div>
+                        <div class="info-title">報修查修專線</div>
+                        <div class="info-content">02-2792-1521</div>
+                    </div>
+                </div>
+                <div class="col-2 contact-info">
+                    <img src="../../../../../assets/images/mail.png" />
+                    <div>
+                        <div class="info-title">Email</div>
+                        <div class="info-content"><a href="mailto: 11306fix@unitech.com.tw">11306fix@unitech.com.tw</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 contact-info">
+                    <img src="../../../../../assets/images/skype.png" />
+                    <div>
+                        <div class="info-title">Skype</div>
+                        <div class="info-content">ut_iorder</div>
+                    </div>
+                </div>
+                <div class="col-2 contact-info">
+                    <img src="../../../../../assets/images/line.png" />
+                    <div>
+                        <div class="info-title">Line</div>
+                        <div class="info-content">@unitech.tw</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="hr-mobile">
+            <div class="service-time">服務時間：週一至週五 8:30~12:00 / 13:30~18:00</div>
+        </div>
+    </div>
+</div>

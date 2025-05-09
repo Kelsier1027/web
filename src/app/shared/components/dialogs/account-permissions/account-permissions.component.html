@@ -1,0 +1,130 @@
+<app-header-inline-close-layout [data]="data">
+  <div class="table-container">
+    <!-- app-table header 欄位沒有字時，sticky會被其他header的字覆蓋，所以不使用-->
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="function" sticky>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">{{ element.function }}</td>
+      </ng-container>
+      <ng-container matColumnDef="Admin">
+        <th mat-header-cell *matHeaderCellDef>帳戶管理員</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="element.Admin">
+            <app-icon
+              *ngSwitchCase="'yes'"
+              class="icon-wrapper"
+              [iconName]="'circle_check_solid'"
+            ></app-icon>
+            <app-icon
+              *ngSwitchCase="'no'"
+              class="icon-wrapper minus"
+              [iconName]="'minus'"
+            ></app-icon>
+            <span *ngSwitchCase="'all order'" class="all-order">全部訂單</span>
+            <span *ngSwitchDefault class="name">{{ element.Admin }}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Sales">
+        <th mat-header-cell *matHeaderCellDef>查價員</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="element.Sales">
+            <app-icon
+              *ngSwitchCase="'yes'"
+              class="icon-wrapper"
+              [iconName]="'circle_check_solid'"
+            ></app-icon>
+            <app-icon
+              *ngSwitchCase="'no'"
+              class="icon-wrapper minus"
+              [iconName]="'minus'"
+            ></app-icon>
+            <span *ngSwitchCase="'all order'" class="all-order">全部訂單</span>
+            <span *ngSwitchDefault class="name">{{ element.Sales }}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Account">
+        <th mat-header-cell *matHeaderCellDef>對帳員</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="element.Account">
+            <app-icon
+              *ngSwitchCase="'yes'"
+              class="icon-wrapper"
+              [iconName]="'circle_check_solid'"
+            ></app-icon>
+            <app-icon
+              *ngSwitchCase="'no'"
+              class="icon-wrapper minus"
+              [iconName]="'minus'"
+            ></app-icon>
+            <span *ngSwitchCase="'all order'" class="all-order">全部訂單</span>
+            <span *ngSwitchDefault class="name">{{ element.Account }}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Buyer">
+        <th mat-header-cell *matHeaderCellDef>採購員</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="element.Buyer">
+            <app-icon
+              *ngSwitchCase="'yes'"
+              class="icon-wrapper"
+              [iconName]="'circle_check_solid'"
+            ></app-icon>
+            <app-icon
+              *ngSwitchCase="'no'"
+              class="icon-wrapper minus"
+              [iconName]="'minus'"
+            ></app-icon>
+            <span *ngSwitchCase="'all order'" class="all-order">全部訂單</span>
+            <span *ngSwitchDefault class="name">{{ element.Buyer }}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="AccountBuyer">
+        <th mat-header-cell *matHeaderCellDef>對帳採購員</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="element.AccountBuyer">
+            <app-icon
+              *ngSwitchCase="'yes'"
+              class="icon-wrapper"
+              [iconName]="'circle_check_solid'"
+            ></app-icon>
+            <app-icon
+              *ngSwitchCase="'no'"
+              class="icon-wrapper minus"
+              [iconName]="'minus'"
+            ></app-icon>
+            <span *ngSwitchCase="'all order'" class="all-order">全部訂單</span>
+            <span *ngSwitchDefault class="name">{{
+              element.AccountBuyer
+            }}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Receiver">
+        <th mat-header-cell *matHeaderCellDef>收貨員</th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="element.Receiver">
+            <app-icon
+              *ngSwitchCase="'yes'"
+              class="icon-wrapper"
+              [iconName]="'circle_check_solid'"
+            ></app-icon>
+            <app-icon
+              *ngSwitchCase="'no'"
+              class="icon-wrapper minus"
+              [iconName]="'minus'"
+            ></app-icon>
+            <span *ngSwitchCase="'all order'" class="all-order">全部訂單</span>
+            <span *ngSwitchDefault class="name">{{ element.Receiver }}</span>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</app-header-inline-close-layout>

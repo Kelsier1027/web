@@ -1,0 +1,58 @@
+<li
+  class="input-wrapper"
+  [ngClass]="{
+    outside: field['labelPosition'] === 'outside'
+  }"
+  [ngStyle]="{ padding: field.stylePadding, margin: field.styleMargin }"
+>
+  <mat-label class="label" *ngIf="field['labelPosition'] === 'outside'">{{
+    field.label
+  }}</mat-label>
+  <div class="input-box">
+    <mat-label class="label_top" *ngIf="field['labelPosition'] === 'top'">
+      {{ field.label }}
+    </mat-label>
+    <mat-form-field
+      appearance="outline"
+      class="input no-wrapper"
+      [formGroup]="group"
+    >
+      <mat-label class="label" *ngIf="field.labelPosition === 'inside'">
+        {{ field["label"] }}
+      </mat-label>
+      <input
+        matInput
+        class="mat-input"
+        [name]="field['name']"
+        [placeholder]="field['placeholder']"
+        [formControlName]="field['name']"
+        type="text"
+        [maxlength]="field['count']"
+      />
+      <p matSuffix class="count">
+        <span
+          >{{ group.value[field.name].length ?? 0 }}/{{ field["count"] }}</span
+        >
+      </p>
+    </mat-form-field>
+    <ng-container *ngFor="let valids of field.validations.errorMessage">
+      <div
+        *ngIf="
+          field.validations.hasErrorMessage &&
+          group.get(field['name'])?.invalid &&
+          group.get(field['name'])?.touched
+        "
+      >
+        <mat-error
+          class="error"
+          *ngIf="group.get(field['name'])?.hasError(valids['type'])"
+        >
+          {{ valids["message"] }}</mat-error
+        >
+      </div>
+    </ng-container>
+    <div class="hint" *ngIf="field['hint'] !== ''">
+      <mat-hint>{{ field["hint"] }}</mat-hint>
+    </div>
+  </div>
+</li>

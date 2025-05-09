@@ -1,0 +1,171 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu active="常用出貨備註"></app-member-menu>
+      <main class="content">
+        <div class="search-bar" *ngIf="currentScreenSize === 'small'">
+          <mat-checkbox
+            color="primary"
+            class="address-checkbox"
+            [checked]="isCreatedByCurrentUser"
+            (change)="onChange($event)"
+            >只顯示本人建立的常用出貨備註</mat-checkbox
+          >
+        </div>
+        <p class="address-title">
+          <app-title>常用出貨備註</app-title>
+          <button
+            (click)="handleCreateModal()"
+            type="submit"
+            class="add-address-button"
+            mat-raised-button
+            color="primary"
+          >
+            新增常用出貨備註
+          </button>
+        </p>
+        <app-table-container *ngIf="currentScreenSize !== 'small'">
+          <div class="search-bar">
+            <mat-checkbox
+              color="primary"
+              class="address-checkbox"
+              [checked]="isCreatedByCurrentUser"
+              (change)="onChange($event)"
+              >只顯示本人建立的常用出貨備註</mat-checkbox
+            >
+          </div>
+          <app-table
+            [dataSource]="
+              dataSource
+                | paginate
+                  : { itemsPerPage: 10, currentPage: pagination?.currentPage }
+            "
+            [noDataCaption]="'查無您的常用出貨備註。'"
+          >
+            <ng-template
+              [column]="{
+                key: 'title',
+                title: '名稱',
+                width: 120,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'comment',
+                title: '出貨備註',
+                headerAlign: 'left',
+                cellAlign: 'left'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'operate',
+                title: '操作',
+                headerAlign: 'center',
+                cellAlign: 'center',
+                width: 120
+              }"
+              let-value
+            >
+              <p class="operate">
+                <span class="link" (click)="handleModifyModal(value.index)"
+                  >修改</span
+                >
+                <span class="link" (click)="handleDelModal(value.index)"
+                  >刪除</span
+                >
+              </p>
+            </ng-template>
+          </app-table>
+          </app-table-container>
+          <div class="pagination">
+            <pagination-controls (pageChange)="onPageChange($event)" [maxSize]="maxSize" [directionLinks]="true"
+              [autoHide]="!dataSource?.length" [responsive]="true" previousLabel="上一頁" nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page" style="text-align: center" class="paginate">
+            </pagination-controls>
+            <app-icon-select *ngIf="dataSource?.length" class="select" (valueChange)="pageSizeChange($event)" [isBindForm]="false" [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: '',
+                styleMargin: '0px 0px 0px 0px',
+                options: pageSizeOption,
+                value: selectedPageSize,
+                class: '',
+                placeholder: '請選擇幾個'
+              }">
+            </app-icon-select>
+          </div>
+        <ng-container *ngIf="currentScreenSize === 'small'">
+          <app-mobile-table-container
+            *ngIf="dataSource?.length; else noDataMobile"
+          >
+            <app-mobile-table-item
+              *ngFor="
+                let data of dataSource
+                  | paginate
+                    : {
+                        itemsPerPage: 10,
+                        currentPage: pagination?.currentPage
+                      };
+                let last = last;
+                let index = index
+              "
+              [isLast]="last"
+            >
+              <app-status-card>
+                <ng-template #headerTitle>
+                  {{ data.title }}
+                </ng-template>
+                <ng-template [statusItem]="{ isColumn: true }">{{
+                  data.comment
+                }}</ng-template>
+
+                <ng-template [statusItem]="{ isColumn: true }"
+                  ><p class="operate">
+                    <span class="link" (click)="handleModifyModal(index)"
+                      >修改</span
+                    >
+                    <span class="link" (click)="handleDelModal(index)"
+                      >刪除</span
+                    >
+                  </p></ng-template
+                >
+              </app-status-card>
+            </app-mobile-table-item>
+            <pagination-controls
+              (pageChange)="onPageChange($event)"
+              [maxSize]="10"
+              [directionLinks]="true"
+              [autoHide]="!dataSource?.length"
+              [responsive]="true"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+            >
+            </pagination-controls>
+          </app-mobile-table-container>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>
+
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的常用出貨備註。</div>
+</ng-template>

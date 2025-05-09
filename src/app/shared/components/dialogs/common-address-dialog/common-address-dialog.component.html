@@ -1,0 +1,265 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+<app-header-layout
+  [data]="data"
+  [cancel]="data.cancel"
+  [confirm]="data.confirm"
+>
+  <main class="content common-address mt20">
+    <app-search-bar *ngIf="currentScreenSize !== 'small'" (reset)="reset()">
+      <ng-container ngProjectAs="[left]">
+        <form class="form" [formGroup]="filterForm">
+          <app-search-input
+            class="search"
+            [placeholder]="'搜尋送貨地址'"
+            (searchChange)="onSearchChange($event)"
+            [inputValue]="filterForm.get('keyword')?.value"
+          ></app-search-input>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="currentScreenSize == 'small'" ngProjectAs="[left]" #left>
+          <mat-checkbox
+            color="primary"
+            class="address-checkbox"
+            [checked]="onlyMe"
+            (change)="onChange($event)"
+            >只顯示本人建立的常用指送地址</mat-checkbox
+          >
+      </ng-container>
+      <ng-container ngProjectAs="[right]">
+        <mat-checkbox
+          color="primary"
+          class="address-checkbox"
+          [checked]="onlyMe"
+          (change)="onChange($event)"
+          *ngIf="currentScreenSize !== 'small'"
+          >只顯示本人建立的常用指送地址</mat-checkbox
+        >
+        <!-- <button
+          (click)="handleCreateModal()"
+          type="submit"
+          class="add-address-button"
+          mat-raised-button
+          color="primary"
+          *ngIf="currentScreenSize !== 'small'"
+        >
+          新增常用指送地址
+        </button> -->
+      </ng-container>
+    </app-search-bar>
+    <ng-container *ngIf="currentScreenSize == 'small'">
+    <form class="form" [formGroup]="filterForm">
+      <app-search-input
+        class="search"
+        [placeholder]="'搜尋送貨地址'"
+        (searchChange)="onSearchChange($event)"
+        [inputValue]="filterForm.get('keyword')?.value"
+      >
+      </app-search-input>
+    </form>
+    <div class="search-filter">
+    <ng-container *ngIf="currentScreenSize == 'small'">
+      <mat-checkbox
+        color="primary"
+        class="address-checkbox"
+        [checked]="onlyMe"
+        (change)="onChange($event)"
+      >
+        只顯示本人建立的常用指送地址
+      </mat-checkbox>
+    </ng-container>
+    <button type="button" class="refresh-icon" (click)="reset()">
+      <span class="icon">
+        <mat-icon class="icon-wrapper">refresh</mat-icon>
+      </span>
+      重設篩選
+    </button>
+    </div>
+    </ng-container>
+    <app-table-container *ngIf="currentScreenSize !== 'small'">
+      <app-table
+        [dataSource]="
+          dataSource
+            | paginate
+              : { itemsPerPage: 10, currentPage: pagination?.currentPage }
+        "
+        [noDataCaption]="'查無您的常用指送地址。'"
+      >
+        <ng-template
+          [column]="{
+            key: 'addrName',
+            title: '送貨公司',
+            width: 192,
+            headerAlign: 'center',
+            cellAlign: 'center'
+          }"
+          let-value
+        >
+          <div class="cell-deliver-company">
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-select"
+              (click)="selectDeliverCompany(value.row)"
+            >
+              選擇
+            </button>
+            <span>{{ value.cell }}</span>
+          </div>
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'fullAddr',
+            title: '送貨地址',
+            width: 256,
+            headerAlign: 'left',
+            cellAlign: 'left'
+          }"
+          let-value
+        >
+          {{ value.cell }}
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'receiver',
+            title: '收貨人',
+            width: 120,
+            headerAlign: 'center',
+            cellAlign: 'center'
+          }"
+          let-value
+        >
+          {{ value.cell }}
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'contactNo',
+            title: '聯絡電話',
+            headerAlign: 'center',
+            cellAlign: 'center',
+            width: 180
+          }"
+          let-value
+        >
+          <p>{{ value.cell }}</p>
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'phoneNo',
+            title: '行動電話',
+            headerAlign: 'center',
+            cellAlign: 'center',
+            width: 126
+          }"
+          let-value
+        >
+          <p>{{ value.cell }}</p>
+        </ng-template>
+        <ng-template
+          [column]="{
+            key: 'operate',
+            title: '操作',
+            headerAlign: 'center',
+            cellAlign: 'center',
+            width: 110
+          }"
+          let-value
+        >
+          <div class="operate">
+            <span class="link" (click)="handleModifyModal(value.index)"
+              >修改</span
+            >
+            <div class="link-divider"></div>
+            <span class="link" (click)="handleDelModal(value.index)">刪除</span>
+          </div>
+        </ng-template>
+      </app-table>
+      <pagination-controls
+        (pageChange)="onPageChange($event)"
+        [maxSize]="10"
+        [directionLinks]="true"
+        [autoHide]="!dataSource?.length"
+        [responsive]="true"
+        previousLabel="上一頁"
+        nextLabel="下一頁"
+        screenReaderPaginationLabel="Pagination"
+        screenReaderPageLabel="page"
+        screenReaderCurrentLabel="You're on page"
+        style="text-align: center"
+      >
+      </pagination-controls>
+    </app-table-container>
+
+    <ng-container *ngIf="currentScreenSize === 'small'">
+      <app-mobile-table-container *ngIf="dataSource?.length; else noDataMobile">
+        <app-mobile-table-item
+          *ngFor="
+            let data of dataSource
+              | paginate
+                : {
+                    itemsPerPage: 10,
+                    currentPage: pagination?.currentPage
+                  };
+            let last = last;
+            let index = index
+          "
+          [isLast]="last"
+        >
+          <app-status-card>
+            <ng-template #headerTitle>
+              <div class="cell-common-address">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  class="btn-select"
+                  (click)="selectDeliverCompany(data)"
+                >
+                  選擇
+                </button>
+                {{ data.addrName }}
+              </div>
+            </ng-template>
+            <ng-template [statusItem]="{ isColumn: true }">{{
+              data.addr
+            }}</ng-template>
+            <ng-template [statusItem]="{ isColumn: true }">{{
+              data.receiver
+            }}</ng-template>
+            <ng-template [statusItem]="{ title: '聯絡電話' }">{{
+              data.contactNo
+            }}</ng-template>
+            <ng-template [statusItem]="{ title: '行動電話' }">{{
+              data.phoneNo
+            }}</ng-template>
+            <ng-template [statusItem]="{ isColumn: true }"
+              ><div class="operate">
+                <span class="link" (click)="handleModifyModal(index)"
+                  >修改</span
+                >
+                <div class="link-divider"></div>
+                <span class="link" (click)="handleDelModal(index)">刪除</span>
+              </div></ng-template
+            >
+          </app-status-card>
+        </app-mobile-table-item>
+        <pagination-controls
+          (pageChange)="onPageChange($event)"
+          [maxSize]="10"
+          [directionLinks]="true"
+          [autoHide]="!dataSource?.length"
+          [responsive]="true"
+          previousLabel="上一頁"
+          nextLabel="下一頁"
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page"
+          style="text-align: center"
+        >
+        </pagination-controls>
+      </app-mobile-table-container>
+    </ng-container>
+  </main>
+</app-header-layout>
+<ng-template #noDataMobile>
+  <div class="no-data-mobile">查無您的常用指送地址。</div>
+</ng-template>
+</ng-container>

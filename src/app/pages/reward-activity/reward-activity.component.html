@@ -1,0 +1,149 @@
+<main *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-loading-mask [showIf]="isHeadLoading || isListLoading"></app-loading-mask>
+  <div class="layout">
+    <app-home-header-action class="header-action"
+      *ngIf="(!isHomePage && currentScreenSize !== 'small') || (isHomePage && !isCategoryLayout)"></app-home-header-action>
+    <app-home-header-search class="header-search"
+      *ngIf="(!isHomePage && currentScreenSize !== 'small') ||(isHomePage && !isCategoryLayout)"></app-home-header-search>
+    <app-home-header-product [isCategoryLayout]="isCategoryLayout" (layoutChange)="toggleMenuType($event)"
+      [hidden]="!isHomePage && currentScreenSize === 'small'"></app-home-header-product>
+    <app-member-header-mobile-nav *ngIf="currentScreenSize === 'small'" [title]="'獎勵活動頁'"
+    (action)="redirect()"></app-member-header-mobile-nav>
+  </div>
+  <div class="container">
+    <div class="topHeader">
+      <img src="../../../assets/images/Subtract.png" alt="">
+      <mat-icon class="large-icon">keyboard_arrow_right</mat-icon>
+      獎勵活動頁
+    </div>
+    <div class="pageHeader">
+      獎勵活動頁
+    </div>
+    <div class="bonus-points">
+      <app-home-incentive-activities (hasData)="toggleIncentiveActivities($event)"> </app-home-incentive-activities>
+    </div>
+
+    <div class="activy-table">
+      <div class="data-header">
+        <div class="input">
+          <mat-icon>search</mat-icon>
+          <input type="text" class="form-control form-input" [(ngModel)]="searchQuery" placeholder="搜尋促銷名稱、促銷編號、品號" (change)="onType1Change()" >
+        </div>
+        <div class="data-select">
+        <select [(ngModel)]="option0" (change)="resetToFirstPage()">
+          <option value="">所有狀態</option>
+          <option value="活動中">活動中</option>
+          <option value="已結束">已結束</option>
+
+        </select>
+        <select [(ngModel)]="option1" (change)="onType1Change()">
+          <option value="所有主分類">所有主分類</option>
+          <option *ngFor="let type1 of type1Options" [value]="type1.name">{{ type1.name }}</option>
+        </select>
+        <select [(ngModel)]="option2" (change)="onType2Change()">
+          <option value="所有次分類">所有次分類</option>
+          <option *ngFor="let type2 of type2Options" [value]="type2.name">{{ type2.name }}</option>
+        </select>
+        <select [(ngModel)]="option3" (change)="resetToFirstPage()">
+          <option value="所有品牌">所有品牌</option>
+          <option *ngFor="let type3 of type3Options" [value]="type3.name">{{ type3.name }}</option>
+        </select>
+        <select [(ngModel)]="option5" (change)="resetToFirstPage()">
+          <option value="10項">10項</option>
+        </select>
+        </div>
+        <div class="refresh">
+          <button (click)="resetFilters()" ><mat-icon>refresh</mat-icon>重設篩選</button>
+        </div>
+      </div>
+
+      <div class="data-content">
+        <table class="table" *ngIf="currentScreenSize !== 'small'">
+          <thead>
+            <tr>
+              <th scope="col" width="10%" class="th-center">活動狀態</th>
+              <th scope="col" width="15%">活動期間</th>
+              <th scope="col">活動名稱</th>
+              <th scope="col" width="10%">促銷編號</th>
+              <!--<th scope="col" width="15%">產品線</th>-->
+              <!--<th scope="col" width="11%">品牌</th>-->
+              <th scope="col" width="7%" class="th-center">詳情</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of data | paginate: { itemsPerPage: pagination?.pageSize ?? 10, currentPage: p, totalItems: pagination?.total ?? 0 }; let i = index">
+              <td>
+                <div class="activy-tag">
+                  <span class="tb-center tag" [class.active-status]="item.status === '活動中'"
+                    [class.finished-status]="item.status === '已結束'">{{item.status}}</span>
+                </div>
+              </td>
+              <td>
+                <span>{{item.during}}</span>
+              </td>
+              <td>
+                <span>{{item.name}}</span>
+              </td>
+              <td>
+                <span>{{item.number}}</span>
+              </td>
+              <!--
+              <td>
+                <button class="toggle" (click)="productLine(i)">{{item.productLine}}
+                  <mat-icon>{{ isIcon1[i] ? 'add' : 'remove'}}</mat-icon>
+                </button>
+                <ul *ngIf="isProductLine[i]">
+                  <li *ngFor="let line of item.line">{{line}}</li>
+                </ul>
+              </td>
+            -->
+              <!--
+              <td>
+                <button class="toggle" (click)="brand(i)">{{item.brandLine}}
+                  <mat-icon>{{ isIcon2[i] ? 'add' : 'remove'}}</mat-icon>
+                </button>
+                <ul *ngIf="isBrand[i]">
+                  <li *ngFor="let brand of item.brand">{{brand}}</li>
+                </ul>
+              </td>
+            -->
+              <td class="check-detail">
+                <span class="tb-center">
+                  <a (click)="getAwardActivityUrl(item.number)">查看詳情</a>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-container *ngIf="currentScreenSize == 'small'">
+        <div class="data-card" *ngFor="let item of data | paginate: { itemsPerPage: pagination?.pageSize ?? 10, currentPage: p, totalItems: pagination?.total ?? 0 }; let i = index">
+          <div class="data-card-header">
+            <div class="activy-tag">
+              <span [class.active-status]="item.status === '活動中'"
+                [class.finished-status]="item.status === '已結束'">{{item.status}}</span>
+            </div>
+            <div class="data-card-header-number">
+              {{item.number}}
+            </div>
+            <div class="check-detail">
+              <span class="tb-center">
+                <a (click)="getAwardActivityUrl(item.number)">查看詳情</a>
+              </span>
+            </div>
+          </div>
+          <div class="data-card-body">
+            <div class="data-card-body-title">活動期間</div>
+            <div class="data-card-body-content">{{item.during}}</div>
+            <div class="data-card-body-title">活動名稱</div>
+            <div class="data-card-body-content">{{item.name}}</div>
+          </div>
+        </div>
+      </ng-container>
+        <pagination-controls (pageChange)="onPageChange($event)" previousLabel="" nextLabel=""
+          style="text-align: center"></pagination-controls>
+
+      </div>
+    </div>
+  </div>
+  <app-home-footer></app-home-footer>
+</main>

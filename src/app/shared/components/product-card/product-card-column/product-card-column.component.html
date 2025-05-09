@@ -1,0 +1,25 @@
+<app-product-card class="product-card">
+  <div class="img-container">
+    <ng-content select="[img]"></ng-content>
+    <ng-content select="[badge]"></ng-content>
+  </div>
+  <app-product-card-row-wrapper>
+    <ng-content select="[tag]"></ng-content>
+  </app-product-card-row-wrapper>
+  <app-product-card-row-wrapper
+    [wrapperStyles]="{ 'justify-content': 'space-between' }"
+  >
+    <div>
+      <ng-content select="[title]"></ng-content>
+      <ng-content select="[subTitle]"></ng-content>
+      <app-product-card-row-wrapper>
+        <ng-content select="[price]"></ng-content>
+        <ng-content select="[oldPrice]"></ng-content>
+      </app-product-card-row-wrapper>
+    </div>
+    <div>
+      <ng-content select="[cart]"></ng-content>
+    </div>
+  </app-product-card-row-wrapper>
+  <ng-content select="[footer]"></ng-content>
+</app-product-card>

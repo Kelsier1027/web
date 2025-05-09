@@ -1,0 +1,422 @@
+<app-member-layout>
+  <ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+    <div class="member-wrapper">
+      <app-member-menu></app-member-menu>
+      <main class="content">
+        <p class="back" (click)="goBack()">
+          <mat-icon>keyboard_backspace</mat-icon>
+          回上一頁
+        </p>
+        <ng-container *ngIf="apiResponse | async as orderDetail">
+          <div class="bill-title">
+            <div class="title-and-button">
+              <span class="bill-no-title">採購單號</span>
+              {{ orderDetail.origSysDocumentRef }}
+
+              <button type="submit" class="print-button" mat-raised-button color="primary"
+                (click)="exportSerialListExcel()" *ngIf="
+                  (orderDetail.subInventory !== '數位軟體' || orderDetail.origSysDocumentRef.substring(0, 2) !== 'DX')
+                  && orderDetail.orderStatus === '結案'
+                  && orderDetail.isSerialListHasItem
+                ">
+                序號清單下載
+              </button>
+            </div>
+            <div class="sub-title">
+              <p class="sub-item">
+                <span class="sub-name">建立時間</span>
+                <span class="sub-text">
+                  {{ orderDetail.creationDate | date : "yyyy/MM/dd HH:mm" }}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="order-tracking">
+            <app-order-tracking [data]="orderDetail" *ngIf="
+                orderDetail.subInventory !== '數位軟體' &&
+                orderDetail.orderStatus !== '已取消'
+              "></app-order-tracking>
+            <div *ngIf="
+                orderDetail.subInventory === '數位軟體' &&
+                orderDetail.orderStatus !== '已取消'
+              " class="tracking">
+              <p class="order-status">訂單已成立</p>
+              <p class="date">
+                購買時間
+                {{ orderDetail.creationDate | date : "yyyy/MM/dd HH:mm" }}
+              </p>
+            </div>
+            <div *ngIf="orderDetail.orderStatus == '已取消' && orderType !== 'PreOrder' && orderType !== 'GroupOrder'" class="tracking">
+              <p class="order-status">訂單已取消</p>
+              <p class="date">
+                訂單取消日期
+                {{
+                orderDetail.tracking.lastUpdatedDate
+                | date : "yyyy/MM/dd HH:mm"
+                }}
+              </p>
+            </div>
+            <app-order-tracking
+              [data]="orderDetail"
+              *ngIf="(orderType === 'PreOrder' || orderType === 'GroupOrder') && orderDetail.orderStatus == '已取消'"
+              [isCancel]="true"
+            ></app-order-tracking>
+
+          </div>
+          <div class="order-data" *ngIf="orderType === 'PreOrder'">
+            <div class="status-red">預購</div>
+            <div class="order-group">
+              <div class="order-detail">
+                <div class="name">{{ orderDetail.promoName }}</div>
+                <div class="detail">
+                  {{ orderDetail.promoDescription }}
+                </div>
+                <div class="time">
+                  活動期間 {{ orderDetail.promoStartDate | date: 'YYYY/MM/dd' }} - {{ orderDetail.promoEndDate | date: 'YYYY/MM/dd' }} (預計出貨期間 {{ orderDetail.shippingDate | date: 'YYYY/MM/dd' }})
+                </div>
+                <div class="time-mobile">
+                  <span> 活動期間 {{ orderDetail.promoStartDate | date: 'YYYY/MM/dd' }} - {{ orderDetail.promoEndDate | date: 'YYYY/MM/dd' }} </span>
+                  <span>預計出貨日 {{ orderDetail.shippingDate | date: 'YYYY/MM/dd' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-data" *ngIf="orderType === 'GroupOrder'">
+            <div class="status-blue">團購</div>
+            <div class="order-group">
+              <div class="order-detail">
+                <div class="name">{{ orderDetail.promoName }}</div>
+                <div class="detail">
+                  {{ orderDetail.promoDescription }}
+                </div>
+                <div class="time">
+                  活動期間 {{ orderDetail.promoStartDate | date: 'YYYY/MM/dd' }} - {{ orderDetail.promoEndDate | date: 'YYYY/MM/dd' }} (預計出貨期間 {{ orderDetail.shippingStartDate | date: 'YYYY/MM/dd' }} ~ {{ orderDetail.shippingEndDate | date: 'YYYY/MM/dd' }})
+                </div>
+                <div class="time-mobile">
+                  <span> 活動期間 {{ orderDetail.promoStartDate | date: 'YYYY/MM/dd' }} - {{ orderDetail.promoEndDate | date: 'YYYY/MM/dd' }} </span>
+                  <span>預計出貨日 {{ orderDetail.shippingStartDate | date: 'YYYY/MM/dd' }} ~ {{ orderDetail.shippingEndDate | date: 'YYYY/MM/dd' }}</span>
+                </div>
+              </div>
+              <div class="order-status" *ngIf="orderDetail.groupBuyStatus == 2">
+                <div class="icon">
+                  <img src="../../../../assets/icons/Completed.png" alt="" />
+                </div>
+                <div class="content">
+                  <div class="status-text">已達成</div>
+                  <div class="status-detail">您的團購訂單已達成。</div>
+                </div>
+              </div>
+              <div class="order-status" *ngIf="orderDetail.groupBuyStatus == 3 && checkDeadline(orderDetail.promoEndDate)">
+                <div class="icon">
+                  <img src="../../../../assets/icons/incomplete.png" alt="" />
+                </div>
+                <div class="content">
+                  <div class="status-text">未達成</div>
+                  <div class="status-detail">您的團購訂單未達成門檻，系統已取消了此筆訂單。</div>
+                </div>
+              </div>
+              <div class="order-status" *ngIf="orderDetail.groupBuyStatus == 4">
+                <div class="icon">
+                  <img src="../../../../assets/icons/cancel.png" alt="" />
+                </div>
+                <div class="content">
+                  <div class="status-text">已取消</div>
+                  <div class="status-detail">您已取消此筆團購訂單。</div>
+                </div>
+              </div>
+              <div class="order-status" *ngIf="orderDetail.groupBuyStatus == 1">
+                <div class="content">
+                  <div class="status-text">團購門檻</div>
+                  <div class="progress-detail">
+                    <div class="progress-message">數量超過{{ orderDetail.targetCount }} 即享優惠</div>
+                    <div class="progress-status">{{ orderDetail.currentCount }}/{{ orderDetail.targetCount }}</div>
+                  </div>
+                  <div class="progressBar">
+                    <mat-progress-bar [color]="color" [mode]="mode" [value]="(orderDetail.currentCount / orderDetail.targetCount) * 100">
+                    </mat-progress-bar>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <app-table-container *ngIf="currentScreenSize !== 'small'">
+            <app-table [dataSource]="orderDetail.orderItems">
+              <ng-template [column]="{
+                  key: 'brand',
+                  title: '品牌',
+                  width: 120,
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }" let-value>
+                {{ value.cell }}
+              </ng-template>
+              <ng-template [column]="{
+                  key: 'description',
+                  title: '品名/規格',
+                  headerAlign: 'center',
+                  cellAlign: 'left'
+                }" let-value>
+                {{ value.cell }}
+
+                <span class="send-later"
+                *ngIf="orderDetail.orderItems[value.index].sendLater"
+                [matTooltip]="sendLaterText"
+                [matTooltipPosition]="'above'"
+                [matTooltipClass]="'above'"
+                >
+                  貨到補寄
+                </span>
+              </ng-template>
+              <ng-template [column]="{
+                  key: 'inventoryItem',
+                  title: '品號',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 200
+                }" let-value>
+                <p class="link">{{ value.cell }}</p>
+              </ng-template>
+              <ng-template [column]="{
+                  key: 'orderedQuantity',
+                  title: '數量',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 70
+                }" let-value>
+                <p>{{ value.cell }}</p>
+              </ng-template>
+              <ng-template [column]="{
+                  key: 'unitIorderPrice',
+                  title: '經銷價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 100
+                }" let-value>
+                <p>${{ value.cell | number }}</p>
+              </ng-template>
+              <ng-template [column]="{
+                  key: 'price',
+                  title: '總價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 100
+                }" let-value>
+                <p>${{ value.cell | number }}</p>
+              </ng-template>
+              <ng-template [column]="{
+                  key: 'operate',
+                  title: '操作',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 132
+                }" let-value *ngIf="orderDetail.subInventory === '數位軟體'">
+                <p class="operate">
+                  <span class="link" (click)="
+                      download(orderDetail.orderItems[value.index].downloadURL)
+                    " *ngIf="orderDetail.orderItems[value.index].downloadURL">
+                    下載
+                  </span>
+                  <span class="link" (click)="
+                      handleSerialModal(
+                        orderDetail.orderItems[value.index].inventoryItem,
+                        orderDetail.origSysDocumentRef,
+                        order.purchaseId,
+                        orderDetail.orderItems[value.index].serialIds
+                      )
+                    " *ngIf="
+                      orderDetail.orderItems[value.index].serialIds &&
+                      orderDetail.orderItems[value.index].itemStatus ===
+                        'SOLD' &&
+                      orderDetail.orderStatus !== '已取消'
+                    ">
+                    查看序號
+                  </span>
+                </p>
+              </ng-template>
+            </app-table>
+            <div class="price-wrapper">
+              <div class="price-subtotal">
+                <div class="price-subtotal-item">
+                  <div class="subtotal-title">小計</div>
+                  <div>${{ orderDetail.orderAmount | number }}</div>
+                </div>
+                <!-- 2025/04/16 Kelsier: 雅婷提出需求變更, 停用紅利折抵的額外顯示 -->
+                <!-- <div class="price-subtotal-item">
+                  <div class="subtotal-title">紅利折抵</div>
+                  <div class="span-warning">
+                    -${{ orderDetail.bonusAmount | number }}
+                  </div>
+                </div> -->
+                <div class="price-subtotal-item">
+                  <div class="subtotal-title">運費</div>
+                  <div>${{ orderDetail.freightCharge | number }}</div>
+                </div>
+                <div class="price-subtotal-item">
+                  <div class="subtotal-title">稅金</div>
+                  <div>+${{ orderDetail.taxAmount | number: '1.0-0' }}</div>
+                </div>
+              </div>
+              <div class="price-total">
+                <div class="total-title">總金額</div>
+                <div class="total-amount">
+                  ${{ orderDetail.totalAmount | number: '1.0-0' }}
+                </div>
+              </div>
+            </div>
+          </app-table-container>
+          <ng-container *ngIf="currentScreenSize === 'small'">
+            <app-mobile-table-container>
+              <app-mobile-table-item *ngFor="
+                  let data of orderDetail.orderItems;
+                  let last = last;
+                  let index = index
+                " [isLast]="last">
+                <app-status-card>
+                  <ng-template #headerTitle>
+                    <div class="product">
+                      <app-status-type color="blue">品號</app-status-type>
+                      <span class="link">
+                        {{ data.inventoryItem }}
+                      </span>
+                    </div>
+                  </ng-template>
+
+                  <ng-template [statusItem]="{ title: '品牌' }">
+                    {{ data.brand }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '品名/規格' }">
+                      {{ data.description }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '數量' }">
+                    {{ data.orderedQuantity }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '經銷價 (未)' }">
+                    ${{ data.unitIorderPrice | number }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '總價 (未)' }">
+                    <p>${{ data.price | number }}</p>
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '備註' }" *ngIf="data.sendLater">
+                    貨到補寄：{{sendLaterText}}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '操作' }" *ngIf="orderDetail.subInventory === '數位軟體'">
+                    <p class="operate">
+                      <span class="link" (click)="download(data.downloadURL)" *ngIf="data.downloadURL">
+                        下載
+                      </span>
+                      <span class="link" (click)="
+                          handleSerialModal(
+                            data.inventoryItem,
+                            orderDetail.origSysDocumentRef,
+                            order.purchaseId,
+                            data.serialIds
+                          )
+                        " *ngIf="
+                          data.serialIds &&
+                          data.itemStatus === 'SOLD' &&
+                          orderDetail.orderStatus !== '已取消'
+                        ">
+                        查看序號
+                      </span>
+                    </p>
+                  </ng-template>
+                </app-status-card>
+              </app-mobile-table-item>
+            </app-mobile-table-container>
+          </ng-container>
+          <div class="price-wrapper" *ngIf="currentScreenSize === 'small'">
+            <div class="price-subtotal">
+              <div class="price-subtotal-item">
+                <div class="subtotal-title">小計</div>
+                <div>${{ orderDetail.orderAmount | number }}</div>
+              </div>
+              <div class="price-subtotal-item">
+                <div class="subtotal-title">紅利折抵</div>
+                <div class="span-warning">
+                  -${{ orderDetail.bonusAmount | number }}
+                </div>
+              </div>
+              <div class="price-subtotal-item">
+                <div class="subtotal-title">運費</div>
+                <div>${{ orderDetail.freightCharge | number }}</div>
+              </div>
+              <div class="price-subtotal-item">
+                <div class="subtotal-title">稅金</div>
+                <div>+${{ orderDetail.taxAmount | number: '1.0-0' }}</div>
+              </div>
+            </div>
+            <div class="price-total">
+              <div class="total-title">總金額</div>
+              <div class="total-amount">
+                ${{ orderDetail.totalAmount | number: '1.0-0' }}
+              </div>
+            </div>
+          </div>
+          <div class="cancel-button" *ngIf="orderDetail.canCancel && !this.isUsingDealerView()">
+            <button type="button" [disabled]="disableCancelButton" (click)="cancelOrderValid()">
+              {{ disableCancelButton ? '正申請取消中' : '申請取消訂單' }}
+            </button>
+          </div>
+          <div class="shipping-wrapper" *ngIf="orderDetail.subInventory !== '數位軟體'">
+            <div class="shipping-detail">
+              <div class="bill-no-title">送貨資訊</div>
+              <app-table-container>
+                <div class="wrapper">
+                  <app-detail-item [title]="'收貨人'">
+                    {{ orderDetail.shipToName }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'送貨地址'">
+                    {{ orderDetail.shipAddr }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'帳單聯絡人'">
+                    {{ orderDetail.invoiceToName }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'帳單寄送地址'">
+                    {{ orderDetail.billAddr }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'出貨備註'">
+                    {{ orderDetail.shipMessage }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'Po No.'">
+                    {{ orderDetail.customerPoNumber }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'電子發票類型'">
+                    {{ orderDetail.invoiceType }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'電子發票號碼'">
+                    {{ orderDetail.invoiceNo }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'採購人'">
+                    {{ orderDetail.buyerName }}
+                  </app-detail-item>
+                  <app-detail-item [title]="'Email'">
+                    {{ orderDetail.email }}
+                  </app-detail-item>
+                  <app-detail-item [border]="currentScreenSize === 'small' ? true : false" [title]="'配送方式'">
+                    {{ orderDetail.shippingMethodCode }}
+                  </app-detail-item>
+                  <app-detail-item [border]="currentScreenSize === 'small' ? true : false" [title]="'&emsp;'">
+                  </app-detail-item>
+                </div>
+              </app-table-container>
+            </div>
+          </div>
+
+          <div class="shipping-wrapper" *ngIf="orderDetail.proofList?.length">
+            <div class="shipping-detail">
+              <div class="bill-no-title">簽收單</div>
+              <div class="shipping-image-wrapper">
+                <div *ngFor="let img of this.proofImages" class="shipping-image">
+                  <img src="{{img}}" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>

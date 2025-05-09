@@ -1,0 +1,10 @@
+.old-price-wrapper {
+  color: #858585;
+  &.default-font-size {
+    font-size: 14px;
+  }
+}
+
+.old-price {
+  text-decoration-line: line-through;
+}

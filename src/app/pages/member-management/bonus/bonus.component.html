@@ -1,0 +1,357 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div *ngIf="displayBonus" class="member-wrapper">
+      <app-member-menu active="紅利好康區"></app-member-menu>
+      <main class="content bonus-content">
+        <p class="title">紅利好康區</p>
+        <section class="bonus-info">
+          <div class="bonus-row">
+            <div class="bonus-item">
+              <span class="bonus-title">{{ active }}</span>
+              <span class="bonus-text">可用紅利</span>
+            </div>
+            <div class="bonus-item">
+              <span class="bonus-title">{{ inActive }}</span>
+              <span class="bonus-text">待生效紅利</span>
+            </div>
+            <div class="bonus-item">
+              <span class="bonus-title red">{{ used }}</span>
+              <span class="bonus-text">已使用紅利</span>
+            </div>
+            <div class="bonus-item">
+              <span class="bonus-title">{{ expireSoon }}</span>
+              <span
+                [ngClass]="expireSoon > 0 ? 'bonus-text link' : 'bonus-text zeroExpireSoon'"
+                [class.disabled]="expireSoon === 0"
+                (click)="popModal()"
+              >
+                30天內到期紅利
+                <mat-icon>keyboard_arrow_right</mat-icon>
+              </span>
+            </div>
+          </div>
+          <div class="bonus-row-mobile">
+            <p class="bonus-title">
+              <span>30天內到期紅利</span>
+              <span class="bonus">{{ expireSoon }}</span>
+            </p>
+            <span
+              class="bonus-text"
+              [ngClass]="{ zeroExpireSoon: expireSoon <= 0 }"
+              (click)="popModal()"
+            >
+              查看更多
+              <mat-icon>keyboard_arrow_right</mat-icon>
+            </span>
+          </div>
+        </section>
+        <app-company-notic-row [field]="noticationData"></app-company-notic-row>
+        <app-table-container>
+          <app-search-bar (reset)="reset()">
+            <ng-container ngProjectAs="[left]">
+              <form class="form" [formGroup]="filterForm">
+                <app-icon-select
+                  class="select"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: 'processStatus',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: [
+                      {
+                        value: 0,
+                        label: '待生效'
+                      },
+                      {
+                        value: 1,
+                        label: '生效'
+                      },
+                      {
+                        value: 2,
+                        label: '失效'
+                      },
+                      {
+                        value: 3,
+                        label: '其它'
+                      }
+                    ],
+                    class: '',
+                    placeholder: '所有狀態',
+                    validations: {
+                      hasErrorMessage: true,
+                      errorMessage: [{ type: 'required', message: '必填欄位' }]
+                    }
+                  }"
+                >
+                </app-icon-select>
+                <div class="datepicker-wrapper" style="display: flex">
+                  <app-date-range-filter
+                    [field]="{
+                      class: 'datepicker-wrapper',
+                      inputType: 'text',
+                      type: 'daterangefilter',
+                      label: '發放日期',
+                      start: 'releaseDateStart',
+                      end: 'releaseDateEnd',
+                      minCreateDate: '',
+                      value: '',
+                      placeholder: '發放'
+                    }"
+                  ></app-date-range-filter>
+                </div>
+
+                <div class="datepicker-wrapper" style="display: flex">
+                  <app-date-range-filter
+                    [field]="{
+                      class: 'datepicker-wrapper',
+                      inputType: 'text',
+                      type: 'daterangefilter',
+                      label: '日期區間',
+                      start: 'effectiveDateStart',
+                      end: 'effectiveDateEnd',
+                      minCreateDate: '',
+                      value: '',
+                      placeholder: '到期'
+                    }"
+                  ></app-date-range-filter>
+                </div>
+                <!--
+                <app-search-input class="search" [placeholder]="'搜尋採購清單編號、紅利名稱'"
+                (searchChange)="onSearchChange($event)"
+                >
+                </app-search-input>
+              -->
+
+                <app-search-input
+                  class="search"
+                  [placeholder]="'搜尋採購清單編號、紅利名稱'"
+                  (searchChange)="onSearchChange($event)"
+                  [inputValue]="filterForm.get('itemNumber')?.value"
+                >
+                </app-search-input>
+              </form>
+            </ng-container>
+          </app-search-bar>
+          <app-table
+            [dataSource]="dataSource | paginate : paginateArgs"
+            [noDataCaption]="'查無您的紅利好康紀錄。'"
+            class="table"
+          >
+            <ng-template
+              [column]="{
+                key: 'transactionDate',
+                title: '交易日期',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'no',
+                title: '採購單號',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'freePoints',
+                title: '贈送點數',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <div class="point">{{ value.cell }}</div>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'usedPoints',
+                title: '使用點數',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <div class="warning">{{ value.cell }}</div>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'status',
+                title: '狀態',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <app-status-tag [color]="value === '生效' ? 'green' : 'grey'">{{
+                value.cell
+              }}</app-status-tag>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'releaseDate',
+                title: '發放日期',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'effectiveDate',
+                title: '到期日期',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'dividendDetails',
+                title: '紅利詳情',
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <p class="link" style="cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;" (click)="bonusDetailModal(value)">
+                {{ value.cell }}
+              </p>
+            </ng-template>
+          </app-table>
+          <div class="pagination">
+            <pagination-controls
+              (pageChange)="onPageChange($event)"
+              [maxSize]="maxSize"
+              [directionLinks]="true"
+              [autoHide]="!dataSource?.length"
+              [responsive]="true"
+              previousLabel="上一頁"
+              nextLabel="下一頁"
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+              style="text-align: center"
+              class="paginate"
+            >
+            </pagination-controls>
+            <app-icon-select
+              *ngIf="dataSource?.length"
+              class="select"
+              (valueChange)="pageSizeChange($event)"
+              [isBindForm]="false"
+              [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: '',
+                styleMargin: '0px 0px 0px 0px',
+                options: pageSizeOption,
+                value: selectedPageSize,
+                class: '',
+                placeholder: '請選擇幾個'
+              }"
+            >
+            </app-icon-select>
+          </div>
+        </app-table-container>
+
+        <ng-container *ngIf="currentScreenSize === 'small'">
+          <app-mobile-table-container>
+            <ng-container *ngIf="dataSource.length; else noData">
+              <app-mobile-table-item
+                *ngFor="let data of dataSource; let last = last"
+                [isLast]="last"
+              >
+                <app-status-card [isActive]="data.status === '生效'">
+                  <ng-template #headerTitle>
+                    <app-status-type color="blue">採購單號</app-status-type
+                    >{{ data.no }}
+                  </ng-template>
+                  <ng-template #headerEnd>
+                    <app-status-tag
+                      [color]="data.status === '生效' ? 'green' : 'grey'"
+                      >{{ data.status }}</app-status-tag
+                    >
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '交易日期' }">
+                    {{ data.transactionDate }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '贈送點數' }">
+                    {{ data.freePoints }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '使用點數' }">
+                    {{ data.usedPoints }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '發放日期' }">
+                    {{ data.releaseDate }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '到期日期' }">
+                    {{ data.effectiveDate }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '紅利詳情' }">
+                    <p class="link" (click)="bonusDetailModal({ row: data })">
+                      {{ data.dividendDetails }}
+                    </p>
+                  </ng-template>
+                </app-status-card>
+              </app-mobile-table-item>
+              <div class="pagination">
+                <pagination-controls
+                  (pageChange)="onPageChange($event)"
+                  [maxSize]="10"
+                  [directionLinks]="true"
+                  [autoHide]="!dataSource?.length"
+                  [responsive]="true"
+                  previousLabel="上一頁"
+                  nextLabel="下一頁"
+                  screenReaderPaginationLabel="Pagination"
+                  screenReaderPageLabel="page"
+                  screenReaderCurrentLabel="You're on page"
+                  style="text-align: center"
+                  class="paginate"
+                >
+                </pagination-controls>
+                <app-icon-select
+                  class="select"
+                  (valueChange)="pageSizeChange($event)"
+                  [isBindForm]="false"
+                  [field]="{
+                    type: 'iconSelect',
+                    label: '',
+                    inputType: 'text',
+                    name: '',
+                    styleMargin: '0px 0px 0px 0px',
+                    options: pageSizeOption,
+                    value: selectedPageSize,
+                    class: '',
+                    placeholder: '請選擇幾個'
+                  }"
+                >
+                </app-icon-select>
+              </div>
+            </ng-container>
+            <ng-template #noData>
+              <div class="no-result">查無您的紅利好康紀錄。</div>
+            </ng-template>
+          </app-mobile-table-container>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>

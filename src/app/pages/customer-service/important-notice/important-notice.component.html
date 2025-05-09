@@ -1,0 +1,21 @@
+<app-member-layout>
+    <div class="member-wrapper">
+        <div class="header-wrapper">
+            <div class="topHeader">
+                <img src="../../../assets/images/Subtract.png" alt="">
+                <mat-icon class="large-icon">keyboard_arrow_right</mat-icon>
+                客服中心
+                <mat-icon class="large-icon">keyboard_arrow_right</mat-icon>
+                iOrder小幫手
+            </div>
+        </div>
+        <div class="container">
+            <app-customer-service-menu></app-customer-service-menu>
+            <main class="content">
+                <app-important-notice-content></app-important-notice-content>
+            </main>
+        </div>
+    </div>
+</app-member-layout>
+
+<app-fixed-nav class="fixed-nav" *ngIf="currentScreenSize !== 'small'"></app-fixed-nav>

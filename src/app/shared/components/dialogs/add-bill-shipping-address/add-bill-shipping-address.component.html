@@ -1,0 +1,114 @@
+<app-header-inline-close-layout [data]="data">
+<app-loading-mask
+[showIf]="this.isLoading"
+></app-loading-mask>
+  <form
+    class="shipping-address-form"
+    [formGroup]="shippingAddressForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <ul class="address-layout">
+      <!-- authorization -->
+      <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+        <app-prompt [hint]="error.errorMessage"></app-prompt>
+      </div>
+      <form [formGroup]="shippingAddressForm">
+        <p>{{ data.action === 0 ? "送貨地址" : "寄送地址" }}</p>
+        <div class="shipping-address">
+          <div class="address-item">
+            <app-icon-select
+              [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: 'city',
+                styleMargin: '0px 0px 0px 0px',
+                options: cities,
+                class: '',
+                placeholder: '縣市',
+                validations: {
+                  hasErrorMessage: true,
+                  errorMessage: [{ type: 'required', message: '必選欄位' }]
+                }
+              }"
+              (valueChange)="cityChange()"
+            >
+            </app-icon-select>
+          </div>
+          <div class="address-item">
+            <app-icon-select
+            [disabled]="disabledarea"
+              [field]="{
+                type: 'iconSelect',
+                label: '',
+                inputType: 'text',
+                name: 'area',
+                styleMargin: '0px 0px 0px 0px',
+                options: areas,
+                class: '',
+                placeholder: '鄉鎮市區',
+                validations: {
+                  hasErrorMessage: true,
+                  errorMessage: [{ type: 'required', message: '必選欄位' }]
+                }
+              }"
+            >
+            </app-icon-select>
+          </div>
+        </div>
+        <app-label-input
+          [field]="{
+            type: 'input',
+            label: '',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'address',
+              placeholder: '請輸入詳細地址(最多15個中文字)',
+            hint: '',
+            class: '',
+            isaddr: true,
+            count: 15,
+            showCount: true,
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                { type: 'required', message: '必填欄位' },
+                { type: 'pattern', message: '請輸入中文字元' },
+                { type: 'tooLong', message: '地址長度不可超過 15 個中文字'}
+              ]
+            }
+          }"
+          (addrLength)="checkAddrLength($event)"
+        >
+        </app-label-input>
+        <div class="password-wrapper">
+          <app-password-input
+            [field]="{
+              type: 'password',
+              label: '密碼',
+              labelPosition: 'top',
+              inputType: 'password',
+              name: 'password',
+              placeholder: '確認變更請輸入密碼',
+              hint: '',
+              class: '',
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [{ type: 'required', message: '必填欄位' }]
+              }
+            }"
+          >
+          </app-password-input>
+        </div>
+      </form>
+    </ul>
+    <footer class="dialog-footer">
+      <section class="footer-wrapper">
+        <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+        <button type="submit" class="button" mat-raised-button color="primary">
+          新增申請
+        </button>
+      </section>
+    </footer>
+  </form>
+</app-header-inline-close-layout>

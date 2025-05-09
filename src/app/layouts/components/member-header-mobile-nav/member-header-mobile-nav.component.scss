@@ -1,0 +1,45 @@
+@import "responsive";
+
+.mobile-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  // width: 375px;
+  ::ng-deep
+    .mat-badge-medium.mat-badge-overlap.mat-badge-after
+    .mat-badge-content {
+    top: -20px;
+    right: -10px;
+  }
+
+}
+.left {
+  width: 15%;
+  display: flex;
+  align-items: center;
+}
+.right {
+  display: flex;
+  align-items: center;
+  width: 85%;
+}
+
+.search {
+  width: 90%;
+}
+
+.icon-wrapper {
+  display: inline-block;
+  width: 10%;
+  height: 24px;
+  &.arrow,
+  &.search {
+    margin-right: 10px;
+    width: 100%;
+  }
+}

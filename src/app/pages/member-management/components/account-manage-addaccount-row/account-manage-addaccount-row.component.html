@@ -1,0 +1,216 @@
+<app-loading-mask [showIf]="isLoading"></app-loading-mask>
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <section class="add-account-row">
+    <h2
+      class="add-account"
+      *ngIf="currentScreenSize !== 'small' && authService.isAdmin"
+    >
+      <span class="title">帳號管理</span>
+      <button mat-raised-button color="primary" (click)="popModel()">
+        新增帳號
+      </button>
+    </h2>
+    <ng-container *ngIf="apiResponse | async as account">
+      <div class="account-info" *ngIf="authService.isAdmin">
+        <div class="account-info-grade">
+          <p class="grade">
+            <app-icon class="icon-wrapper" [iconName]="'security'"></app-icon
+            >{{ adminAccount?.jobTitle }}
+          </p>
+          <ng-container *ngIf="currentScreenSize === 'small'">
+            <span
+              class="link"
+              (click)="popApplyChangeModel()"
+              *ngIf="!isAdminChangeApply"
+              >申請變更</span
+            >
+            <span class="disable" *ngIf="isAdminChangeApply">申請變更</span>
+          </ng-container>
+        </div>
+        <p class="user">
+          <span class="name">{{ adminAccount?.lastName }}</span>
+          <span class="email">({{ adminAccount?.email }})</span>
+          <ng-container *ngIf="currentScreenSize !== 'small'">
+            <span
+              class="link"
+              (click)="popApplyChangeModel()"
+              *ngIf="!isAdminChangeApply"
+              >申請變更</span
+            >
+            <span class="disable" *ngIf="isAdminChangeApply">申請變更</span>
+          </ng-container>
+        </p>
+      </div>
+      <h2
+        class="add-account"
+        *ngIf="currentScreenSize === 'small' && authService.isAdmin"
+      >
+        <span class="title">帳號管理</span>
+        <button mat-raised-button color="primary" (click)="popModel()">
+          新增帳號
+        </button>
+      </h2>
+      <div class="table-container" *ngIf="currentScreenSize !== 'small'">
+        <app-table-container>
+          <app-table [dataSource]="dataSource">
+            <ng-template
+              [column]="{
+                key: 'jobTitle',
+                title: '帳號身份',
+                width: 104,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{ key: 'email', title: '帳號', width: 481 }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'lastName',
+                title: '姓名',
+                width: 119,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'isAvailable',
+                title: '狀態',
+                width: 122,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <div class="toggle_wrapper" *ngIf="value.cell !== undefined">
+                <app-icon
+                  class="toggle_on"
+                  [iconName]="'toggle_on'"
+                  *ngIf="value.cell && authService.isAdmin"
+                  (click)="toggleClick(account[value.index])"
+                ></app-icon>
+                <app-icon
+                  class="toggle_off"
+                  [iconName]="'toggle_off'"
+                  *ngIf="!value.cell && authService.isAdmin"
+                  (click)="toggleClick(account[value.index])"
+                ></app-icon>
+                <span>{{ value.cell ? "啟用" : "停用" }}</span>
+              </div>
+              <div class="apply" *ngIf="value.cell === undefined">
+                申請處理中 {{ value.cell }}
+              </div>
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'operate',
+                title: authService.isAdmin ? '操作' : '',
+                headerAlign: 'center',
+                cellAlign: 'center',
+                width: 169
+              }"
+              let-value
+            >
+              <p
+                class="operate"
+                *ngIf="
+                  value.row.isAvailable !== undefined && authService.isAdmin
+                "
+              >
+                <span
+                  class="link"
+                  [ngClass]="{
+                    'reset-password': value.row.role !== 'Receiver'
+                  }"
+                  (click)="handleResetPasswordModal(account[value.index])"
+                  *ngIf="value.row.role !== 'Receiver'"
+                  >重設密碼</span
+                >
+                <span
+                  class="link"
+                  (click)="handleDeleteAccountModal(account[value.index])"
+                  >刪除帳號</span
+                >
+              </p>
+            </ng-template>
+          </app-table>
+        </app-table-container>
+      </div>
+      <ng-container *ngIf="currentScreenSize === 'small'">
+        <app-mobile-table-container>
+          <app-mobile-table-item
+            *ngFor="let data of dataSource; let last = last; let index = index"
+            [isLast]="last"
+          >
+            <app-status-card>
+              <ng-template #headerTitle>
+                {{ data.jobTitle }}
+              </ng-template>
+              <ng-template #headerEnd>
+                <div
+                  class="toggle_wrapper"
+                  *ngIf="data.isAvailable !== undefined"
+                >
+                  <app-icon
+                    class="toggle_on"
+                    [iconName]="'toggle_on'"
+                    *ngIf="data.isAvailable && authService.isAdmin"
+                    (click)="toggleClick(account[index])"
+                  ></app-icon>
+                  <app-icon
+                    class="toggle_off"
+                    [iconName]="'toggle_off'"
+                    *ngIf="!data.isAvailable && authService.isAdmin"
+                    (click)="toggleClick(account[index])"
+                  ></app-icon>
+                  <span>{{ data.isAvailable ? "啟用" : "停用" }}</span>
+                </div>
+                <div class="apply" *ngIf="data.isAvailable === undefined">
+                  申請處理中 {{ data.isAvailable }}
+                </div>
+              </ng-template>
+              <ng-template [statusItem]="{ isColumn: true }"
+                >{{ data.lastName }}
+              </ng-template>
+              <ng-template [statusItem]="{ isColumn: true }"
+                >{{ data.email }}
+              </ng-template>
+              <ng-template [statusItem]="{ isColumn: true }">
+                <p
+                  class="operate"
+                  *ngIf="data.isAvailable !== undefined && authService.isAdmin"
+                >
+                  <span
+                    class="link"
+                    [ngClass]="{
+                      'reset-password': data.role !== 'Receiver'
+                    }"
+                    (click)="handleResetPasswordModal(account[index])"
+                    *ngIf="data.role !== 'Receiver'"
+                    >重設密碼</span
+                  >
+                  <span
+                    class="link"
+                    (click)="handleDeleteAccountModal(account[index])"
+                    >刪除帳號</span
+                  >
+                </p>
+              </ng-template>
+            </app-status-card>
+          </app-mobile-table-item>
+        </app-mobile-table-container>
+      </ng-container>
+    </ng-container>
+  </section>
+</ng-container>

@@ -1,0 +1,53 @@
+name: SIT Deploy
+
+env:
+  APP_PATH: dist//browser
+  APP_PATH_JINGHO: dist/jingho-web/browser
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - deploy/SIT
+
+jobs:
+  build:
+    runs-on: little-box
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci --no-audit
+
+      - name: Build SIT
+        run: npm run build:sit
+
+      - name: Upload files via SFTP for Unitech
+        env:
+          SFTP_ADDRESS: ${{ secrets.DEV_IP }}
+          SFTP_USER: 'gannaDev'
+          REMOTE_PATH: '/C:/inetpub/wwwroot/iOrder/SIT/Web' 
+          LOCAL_PATH: ${{ env.APP_PATH }}
+          SSHPASS: ${{ secrets.SFTP_PASSPHRASE }}
+        run: |
+          sshpass -e sftp "$SFTP_USER@$SFTP_ADDRESS:$REMOTE_PATH" <<< $"put -r $LOCAL_PATH/*"
+
+      - name: Build SIT JingHo
+        run: npm run build:jingho:sit
+        
+      - name: Upload files via SFTP for Jingho
+        env:
+          SFTP_ADDRESS: ${{ secrets.DEV_IP }}
+          SFTP_USER: 'gannaDev'
+          REMOTE_PATH: '/C:/inetpub/wwwroot/iOrder/SIT/Jingho.Web' 
+          LOCAL_PATH: ${{ env.APP_PATH_JINGHO }}
+          SSHPASS: ${{ secrets.SFTP_PASSPHRASE }}
+        run: |
+          sshpass -e sftp "$SFTP_USER@$SFTP_ADDRESS:$REMOTE_PATH" <<< $"put -r $LOCAL_PATH/*"

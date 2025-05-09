@@ -1,0 +1,27 @@
+<cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <!-- This is the tree node template for leaf nodes -->
+  <cdk-tree-node *cdkTreeNodeDef="let node" cdkTreeNodePadding [style.display]="shouldRender(node) ? 'flex' : 'none'"
+    class="example-tree-node"
+    [ngClass]="{menu:node['theme'] === 'menu', active: node.id === clickItem,  'tree-header': node['theme'] === 'tree-header'}"
+    (click)="click(node)">
+    <!-- use a disabled button to provide padding for tree leaf -->
+    <app-icon-label [option]="{ icon: node['icon'], lable: node['name'], class:node['labelclass'], custom: true }"
+      [ngClass]="{active: node.id === clickItem}"></app-icon-label>
+    <button mat-icon-button disabled></button>
+    <div class='tag' *ngIf="node.news!==0">{{node.news}}</div>
+  </cdk-tree-node>
+  <!-- This is the tree node template for expandable nodes -->
+  <cdk-tree-node *cdkTreeNodeDef="let node; when: hasChild" cdkTreeNodePadding
+    [style.display]="shouldRender(node) ? 'flex' : 'none'" class="example-tree-node"
+    [ngClass]="{menu:node['theme'] === 'menu', active: node.id === clickItem}">
+    <app-icon-label [option]="{ icon: node['icon'], lable: node['name'], class:node['labelclass'], custom: true }"
+      [ngClass]="{active: node.id === clickItem}">
+    </app-icon-label>
+    <button mat-icon-button cdkTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name"
+      (click)="node.isExpanded = !node.isExpanded" [style.visibility]="node.expandable ? 'visible' : 'hidden'">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+  </cdk-tree-node>
+</cdk-tree>

@@ -1,0 +1,39 @@
+name: iOrder CI/CD
+
+env:
+  APP_PATH: dist//browser
+  
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: little-box
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci --no-audit
+
+      - name: Build Dev Iorder
+        run: npm run build:dev
+
+      - name: Upload files via SFTP
+        env:
+          SFTP_ADDRESS: ${{ secrets.DEV_IP }}
+          SFTP_USER: 'gannaDev'
+          REMOTE_PATH: '/C:/inetpub/wwwroot/iOrder/DEV/Web' 
+          LOCAL_PATH: ${{ env.APP_PATH }}
+          SSHPASS: ${{ secrets.SFTP_PASSPHRASE }}
+        run: |
+          sshpass -e sftp "$SFTP_USER@${SFTP_ADDRESS}:$REMOTE_PATH" <<< $"put -r $LOCAL_PATH/*"

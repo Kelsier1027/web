@@ -1,0 +1,300 @@
+@import "src/styles/responsive";
+.member-center {
+  position: relative;
+
+  @include pad {
+    background-color: #fff;
+    padding-bottom: 230px;
+  }
+  .bg-wrapper {
+    background-color: #2564c0;
+    > .title {
+      display: none;
+    }
+    @include pad {
+      padding: 32px 56px;
+      height: 290px;
+      background-image: url("../../../../../src/assets/images/BG.svg");
+      background-repeat: no-repeat;
+      background-position: top;
+      background-size: cover;
+      > .title {
+        font-weight: 500;
+        font-size: 30px;
+        line-height: 36px;
+        color: #ffffff;
+        margin: 0px;
+      }
+    }
+  }
+  .member-action {
+    display: none;
+    @include pad {
+      display: flex;
+      width: calc(100% - 56px - 56px);
+      height: 242px;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      top: 30%;
+      bottom: 0px;
+      margin: auto;
+      background: #ffffff;
+      box-shadow: 0px 0px 1px rgb(0 0 0 / 20%),
+        0px 2px 14px -2px rgb(0 0 0 / 12%);
+      border-radius: 16px;
+      padding: 36px 0px;
+      .action-item {
+        width: calc(100% / 4);
+        padding: 0px 40px;
+        border-right: 1px solid #ebebeb;
+        .icon {
+          display: inline-block;
+          vertical-align: middle;
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+          .mat-icon {
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+          }
+        }
+        &:last-child {
+          border-right: 0px solid transparent;
+        }
+        .action-title {
+          font-size: 18px;
+          line-height: 26px;
+          color: #333;
+          margin-bottom: 15.5px;
+        }
+      }
+    }
+  }
+  .member-action-mobile {
+    display: flex;
+    margin-bottom: 8px;
+    padding-top: 8px;
+    background: #eff2f4;
+    flex-flow: wrap;
+    .action-item {
+      display: flex;
+      width: calc(100% / 4);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: #fff;
+      color: #333333;
+      padding: 20px 0px;
+      border-right: 1px solid #ebebeb;
+      border-bottom: 1px solid #ebebeb;
+      &:nth-child(1),
+      &:nth-child(2),
+      &:nth-child(3),
+      &:nth-child(4) {
+        border-top: 1px solid #ebebeb;
+      }
+      .icon-wrapper {
+        width: 24px;
+        height: 24px;
+        color: #1060b4;
+      }
+      > p {
+        margin: 0px;
+      }
+    }
+
+    &.tax-setting {
+      background-color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      @include pad {
+        display: none;
+      }
+
+      .tax {
+        display: flex;
+        align-items: center;
+
+        .tax-button {
+          width: 80px;
+          height: 30px;
+          border-radius: 4px;
+
+          &.active {
+            background: #333333;
+            color: #fff;
+          }
+        }
+
+        .tax-button-wrapper {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 166px;
+          height: 36px;
+          background: #fff;
+          border: 1px solid #d6d6d6;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    @include pad {
+      display: none;
+    }
+  }
+}
+.info-col {
+  display: flex;
+  color: #ffffff;
+  justify-content: center;
+  .wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-flow: wrap;
+    @include pad {
+      flex-flow: nowrap;
+      max-width: 1200px;
+    }
+  }
+  @include pad {
+    padding: 69px 40px 0px;
+  }
+  .member-left {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 56px;
+    background: linear-gradient(180deg, #1060b4 0%, #0c51b9 63.1%);
+    @include pad {
+      padding: 0px;
+      background: transparent;
+      justify-content: flex-start;
+    }
+
+    .member-info {
+      display: flex;
+      align-items: center;
+      .level {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 60px;
+        background: #fff;
+        color: #333333;
+        width: 36px;
+        height: 36px;
+        @include pad {
+          padding: 6px 14px;
+          width: auto;
+          height: auto;
+        }
+        .icon {
+          display: inline-block;
+          vertical-align: middle;
+          width: 24px;
+          height: 24px;
+          .mat-icon {
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+          }
+        }
+        .level-text {
+          display: none;
+          @include pad {
+            display: inline-block;
+          }
+        }
+      }
+      .user {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 0px;
+        margin-left: 12px;
+        font-size: 16px;
+        .name {
+          font-size: 13px;
+        }
+      }
+    }
+    .member-login {
+      &.mat-stroked-button {
+        border: 1px solid #fff;
+      }
+      @include pad {
+        display: none;
+      }
+    }
+    @include pad {
+      width: calc(100% - 330px);
+    }
+  }
+  .member-right {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    @include pad {
+      width: auto;
+      padding: 0px;
+    }
+    .link-item {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+
+      @include pad {
+        display: flex;
+        margin-right: 32px;
+      }
+      &:last-child {
+        display: flex;
+        margin-right: 0px;
+      }
+      .text {
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+      .suffix {
+        font-size: 14px;
+        font-weight: 400;
+        margin-left: 2px;
+      }
+      .icon {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        .mat-icon {
+          width: 24px;
+          height: 24px;
+          line-height: 24px;
+        }
+      }
+      .title {
+        display: inline-block;
+        width: 5em;
+        @include pad {
+        }
+      }
+    }
+  }
+}
+
+.link {
+  cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+}

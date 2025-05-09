@@ -1,0 +1,33 @@
+.Loading {
+    background-color: rgba(34, 34, 34, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #FFF;
+    z-index: 999999;
+    display: flex;
+    flex-flow: row wrap;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @keyframes topFadeOut {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .too-long-message {
+    animation-name: topFadeOut;
+    animation-duration: 0.5s;
+    transition: ease-out;
+  }

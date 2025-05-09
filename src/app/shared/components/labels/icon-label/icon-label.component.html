@@ -1,0 +1,13 @@
+<div class="icon-lable" [ngClass]="{
+  'icon-none': option['icon'] === '' ,
+   'dot': option['class'] === 'dot'}">
+  <mat-icon *ngIf='!option.custom'>{{ option.icon }}</mat-icon>
+  <div class='custom-icon-wrapper' *ngIf='option.custom && option.icon !==""'>
+    <app-icon [iconName]="option.icon"></app-icon>
+  </div>
+
+  <div class='prefix-wrapper'>
+    <span class='prefix'></span>
+  </div>
+  <p class="title">{{ option.lable }}</p>
+</div>

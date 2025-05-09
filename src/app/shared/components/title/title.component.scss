@@ -1,0 +1,10 @@
+@import "/src/styles/responsive";
+
+.title {
+  display: none;
+  font-size: 26px;
+  line-height: 18px;
+  @include pad {
+    display: inline-block;
+  }
+}

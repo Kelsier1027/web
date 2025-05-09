@@ -1,0 +1,17 @@
+<div class="container">
+    <div *ngFor="let data of flashSaleData" class="box">
+        <app-timer [countDownTime]="data.countDownTime"></app-timer>
+        <div class="inner">
+            <div class="top">
+                <img class="m-auto mb-10px" alt="" [src]="data.imgSrc">
+                <p class="title mb-10px">{{data.mainTitle}}</p>
+                <p class="gray mb-10px sub-title">{{data.subTitle}}</p>
+            </div>
+
+            <div class="bottom">
+                <button type="button" target="_blank" routerLink="/Promotion" [queryParams]="{ source: 'flash-sale', sourceId: data.promoId }">查看更多促銷商品</button>
+                <div class="gray mb-10px promostring"> {{data.promoString}} </div>
+            </div>
+        </div>
+    </div>
+</div>

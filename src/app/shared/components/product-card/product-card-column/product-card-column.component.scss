@@ -1,0 +1,28 @@
+@import "/src/styles/responsive";
+
+.product-card {
+  background: #FFFFFF;
+  padding: 16px;
+  display: block;
+
+  @include pad {
+    padding: 20px;
+  }
+}
+
+.img-container {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+::ng-deep div[class~="img-container"] > img {
+  max-width: 140px;
+  margin: auto;
+  padding-left: 5px;
+}
+
+.title {
+  display: block;
+  padding: 9px 0;
+}
+

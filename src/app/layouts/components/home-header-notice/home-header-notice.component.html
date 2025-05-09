@@ -1,0 +1,12 @@
+<section [ngClass]="getColStyle()" *ngIf="this.data[0]">
+  <p class='notice'>
+    <span class='notice-icon'>
+      <app-icon [iconName]="'notice'"></app-icon>
+    </span>
+    <a routerLink="/CustomerService/ImportantNotice" [queryParams]="{ itemId: this.data[0]?.id }"><span class='text'  >【{{this.data[0]?.typeName}}】{{this.data[0]?.title}}</span></a>
+  </p>
+  <a class='more' routerLink="/CustomerService/ImportantNotice">
+    查看全部
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </a>
+</section>

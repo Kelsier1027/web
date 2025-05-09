@@ -1,0 +1,98 @@
+<div class="container">
+  <div class="category">
+    <button
+      (click)="sortFieldChange(''); sortOrderChange('')"
+      class="category-button"
+      [ngClass]="{ active: sortOrder === '' && !isTraceOrder }"
+    >
+      最新上架
+    </button>
+    <button
+      (click)="sortFieldChange(''); traceOrderChange()"
+      class="category-button"
+      [ngClass]="{ active: isTraceOrder }"
+    >
+      熱門追蹤
+    </button>
+    <button
+      (click)="sortFieldChange('unitPrice'); sortOrderChange('ASC')"
+      class="category-button"
+      [ngClass]="{ active: sortOrder === 'ASC' && !isTraceOrder }"
+    >
+      價格低到高
+    </button>
+    <button
+      (click)="sortFieldChange('unitPrice'); sortOrderChange('DESC')"
+      class="category-button"
+      [ngClass]="{ active: sortOrder === 'DESC' && !isTraceOrder }"
+    >
+      價格高到低
+    </button>
+  </div>
+  <div class="right">
+    <div class="display-type">
+      <div class="type-wrapper">
+        <button
+          class="type"
+          [ngClass]="{ active: type === 1 }"
+          (click)="layoutChange.emit(1)"
+        >
+          <span class="icon-wrapper">
+            <app-icon class="type-grid-icon" iconName="type_grid"></app-icon>
+          </span>
+        </button>
+      </div>
+
+      <div class="type-wrapper">
+        <button
+          class="type"
+          [ngClass]="{ active: type === 2 }"
+          (click)="layoutChange.emit(2)"
+        >
+          <span class="icon-wrapper">
+            <app-icon class="type-list-icon" iconName="type_list"></app-icon>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="select-wrapper">
+      <app-icon-select
+        class="select"
+        (valueChange)="pageSizeChange($event)"
+        [isBindForm]="false"
+        [field]="{
+          type: 'iconSelect',
+          label: '',
+          inputType: 'text',
+          name: '',
+          styleMargin: '0px 0px 0px 0px',
+          options: pageSizeOption,
+          value: selectedPageSize,
+          class: '',
+          placeholder: '請選擇幾個'
+        }"
+      >
+      </app-icon-select>
+    </div>
+
+    <div class="tax">
+      <div class="tax-button-wrapper">
+        <button
+          (click)="unitPriceChange(true)"
+          [ngClass]="{ active: isUnitPrice }"
+          class="tax-button active"
+        >
+          未稅價
+        </button>
+        <button
+          (click)="unitPriceChange(false)"
+          [ngClass]="{ active: !isUnitPrice }"
+          class="tax-button"
+        >
+          含稅價
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

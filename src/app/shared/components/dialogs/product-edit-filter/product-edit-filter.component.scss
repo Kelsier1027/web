@@ -1,0 +1,57 @@
+.action-button {
+  color: #0972E3;
+  font-size: 13px;
+  display: inline-block;
+
+  &:first-child {
+    border-right: 1px solid #C2C2C2;
+    padding-right: 12px;
+  }
+
+  &:last-child {
+    padding-left: 12px;
+  }
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-top: 10px;
+  font-size: 13px;
+  color: #858585;
+}
+
+.info-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.wrapper {
+  height: 100%;
+  overflow: auto;
+  padding: 0 28px 28px 28px;
+}
+
+::ng-deep .product-edit .mat-dialog-container {
+  padding: 0 ;
+}
+
+::ng-deep #body app-product-edit-filter .dialog-header {
+  position: relative;
+  width: 100%;
+  padding: 17px 17px 17px 28px;
+  margin: 0;
+}
+
+::ng-deep #body app-product-edit-filter .dialog-wrapper {
+  height: 100% ;
+  display: flex ;
+  flex-direction: column ;
+}
+
+::ng-deep #body app-product-edit-filter .dialog-content {
+  padding: 0 !important;
+  flex: 1 ;
+}
+

@@ -1,0 +1,26 @@
+<ng-container *ngIf="(layoutService.layoutChanges$ | async) as currentScreenSize">
+  <div class='Slideshow-col'>
+    <!---->
+    <swiper #swiper [config]="config" (swiper)="onSwiper($event)" (slideChange)="onSlideChange()">
+      <ng-container *ngFor="let slide of slidesOption; index as i">
+        <ng-template swiperSlide>
+          <a [href]="getSlideUrl(slide)" target="_blank">
+          <img class="swiperMobileImg" [src]="slide.mobile" [alt]="slide" *ngIf="currentScreenSize === 'small'" />
+          <img class="swiperPcImg" [src]="slide.pc" [alt]="slide" *ngIf="currentScreenSize !== 'small'" />
+          </a>
+        </ng-template>
+      </ng-container>
+    </swiper>
+    <div class='action'>
+      <div class="swiper-pagination-slide"></div>
+      <div class='buttons'>
+        <button class='prev-button' (click)="slidePrev()">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+        <button class='next-button' (click)="slideNext()">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>

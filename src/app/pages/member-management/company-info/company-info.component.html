@@ -1,0 +1,30 @@
+<app-member-layout [isMember]="true">
+  <app-breadcrumb></app-breadcrumb>
+  <div class="member-wrapper">
+    <app-member-menu active="公司帳戶"></app-member-menu>
+    <main class="content">
+      <p class="title">公司帳戶</p>
+      <ng-container *ngIf="apiResponse | async as account">
+        <app-company-info-row [account]="account"></app-company-info-row>
+        <section class="notic">
+          <p class="notic-title">
+            <mat-icon class="icon">info</mat-icon>
+            <span>無法結帳時，有以下兩種處理方式</span>
+          </p>
+          <ul class="notic-content">
+              <li class="notic-item">聯繫業務，申請額度調整。</li>
+              <li class="notic-item">選擇以下一個銀行進行匯款，完成匯款後通知精技電腦電子商務部或是您的業務窗口。<a class="link" link (click)="anchorToBankRow()">查看匯款銀行資訊</a></li>
+          </ul>
+        </section>
+        <app-company-outsanding-row
+          [account]="account"
+        ></app-company-outsanding-row>
+        <div id="bank-row">
+          <app-company-bank-row
+            [taxReference]="account.taxReference"
+          ></app-company-bank-row>
+        </div>
+      </ng-container>
+    </main>
+  </div>
+</app-member-layout>

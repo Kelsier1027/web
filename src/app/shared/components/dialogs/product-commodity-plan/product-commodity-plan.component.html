@@ -1,0 +1,47 @@
+<app-header-layout [data]="data">
+  <section
+    class="product-commodity-change-wrapper"
+    [ngClass]="{ 'with-text': data.text }"
+  >
+    <span *ngIf="data.isIcon" class="wrapper">
+      <app-icon [iconName]="'warning'"></app-icon>
+    </span>
+    <p class="text" [innerHTML]="data.text"></p>
+  </section>
+  <div class="box">
+    <div class="item">
+      <div class="tag">
+        <app-product-card-tag [gap]="false" color="red" padding="1px"
+          >無庫存</app-product-card-tag
+        >
+      </div>
+      <img [src]="data.replaceItem.mainItemImg" alt="" />
+      <p class="mt-8">{{ data.replaceItem.mainItemName }}</p>
+    </div>
+    <div class="arrow">
+      <span class="arrow-wrapper"
+        ><img src="../../../../../assets/images/arrow_forward.svg" alt="arrow"
+      /></span>
+    </div>
+    <div class="item">
+      <div class="tag">
+        <app-product-card-tag [gap]="false" color="blue" padding="1px"
+          >替代</app-product-card-tag
+        >
+      </div>
+      <img [src]="data.replaceItem.replaceItemImg" alt="" />
+      <p class="mt-8">{{ data.replaceItem.replaceItemName }}</p>
+    </div>
+  </div>
+
+  <footer class="dialog-footer">
+    <section class="footer-wrapper">
+      <button class="button" mat-stroked-button (click)="cancel()">
+        不要商品
+      </button>
+      <button class="button" mat-raised-button color="primary" (click)="save()">
+        替代其他商品
+      </button>
+    </section>
+  </footer>
+</app-header-layout>

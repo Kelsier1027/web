@@ -1,0 +1,84 @@
+<app-header-inline-close-layout [data]="data">
+  <form
+    class="account-form"
+    [formGroup]="applyChangeForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <ul class="account-input-layout">
+      <!-- authorization -->
+      <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+        <app-prompt [hint]="error.errorMessage"></app-prompt>
+      </div>
+      <form [formGroup]="applyChangeForm">
+        <div class="user-wrapper">
+          <app-label-radio
+            [field]="{
+              type: 'radiobutton',
+              label: '',
+              inputType: 'radio',
+              name: 'status',
+              class: 'inline',
+              options: [
+                { value: 1, label: '公司人員' },
+                { value: 2, label: '其他人員' }
+              ],
+              value: 1,
+              color: 'primary'
+            }"
+          ></app-label-radio>
+          <ng-container [ngSwitch]="applyChangeForm.value.status">
+            <div *ngSwitchCase="1">
+              <app-icon-select
+                [field]="{
+                  type: 'iconSelect',
+                  label: '',
+                  inputType: 'text',
+                  name: 'account',
+                  styleMargin: '0px 0px 0px 0px',
+                  options: data.userList,
+                  class: '',
+                  placeholder: '請選擇帳號身份',
+                  validations: {
+                    hasErrorMessage: true,
+                    errorMessage: [{ type: 'required', message: '必填欄位' }]
+                  }
+                }"
+              >
+              </app-icon-select>
+            </div>
+            <div *ngSwitchCase="2">
+              <app-label-input
+                [field]="{
+                  type: 'input',
+                  label: '',
+                  labelPosition: 'top',
+                  inputType: 'email',
+                  name: 'email',
+                  placeholder: '請輸入Email帳號',
+                  hint: '',
+                  class: '',
+                  validations: {
+                    hasErrorMessage: true,
+                    errorMessage: [
+                      { type: 'required', message: '必填欄位' },
+                      { type: 'email', message: 'Email格式錯誤' }
+                    ]
+                  }
+                }"
+              >
+              </app-label-input>
+            </div>
+          </ng-container>
+        </div>
+      </form>
+    </ul>
+    <footer class="dialog-footer">
+      <section class="footer-wrapper">
+        <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+        <button type="submit" class="button" mat-raised-button color="primary">
+          寄送
+        </button>
+      </section>
+    </footer>
+  </form>
+</app-header-inline-close-layout>

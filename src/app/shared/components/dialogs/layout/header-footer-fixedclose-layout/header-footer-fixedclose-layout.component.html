@@ -1,0 +1,37 @@
+<button mat-icon-button class="close-button icon-outside" mat-dialog-close>
+  <mat-icon class="close-icon material-icons color_white">close</mat-icon>
+</button>
+<div class="dialog-content" (scroll)="onElementScroll($event)">
+  <h2 class="title" [ngStyle]="{ textAlign: data?.StyleTextAlign ?? 'center' }">
+    {{ data.title }}
+  </h2>
+  <ng-content></ng-content>
+</div>
+<footer class="dialog-footer" *ngIf="data.confirmButton">
+  <section
+    class="footer-wrapper"
+    [ngStyle]="{ width: data?.StyleWidthFooter ?? '100%' }"
+  >
+    <button
+      *ngIf="data?.cancelButton"
+      class="button reject"
+      mat-stroked-button
+      mat-dialog-close
+      [mat-dialog-close]="false"
+    >
+      {{ data.cancelButton }}
+    </button>
+    <button
+      *ngIf="data?.cancelButton"
+      color="primary"
+      class="button accept"
+      mat-raised-button
+      mat-dialog-close
+      [mat-dialog-close]="true"
+      cdkFocusInitial
+      [disabled]="confirmDisabled"
+    >
+      {{ data.confirmButton }}
+    </button>
+  </section>
+</footer>

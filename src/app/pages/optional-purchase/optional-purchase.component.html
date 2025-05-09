@@ -1,0 +1,361 @@
+<ng-container>
+  <app-loading-mask
+    [showIf]="isLoading"
+  >
+  </app-loading-mask>
+  <main>
+    <mat-toolbar class="header">
+      <a routerLink="/">
+        <div class="business-logo">
+          <div class="logo"></div>
+        </div>
+      </a>
+      <button mat-button routerLink="/">
+        <div class="home"></div>
+      </button>
+    </mat-toolbar>
+
+    <div class="main">
+      <section class="banner">
+        <div class="container">
+          <div class="row">
+            <div class="bannerWord">
+              <div class="title">
+                <div class="title-img">
+                  <img
+                    src="../../../assets/images/optionalPurchase1.png"
+                    alt=""
+                  />
+                </div>
+                <div class="title-word">任購超值配</div>
+              </div>
+              <div class="subTitle">
+                超值任購
+                <div class="go">GO!GO!GO!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="product-detail">
+        <div class="container">
+          <div class="text-swiper">
+            <div class="swiper-group">
+              <div class="swiper">
+                <div class="swiper-wrapper">
+                  <button
+                    [ngClass]="{slideClicked: i === clickedSlideIndex}"
+                    class="swiper-slide"
+                    *ngFor="let text of textItems;let i = index"
+                    (click)="loadContentManagement2(text.promoId)"
+                  >
+                    <div class="slide-tag">{{ text.tag }}</div>
+                    <div class="slide-title">{{ text.title }}</div>
+                  </button>
+                </div>
+              </div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-button-next"></div>
+            </div>
+          </div>
+          <div class="cart">
+            <div class="period">
+              <div class="item">
+                活動期間 {{ startDate | date : "yyyy/MM/dd HH:mm" }} ~
+                {{ endDate | date : "yyyy/MM/dd HH:mm" }}
+                <div class="timer">
+                  <div class="time">{{ formatHour(countdown) }}</div>
+                  :
+                  <div class="time">{{ formatMin(countdown) }}</div>
+                  :
+                  <div class="time">{{ formatSec(countdown) }}</div>
+                </div>
+              </div>
+              <mat-select class="select" [(ngModel)]="addressOption">
+                <mat-option
+                  (click)="changeStorage(option.subInventoryCode)"
+                  *ngFor="let option of options"
+                  [value]="option.subInventoryCode"
+                >
+                  {{ option.subInventoryName }}
+                </mat-option>
+              </mat-select>
+            </div>
+            <div class="threshold" [ngClass]="{ extend: isExtend }">
+              <div class="choose">
+                已選擇
+                <span class="num">{{ cartProductList.length }}</span>
+                個
+              </div>
+              <span class="filter-border">|</span>
+              <ng-container [ngTemplateOutlet]="threshold"></ng-container>
+              <button
+                class="extend-button"
+                (click)="isExtend = !isExtend"
+              >
+                <app-icon
+                  *ngIf="!isExtend; else minus"
+                  class="add"
+                  [iconName]="'add'"
+                ></app-icon>
+                <ng-template #minus>
+                  <app-icon class="minus" [iconName]="'minus'"></app-icon>
+                </ng-template>
+              </button>
+            </div>
+            <div class="cart-list">
+              <div class="cart-product">
+                <ng-container
+                  [ngTemplateOutlet]="productListBlock"
+                ></ng-container>
+              </div>
+              <ng-container [ngTemplateOutlet]="cartSummary"></ng-container>
+            </div>
+          </div>
+          <div class="choose-block" *ngIf="this.subMethod != 5">
+            <button
+              class="add-to-cart"
+              [ngClass]="{ active: ABlock }"
+              (click)="toggleBlock()"
+            >
+              A區
+              <div>{{ AblockItemAmt }}</div>
+            </button>
+            <button
+              class="add-to-cart"
+              [ngClass]="{ active: !ABlock }"
+              (click)="toggleBlock()"
+            >
+              B區
+              <div>{{ BBlockItemAmt }}</div>
+            </button>
+          </div>
+          <div class="product-block">
+            <ng-container *ngFor="let item of productList; let index = index">
+              <ng-container
+                *ngIf="
+                  !item.customPromoArea ||
+                  (ABlock
+                    ? item.customPromoArea === 'A'
+                    : item.customPromoArea === 'B')
+                "
+              >
+                <div
+                  class="product-info-list"
+                  [ngClass]="{
+                    left: index % 4 === 0,
+                    right: index % 4 === 3,
+                    bottom:
+                      (productList.length % 4 === 0 &&
+                        index === productList.length - 1) ||
+                      (productList.length % 4 === 1 &&
+                        index === productList.length - 1) ||
+                      (productList.length % 4 === 2 &&
+                        index === productList.length - 1) ||
+                      (productList.length % 4 === 3 &&
+                        index === productList.length - 1),
+                    top: index < 4
+                  }"
+                >
+                  <div class="product-img">
+                    <img [src]="item.prodImg" />
+                  </div>
+                  <div class="product-info-name">
+                    <div class="product-name">{{ item.name }}</div>
+                    <div class="product-introduce">{{ item.description }}</div>
+                  </div>
+                  <div class="limit-price">
+                    <div class="discount-Price">{{ item.price | tax }}</div>
+                    <div class="price">
+                      <span>{{ item.unitPrice | tax }} </span>(未)
+                    </div>
+                  </div>
+                  <div class="count">
+                    <form class="action-list" [formGroup]="group">
+                      <div class="count-wrapper">
+                        <app-increment-input
+                          (numberChange)="changeQty($event)"
+                          class="select-number"
+                          [field]="item.countOption"
+                          [max]="item.countOption._max"
+                          [min]="item.showSelectButton ? 1 : 0"
+                        >
+                        </app-increment-input>
+                      </div>
+                    </form>
+                    <button
+                      class="select"
+                      (click)="toggleButton(item)"
+                      *ngIf="item.showSelectButton"
+                    >
+                      <img src="../../../assets/icons/Checked.png" />已選購
+                    </button>
+                    <button
+                      [disabled]="item.countOption._value <= 0"
+                      class="none-select"
+                      (click)="toggleButton(item)"
+                      *ngIf="!item.showSelectButton && !checkHavestock(item.itemId)"
+                    >
+                      選購
+                    </button>
+                    <button itemId
+                      [disabled]="true"
+                      class="none-select no-stock"
+                      *ngIf="checkHavestock(item.itemId)"
+                    >
+                      補貨中
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div class="bottom-cart">
+            <div class="bottom-cart-mobile" *ngIf="!showCartDetail">
+              <div class="cart-product">
+                <div class="product-list" *ngFor="let item of cartProductList">
+                  <img [src]="item.prodImg" />
+                </div>
+              </div>
+              <div class="num-text">
+                已選擇
+                <span class="num">{{ cartProductList.length }}</span>
+                個
+              </div>
+              <img
+                class="cart-arrow"
+                (click)="toggleCart()"
+                src="../../../assets/images/arrowUp.png"
+              />
+            </div>
+            <div class="bottom-cart-detail-mobile" *ngIf="showCartDetail">
+              <div class="head">
+                <div class="num-text">
+                  已選擇
+                  <span class="num"> {{ cartProductList.length }}</span>
+                  個
+                </div>
+                <img
+                  class="cart-arrow"
+                  (click)="toggleCart()"
+                  src="../../../assets/images/arrow.png"
+                />
+              </div>
+              <div class="bonus-block">
+                <ng-container [ngTemplateOutlet]="threshold"></ng-container>
+              </div>
+              <div class="cart-product">
+                <ng-container
+                  [ngTemplateOutlet]="productListBlock"
+                ></ng-container>
+              </div>
+              <ng-container [ngTemplateOutlet]="cartSummary"></ng-container>
+            </div>
+            <div class="threshold" [ngClass]="{ extend: isExtend }">
+              <div>
+                已選擇
+                <span class="num">{{ cartProductList.length }}</span>
+                個
+              </div>
+              <span class="filter-border">|</span>
+              <ng-container [ngTemplateOutlet]="threshold"></ng-container>
+              <button
+                class="extend-button"
+                (click)="isExtend = !isExtend"
+              >
+                <app-icon
+                  *ngIf="!isExtend; else minus"
+                  class="add"
+                  [iconName]="'add'"
+                ></app-icon>
+                <ng-template #minus>
+                  <app-icon class="minus" [iconName]="'minus'"></app-icon>
+                </ng-template>
+              </button>
+            </div>
+            <div class="cart-list">
+              <div class="cart-product">
+                <ng-container
+                  [ngTemplateOutlet]="productListBlock"
+                ></ng-container>
+              </div>
+              <ng-container [ngTemplateOutlet]="cartSummary"></ng-container>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <button *ngIf="isShow" (click)="gotoTop()" class="gototop">
+      <span class="icon-wrapper to_the_top">
+        <app-icon [iconName]="'to_the_top'"></app-icon>
+      </span>
+    </button>
+  </main>
+  <div class="footer-bg-gray"></div>
+  <footer>
+    優惠商品數量有限，售完為止。本廣告活動頁商品規格、顏色、價位、贈品如與購物車不符，以購物車標示為準。
+  </footer>
+</ng-container>
+
+<ng-template #threshold>
+  <div class="optional">任選門檻</div>
+  <div class="threshold-bonus-container" [ngClass]="{ extend: isExtend }">
+    <div
+      class="bonus available"
+      *ngFor="let threshold of thresholds; let i = index"
+      [ngClass]="{
+        'not-available':
+        checkBonusThreshold('active',threshold.conditionMethod,threshold.level,threshold.conditionValueAny,threshold.conditionValueA,threshold.conditionValueB, i)
+        && this.activeIndex != i,
+        'active':
+        checkBonusThreshold('active',threshold.conditionMethod,threshold.level,threshold.conditionValueAny,threshold.conditionValueA,threshold.conditionValueB, i)
+        && this.activeIndex === i
+      }">
+        {{ threshold.description }}
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #productListBlock>
+  <div class="product-list" *ngFor="let item of cartProductList">
+    <div class="product">
+      <div class="block" *ngIf="subMethod === 6">
+        {{ item.customPromoArea }}區
+      </div>
+      <img [src]="item.prodImg" />
+      <div class="amount">{{ item.countOption._value }} 個</div>
+    </div>
+    <div class="x" (click)="toggleButton(item)">x</div>
+  </div>
+</ng-template>
+
+<ng-template #cartSummary>
+  <div class="cart-summarize">
+    <div class="original-price">
+      <span>原價</span><span>{{ summary.price | tax }}</span>
+    </div>
+    <div class="bonus">
+      <span>紅利折扣</span><span>{{ summary.bonusDiscount | tax }}</span>
+    </div>
+    <div class="subTitle">
+      <span>小計</span>
+      <span>
+        <span class="subTitle-price">
+          {{ summary.total | tax }}
+        </span>
+        (未)
+      </span>
+    </div>
+    <button 
+      type="button" 
+      mat-raised-button
+      color="primary"
+      class="add-to-cart" 
+      (click)="addToCart()" 
+      [disabled]="!canOrder()">
+      加入購物車
+    </button>
+  </div>
+</ng-template>

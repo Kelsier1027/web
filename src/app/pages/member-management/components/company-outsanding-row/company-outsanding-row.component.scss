@@ -1,0 +1,90 @@
+@import "responsive";
+.outstanding-wrapper {
+  border-radius: 6px;
+  padding: 20px 16px;
+  @include pad {
+    border: 1px solid #ebebeb;
+    padding: 20px 24px;
+    margin: 24px 0px;
+  }
+  .outstand-box {
+    .outstand-text {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 23px;
+      color: #333333;
+      margin-right: 8px;
+    }
+    .outstand-price {
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 21px;
+      color: #0972e3;
+    }
+  }
+  .outstanding-table {
+    border: 1px solid #ebebeb;
+    border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    @include pad {
+      flex-wrap: nowrap;
+      margin-top: 12px;
+    }
+    .col {
+      width: 100%;
+      text-align: center;
+      &:first-of-type {
+        border-right: 1px solid #ebebeb;
+      }
+      .col-item-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        text-align: left;
+        @include pad {
+          justify-content: center;
+        }
+        .col-item {
+          padding: 20px 40px;
+          width: 182px;
+          .col-text {
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 23px;
+            @include pad {
+              display: flex;
+              flex-wrap: wrap;
+            }
+          }
+          &:first-child {
+            border-right: 1px solid #ebebeb;
+          }
+          @include pad {
+            &:first-child {
+              border-right: none;
+            }
+          }
+        }
+      }
+    }
+    .col-title {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 23px;
+      background: #ebebeb;
+      padding: 13px 16px;
+      text-align: left;
+      @include pad {
+        padding: 13px 0px;
+        text-align: center;
+      }
+    }
+    p {
+      margin: 0px;
+    }
+  }
+}

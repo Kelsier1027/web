@@ -1,0 +1,33 @@
+@import "src/styles/responsive";
+
+.card-container {
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  padding: 10px 0px;
+  padding-bottom: 0px;
+
+  header {
+    margin: 10px 20px;
+  }
+
+  .card-menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #5c5c5c;
+    padding: 13px 20px;
+    border-bottom: solid 1px #ebebeb;
+    border-radius: 4px;
+    white-space: nowrap;
+    cursor: url(../../../assets/icons/cursor_click.svg), pointer  !important;
+
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      color: #1060b4;
+    }
+  }
+}

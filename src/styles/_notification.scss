@@ -1,0 +1,30 @@
+$error-bg: #fff;
+$error-text: #212b36;
+
+$info-bg: rgba(73, 73, 73, 0.87);
+$info-text: #fff;
+
+$success-bg: #c8facd;
+$success-text: #005249;
+
+$shadow: rgba(145, 158, 171, 0.16);
+@mixin setNotificationTheme() {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  box-shadow: 0px 8px 16px $shadow;
+  border-radius: 8px;
+  padding: 12px 8px 12px 12px;
+  &.error {
+    background-color: $error-bg;
+    color: $error-text;
+  }
+  &.info {
+    background-color: $info-bg;
+    color: $info-text;
+  }
+  &.success {
+    background-color: $success-bg;
+    color: $success-text;
+  }
+}

@@ -1,0 +1,371 @@
+
+<app-home-layout>
+  <div class="navButtons">
+    <button (click)="handleClickSales()" mat-flat-button class="saleButton">
+      <span>破盤特賣</span>
+      <span class="badge">SALE</span>
+    </button>
+    <button (click)="handleClickPurchase()" mat-flat-button class="purchaseButton">
+      任購超值配
+    </button>
+    <button (click)="handleClickPurchase()" mat-flat-button class="promoButton">
+      特定期間促銷
+    </button>
+    <button (click)="handleClickFlash()" mat-flat-button class="flashButton">
+      <mat-icon class="badge">bolt</mat-icon>
+      限時促銷
+    </button>
+    <button (click)="handleClickSpecial()" mat-flat-button class="specialButton">
+      特殊活動
+    </button>
+    <button (click)="handleClickGroup()" mat-flat-button class="groupButton">
+      團購/預購商品
+    </button>
+  </div>  
+  <div class="incentiveActivities p-20px p-pad-30px px-lweb-320px bg-white" [hidden]="!showIncentiveActivities">
+    <div class="incentiveActivitiesTitle">
+      <h1>獎勵活動</h1>
+      <h3 class="d-none d-pad-flex">
+        <a routerLink="/RewardActivity" target="_blank">查看更多</a>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </h3>
+    </div>
+    <p #salesBoxRef></p>
+    <app-home-incentive-activities (hasData)="toggleIncentiveActivities($event)"> </app-home-incentive-activities>
+    <p class="d-pad-none">
+      <button routerLink="/RewardActivity" class="salesButton">
+        <span routerLink="/RewardActivity" target="_blank">查看更多</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </p>
+  </div>
+
+  <div *ngIf="salesData.length" class="p-20px p-pad-30px px-lweb-320px">
+    <div class="salesTitle">
+      <h1 style="display: inline-block; margin-bottom: 0; margin-right: 10px">
+        破盤特賣
+      </h1>
+      <span class="saleBadge">SALE</span>
+    </div>
+    <div class="sales">
+      <div *ngFor="let sale of salesData" class="box">
+        <ng-container
+          *ngTemplateOutlet="
+            saleproductCard;
+            context: {
+              $implicit: sale
+            }
+          "
+        ></ng-container>
+      </div>
+    </div>
+    <p class="salesToAll">
+      <a routerLink="/OnSale" target="_blank" class="salesButton">
+        <span>查看所有破盤特賣</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+    </p>
+  </div>
+
+  <div #purchaseRef class="purchase bg-white">
+    <a
+      class="box anyPurchase me-pad-24px"
+      href="#"
+      (click)="fetchOptionalPurchase($event)"
+    >
+      <div class="w-50">
+        <p class="title mb-10px">任購超值配</p>
+        <p class="mb-10px">iOrder任購專區</p>
+        <button>
+          <span>任你選GO!</span>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+      <div class="w-50">
+        <img src="{{ middle1Image }}" alt="" />
+      </div>
+    </a>
+    <div #flashRef class="box promotion" (click)="toPeriodPromotion()">
+      <div class="w-50">
+        <p class="title mb-10px">特定期間促銷</p>
+        <p class="mb-10px">iOrder特定期間優惠專區</p>
+        <button>
+          <span>享優惠!</span>
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </div>
+      <div
+        class="w-50"
+        [style.max-width]="maxImageWidth"
+        [style.max-height]="maxImageHeight"
+      >
+        <img src="{{ middle2Image }}" alt="" />
+      </div>
+    </div>
+  </div>
+
+  <div #specialRef class="flashSale p-20px p-pad-30px px-lweb-320px">
+    <div class="flashSaleTitle">
+      <h1>
+        <span>
+          <mat-icon class="red-icon">bolt</mat-icon>
+        </span>
+        限時促銷
+      </h1>
+      <a class="d-none d-pad-flex" target="_blank" routerLink="/Promotion">
+        <a>查看更多</a><mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+    </div>
+    <app-home-flash-sale></app-home-flash-sale>
+    <p class="d-pad-none">
+      <a routerLink="/Promotion" target="_blank" class="salesButton">
+        <span>查看更多</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+    </p>
+  </div>
+
+  <div
+    class="p-20px p-pad-30px bg-pad-white px-lweb-320px"
+    *ngIf="periodSaleList1"
+  >
+    <h1>{{ periodSaleListName1 }}</h1>
+    <div class="sales">
+      <div *ngFor="let sale of salesDataChris" class="box">
+        <ng-container
+          *ngTemplateOutlet="
+            productCard;
+            context: {
+              $implicit: sale
+            }
+          "
+        ></ng-container>
+      </div>
+    </div>
+    <p class="salesToAll" *ngIf="salesDataChrisbtn">
+      <a
+        class="salesButton"
+        routerLink="/ProductList"
+        [queryParams]="{ specialEventId: periodSaleListId1, source: 'event-sale', sourceId: periodSaleListId1 }"
+        target="_blank"
+      >
+        <span>查看所有{{ periodSaleListName1 }}</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+      <!--
+      <picture class='pomotion-image' routerLink="/ProductList">
+        <source media="(min-width: 480px)" srcset='../../../assets/images/Frame1.png' />
+        <img src='../../../assets/images/frame1_mobile.png' alt="iphone14" />
+      </picture>
+      -->
+    </p>
+  </div>
+
+  <div
+    class="p-20px p-pad-30px bg-pad-white px-lweb-320px"
+    *ngIf="periodSaleList2"
+  >
+    <h1>{{ periodSaleListName2 }}</h1>
+    <div class="sales">
+      <div *ngFor="let sale of salesDataChris2" class="box">
+        <ng-container
+          *ngTemplateOutlet="
+            productCard;
+            context: {
+              $implicit: sale
+            }
+          "
+        ></ng-container>
+      </div>
+    </div>
+    <p class="salesToAll" *ngIf="salesDataChris2btn">
+      <a
+        class="salesButton"
+        routerLink="/ProductList"
+        [queryParams]="{ specialEventId: periodSaleListId2, source: 'event-sale', sourceId: periodSaleListId2 }"
+        target="_blank"
+      >
+        <span>查看所有{{ periodSaleListName2 }}</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+    </p>
+  </div>
+  <div
+    class="p-20px p-pad-30px bg-pad-white px-lweb-320px"
+    *ngIf="periodSaleList3"
+  >
+    <h1>{{ periodSaleListName3 }}</h1>
+    <div class="sales">
+      <div *ngFor="let sale of salesDataChris3" class="box">
+        <ng-container
+          *ngTemplateOutlet="
+            productCard;
+            context: {
+              $implicit: sale
+            }
+          "
+        ></ng-container>
+      </div>
+    </div>
+    <p class="salesToAll" *ngIf="salesDataChris3btn">
+      <a
+        class="salesButton"
+        routerLink="/ProductList"
+        [queryParams]="{ specialEventId: periodSaleListId3, source: 'event-sale', sourceId: periodSaleListId3 }"
+        target="_blank"
+      >
+        <span>查看所有{{ periodSaleListName3 }}</span>
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </a>
+    </p>
+  </div>
+  <p #groupRef></p>
+  <div *ngIf="showGroupBuy" class="strongDiscount p-20px p-pad-30px px-lweb-320px">
+    <div class="inner bg-white">
+      <div class="text-center">
+        <h1><span>團購/預購</span>商品</h1>
+      </div>
+      <app-home-strong-discount
+        [comparisonComp]=comparisonComp
+        (onNoData)="handleGroupBuyNoData($event)"
+        (addToComparison)="
+          onCompare($event); checkstrongDiscountisCompare($event)
+        "
+        (addToCart)="
+          onNavigateProduct($event.itemId, 'prime-sale', $event.promoId);
+        "
+      ></app-home-strong-discount>
+    </div>
+  </div>
+
+  <section class="pomotion-col p-20px p-pad-30px px-lweb-320px bg-white" *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+    <div *ngFor="let data of downOption">
+      <picture class="pomotion-image" [attr.routerLink]="processDownAdUrl(data.relatedUrl)">
+        <source media="(min-width: 480px)" srcset="{{data.imageUrlForPc}}" />
+        <a [href]="processDownAdUrl(data.relatedUrl)" target="_blank">
+          <img *ngIf="currentScreenSize !== 'small'" src="{{ data.imageUrlForPc }}" alt="{{ data.name }}" />
+          <img *ngIf="currentScreenSize === 'small'" src="{{ data.imageUrlForMobile }}" alt="{{ data.name }}" />
+        </a>
+      </picture>
+    </div>
+  </section>
+</app-home-layout>
+
+<ng-template #productCard let-sale>
+  <app-product-card-column (click)="onNavigateProduct(sale.itemId, 'event-sale', sale.id)">
+    <img img class="img" [src]="sale.imgSrc" alt="" />
+    <div
+      tag
+      *ngFor="let tag of sale.tags"
+      [class]="'style-' + tag"
+      class="promo-methods"
+    >
+      {{ showPromoMethods(tag) }}
+    </div>
+    <div tag *ngIf="sale.tags.length === 0" class="promo-methods"></div>
+    <app-product-card-title class="home-card-title" title>
+      {{ sale.mainTitle }}
+    </app-product-card-title>
+    <app-product-card-sub-title class="sub-title" subTitle>
+      {{ sale.subTitle }}
+    </app-product-card-sub-title>
+    <app-product-card-price class="price mb-10px" price>
+      {{ sale.price | tax }}
+    </app-product-card-price>
+    <app-product-card-old-price class="mb-10px" oldPrice>
+      {{ sale.oldPrice | tax : true }}
+    </app-product-card-old-price>
+    <div class="small-cart-wrapper" cart (click)="$event.stopPropagation()">
+      <app-product-control
+        [displayStatus]="0"
+        [isCompareAddOrRemove]="isCompareAddOrRemove(sale)"
+        [isAddToWishList]="isAddToWishList(sale)"
+        (addToComparison)="onCompare(sale)"
+        (addToCart)="onNavigateProduct(sale.itemId, 'event-sale', sale.id)"
+        (addToWishList)="addToWishList(sale)"
+      ></app-product-control>
+    </div>
+    <app-product-card-footer footer [border]="true">
+      <div *ngIf="sale.hot; else notHot" class="warning">
+        <span class="hot">HOT</span>
+        <span class="warning-text">此商品即將售完</span>
+      </div>
+      <ng-template #notHot>
+        <div class="notHot">iOrder 推薦商品</div>
+      </ng-template>
+    </app-product-card-footer>
+  </app-product-card-column>
+  <div class="cart-wrapper">
+    <app-product-control
+      [displayStatus]="0"
+      [isCompareAddOrRemove]="isCompareAddOrRemove(sale)"
+      [isAddToWishList]="isAddToWishList(sale)"
+      (addToComparison)="onCompare(sale)"
+      (addToCart)="onNavigateProduct(sale.itemId, 'event-sale', sale.id)"
+      (addToWishList)="addToWishList(sale)"
+    ></app-product-control>
+  </div>
+</ng-template>
+
+<ng-template #saleproductCard let-sale>
+  <app-product-card-column (click)="onNavigateProduct(sale.itemId, 'breaking-good', sale.promoId)">
+    <img img class="img" [src]="sale.imgSrc" alt="" />
+    <div
+      tag
+      *ngFor="let tag of sale.tags"
+      [class]="'style-' + tag"
+      class="promo-methods"
+    >
+      {{ showPromoMethods(tag) }}
+    </div>
+    <app-product-card-title class="home-card-title" title>
+      {{ sale.mainTitle }}
+    </app-product-card-title>
+    <app-product-card-sub-title class="sub-title" subTitle>
+      {{ sale.subTitle }}
+    </app-product-card-sub-title>
+    <app-product-card-price class="price mb-10px" price>
+      {{ sale.price | tax }}
+    </app-product-card-price>
+    <app-product-card-old-price class="mb-10px" oldPrice>
+      {{ sale.oldPrice | tax : true }}
+    </app-product-card-old-price>
+    <div class="small-cart-wrapper" cart (click)="$event.stopPropagation()">
+      <app-product-control
+        [displayStatus]="0"
+        [isCompareAddOrRemove]="isCompareAddOrRemove(sale)"
+        [isAddToWishList]="isAddToWishList(sale)"
+        (addToComparison)="onCompare(sale)"
+        (addToCart)="onNavigateProduct(sale.itemId, 'event-sale', sale.id)"
+        (addToWishList)="addToWishList(sale)"
+      ></app-product-control>
+    </div>
+    <app-product-card-footer footer [border]="true">
+      <div *ngIf="sale.hot; else notHot" class="warning">
+        <span class="hot">HOT</span>
+        <span class="warning-text">此商品即將售完</span>
+      </div>
+      <ng-template #notHot>
+        <div class="notHot">{{ sale.promoString }}</div>
+      </ng-template>
+    </app-product-card-footer>
+  </app-product-card-column>
+  <div class="cart-wrapper">
+    <app-product-control
+      [displayStatus]="0"
+      [isComparedata]="sale"
+      [isCompareAddOrRemove]="isCompareAddOrRemove(sale)"
+      [isAddToWishList]="isAddToWishList(sale)"
+      (addToComparison)="onCompare(sale)"
+      (addToCart)="onNavigateProduct(sale.itemId, 'event-sale', sale.id)"
+      (addToWishList)="addToWishList(sale)"
+    ></app-product-control>
+  </div>
+</ng-template>
+
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-product-comparison
+    #comparisonComp
+    [currentScreenSize]="currentScreenSize"
+  ></app-product-comparison>
+</ng-container>

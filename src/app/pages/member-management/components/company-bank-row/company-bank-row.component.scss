@@ -1,0 +1,205 @@
+@import "responsive";
+.bank-box {
+  margin-top: 8px;
+  background-color: #eff2f4;
+  border-top: 1px solid #e2e6e9;
+  border-bottom: 1px solid #e2e6e9;
+  @include pad {
+    border-radius: 6px;
+    border: 1px solid #ebebeb;
+    background-color: #fff;
+    margin-bottom: 60px;
+  }
+  .bank-wrapper {
+    background-color: #fff;
+    .bank-table {
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      padding: 0px 24px 20px;
+
+      @include pad {
+        border: 1px solid #ebebeb;
+        flex-wrap: nowrap;
+        padding: 0px;
+        margin: 0px 24px;
+      }
+      .col {
+        width: 100%;
+        text-align: center;
+        &:first-of-type {
+          border-bottom: 1px solid #ebebeb;
+          margin-bottom: 24px;
+          @include pad {
+            border-bottom: 0px solid transparent;
+            border-right: 1px solid #ebebeb;
+            margin-bottom: 0px;
+          }
+        }
+        .col-item-wrapper {
+          display: flex;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          padding: 0px 0px 0px 80px;
+          .col-item {
+            padding: 0px 0px 20px;
+            .col-text {
+              text-align: left;
+              font-size: 14px;
+              line-height: 22px;
+              color: #5c5c5c;
+              margin-bottom: 8px;
+              &.account {
+                font-weight: 700;
+                font-size: 22px;
+                line-height: 24px;
+                margin-bottom: 16px;
+              }
+              &.account-name {
+                color: #858585;
+              }
+              .tag {
+                background: #ebebeb;
+                border-radius: 4px;
+                padding: 1px 6px;
+                margin-right: 16px;
+                color: #858585;
+              }
+            }
+          }
+        }
+      }
+      .col-title {
+        display: flex;
+        align-items: center;
+        padding: 0px 32px 12px;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 29px;
+        @include pad {
+          padding: 24px 32px 12px;
+        }
+
+        .images {
+          display: inline-block;
+          width: 36px;
+          height: 36px;
+          margin-right: 12px;
+        }
+      }
+      p {
+        margin: 0px;
+      }
+    }
+    .icon-wrapper {
+      width: 20px;
+      height: 20px;
+      margin-left: 8px;
+      cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+
+      .custom-icon {
+        color: #0a72e3;
+      }
+    }
+  }
+  .contact-wrapper {
+    background-color: #fff;
+    padding: 0px 16px 20px;
+    margin-bottom: 8px;
+    @include pad {
+      padding: 0px 24px 20px;
+      margin-bottom: 0px;
+    }
+    .contact {
+      border: 1px solid #ebebeb;
+      border-radius: 6px;
+      @include pad {
+        display: flex;
+      }
+      .contact-item {
+        display: flex;
+        padding: 16px 20px;
+        text-align: center;
+        border-bottom: 1px solid #ebebeb;
+        align-items: center;
+        @include pad {
+          padding: 24px 0px;
+          justify-content: center;
+          width: calc(100% / 3);
+        }
+        &:not(:last-child) {
+          @include pad {
+            border-right: 1px solid #ebebeb;
+          }
+        }
+        .contact-icon-wrapper {
+          width: 36px;
+          height: 36px;
+          border: 1px solid #ebebeb;
+          border-radius: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-right: 12px;
+          .contact-icon {
+            width: 20px;
+            height: 20px;
+          }
+        }
+        .contact-info {
+          text-align: left;
+          .contact-title {
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 23px;
+            color: #333333;
+            @include pad {
+              font-weight: 500;
+              font-size: 16px;
+              line-height: 23px;
+            }
+          }
+          .contact-subtitle {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 23px;
+            color: #5c5c5c;
+            @include pad {
+              font-weight: 500;
+              font-size: 16px;
+              line-height: 23px;
+            }
+          }
+          > p {
+            margin: 0px;
+          }
+        }
+      }
+    }
+  }
+  .tip {
+    display: none;
+    font-size: 13px;
+    line-height: 19px;
+    color: #858585;
+    margin: 10px 0px 0px;
+    @include pad {
+      display: inline-block;
+    }
+  }
+  .bank-name,
+  .contact-name {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 23px;
+    padding: 24px 16px 16px;
+    margin: 0px;
+    @include pad {
+      padding: 24px 24px 12px;
+    }
+  }
+}

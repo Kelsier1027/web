@@ -1,0 +1,31 @@
+<div
+  class="re-captcha-wrapper"
+  [ngStyle]="{ padding: field.stylePadding, margin: field.styleMargin }"
+>
+  <re-captcha
+    (resolved)="resolved($event)"
+    [siteKey]="siteKey"
+    [formControlName]="field.name"
+    [class.is-invalid]="
+      field.validations.hasErrorMessage &&
+      group.get(field.name)?.invalid &&
+      group.get(field.name)?.touched
+    "
+  ></re-captcha>
+  <ng-container *ngFor="let valids of field.validations.errorMessage">
+    <div
+      *ngIf="
+        field.validations.hasErrorMessage &&
+        group.get(field.name)?.invalid &&
+        group.get(field.name)?.touched
+      "
+    >
+      <mat-error
+        class="error"
+        *ngIf="group.get(field['name'])?.hasError(valids['type'])"
+      >
+        {{ valids["message"] }}</mat-error
+      >
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,62 @@
+@import "/src/styles/responsive";
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333333;
+  background: #fbfbfb;
+  height: 73px;
+  padding: 0px 24px;
+  @include pad {
+    justify-content: space-between;
+  }
+  .info-links {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .link-item {
+      display: flex;
+      position: relative;
+      padding: 0px 16px;
+      height: 100%;
+      border-left: 1px solid #ebebeb;
+      &:last-child {
+        border-right: 1px solid #ebebeb;
+        &:after {
+          content: none;
+        }
+      }
+      > a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+    @include pad {
+      display: flex;
+    }
+  }
+  .business {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .logo {
+      width: 190px;
+      height: 50px;
+      background-image: url("../../../../../src/assets/images/Logo_Company_Login_and_Search.svg");
+
+      &.jing-ho {
+        width: 270px;
+        height: 50px;
+        background-image: url("../../../../../src/assets/images/Logo_Company_Login_and_Search_JingHo.svg");
+      }
+      
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin-right: 16px;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+@import "src/styles/responsive";
+
+.member-layout {
+  position: relative;
+  background-color: #eff2f4;
+  padding-bottom: 50px;
+
+  ::ng-deep .mat-form-field-flex {
+    max-height: 40px;
+  }
+}
+
+.content {
+  padding: 24px 24px 30px;
+  overflow: auto;
+}

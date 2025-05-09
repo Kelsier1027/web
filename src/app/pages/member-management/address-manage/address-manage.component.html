@@ -1,0 +1,290 @@
+<app-member-layout>
+  <app-breadcrumb></app-breadcrumb>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu active="配送地址管理"></app-member-menu>
+      <main class="content">
+        <p class="title">配送地址管理</p>
+        <app-company-notic-row [field]="noticationData"></app-company-notic-row>
+
+        <ng-container *ngIf="apiResponse | async as addrManage">
+          <div class="default-address-wrapper">
+            <p class="address-title" [ngClass]="{ expand: expand }">
+              預設結帳配送資訊
+              <mat-icon class="expand-icon" (click)="handleExpand()">{{
+                expand ? "remove" : "add"
+              }}</mat-icon>
+            </p>
+            <form
+              class="address-form"
+              [formGroup]="applyChangeForm"
+              (ngSubmit)="onSubmit()"
+              [ngClass]="{ expand: expand }"
+            >
+              <ul
+                *ngIf="expand || currentScreenSize !== 'small'"
+                class="address-input-layout"
+              >
+                <!-- authorization -->
+                <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+                  <app-prompt [hint]="error.errorMessage"></app-prompt>
+                </div>
+                <div class="address-wrapper">
+                  <div class="address-item left">
+                    <div class="address-select">
+                      <app-icon-select
+                        [field]="{
+                          type: 'iconSelect',
+                          label: '送貨地址',
+                          inputType: 'text',
+                          name: 'defaultShipAddrId',
+                          styleMargin: '0px 0px 0px 0px',
+                          options: addrMange.shipAddrList,
+                          class: '',
+                          placeholder: '請選擇送貨地址',
+                          validations: {
+                            hasErrorMessage: true,
+                            errorMessage: [
+                              { type: 'required', message: '必填欄位' }
+                            ]
+                          }
+                        }"
+                      >
+                      </app-icon-select>
+                    </div>
+                    <div class="address-select">
+                      <app-icon-select
+                        [field]="{
+                          type: 'iconSelect',
+                          label: '收貨人',
+                          inputType: 'text',
+                          name: 'defaultShipContact',
+                          styleMargin: '0px 0px 0px 0px',
+                          options: addrMange.shipContactList,
+                          class: '',
+                          placeholder: '請選擇收貨人',
+                          validations: {
+                            hasErrorMessage: true,
+                            errorMessage: [
+                              { type: 'required', message: '必填欄位' }
+                            ]
+                          }
+                        }"
+                      >
+                      </app-icon-select>
+                    </div>
+                  </div>
+                  <div class="address-item right">
+                    <div class="address-select">
+                      <app-icon-select
+                        [field]="{
+                          type: 'iconSelect',
+                          label: '發票寄送地址',
+                          inputType: 'text',
+                          name: 'defaultBillAddrId',
+                          styleMargin: '0px 0px 0px 0px',
+                          options: addrMange.billAddrList,
+                          class: '',
+                          placeholder: '請選擇發票寄送地址',
+                          validations: {
+                            hasErrorMessage: true,
+                            errorMessage: [
+                              { type: 'required', message: '必填欄位' }
+                            ]
+                          }
+                        }"
+                      >
+                      </app-icon-select>
+                    </div>
+                    <div class="address-select">
+                      <app-icon-select
+                        [field]="{
+                          type: 'iconSelect',
+                          label: '發票收件人',
+                          inputType: 'text',
+                          name: 'defaultBillContact',
+                          styleMargin: '0px 0px 0px 0px',
+                          options: addrMange.billContactList,
+                          class: '',
+                          placeholder: '請選擇發票收件人',
+                          validations: {
+                            hasErrorMessage: true,
+                            errorMessage: [
+                              { type: 'required', message: '必填欄位' }
+                            ]
+                          }
+                        }"
+                      >
+                      </app-icon-select>
+                    </div>
+                  </div>
+                </div>
+                <footer class="address-footer">
+                  <section class="footer-wrapper">
+                    <button
+                      type="submit"
+                      class="button"
+                      mat-raised-button
+                      color="primary"
+                      [disabled]="isDefaultAddrChange"
+                    >
+                      儲存
+                    </button>
+                  </section>
+                </footer>
+              </ul>
+            </form>
+          </div>
+          <div class="custom-address-wrapper">
+            <p class="address-title">我的配送地址</p>
+            <div class="custom-address-button">
+              <button
+                (click)="handleShippingAddressModal()"
+                type="submit"
+                class="add-address-button"
+                mat-raised-button
+                color="primary"
+                [ngClass]="{'read-only-hidden':!IsAdmin}"
+              >
+                {{ tabIndex === 1 ? "新增公司地址" : "新增帳單寄送地址" }}
+              </button>
+            </div>
+          </div>
+          <div class="address-tab">
+            <app-status-filter
+              class="status-filter"
+              (tabChange)="onTabChange($event.status)"
+            >
+              <ng-template [filterConfig]="{ value: { status: 1 } }"
+                >公司地址</ng-template
+              >
+              <ng-template [filterConfig]="{ value: { status: 2 } }"
+                >帳單寄送地址</ng-template
+              >
+            </app-status-filter>
+          </div>
+
+          <app-table-container *ngIf="currentScreenSize !== 'small'">
+            <app-table [dataSource]="dataSource">
+              <ng-template
+                [column]="{ key: 'id', title: '地址名稱', width: 150 }"
+                let-value
+              >
+                {{
+                  tabIndex === 1
+                    ? "公司地址" + (value.index + 1)
+                    : "寄送地址" + (value.index + 1)
+                }}
+              </ng-template>
+              <ng-template
+                [column]="{ key: 'fullAddr', title: '送貨地址' }"
+                let-value
+              >
+                {{ value.cell }}
+                <span
+                  class="default_tag"
+                  *ngIf="
+                    value.row.id === addrMange.defaultAddr.defaultShipAddrId
+                  "
+                  >預設</span
+                >
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'status',
+                  title: '狀態',
+                  width: 148,
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                <span class="status_available" *ngIf="value.cell === 0"
+                  >啟用</span
+                >
+                <span class="status_other" *ngIf="value.cell === 1"
+                  >失效申請處理中</span
+                >
+                <span class="status_other" *ngIf="value.cell === 2"
+                  >新增申請處理中</span
+                >
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'operate',
+                  title: '操作',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 120
+                }"
+                let-value
+              >
+                <p
+                  class="link"
+                  (click)="handleInvalidationApplicationModal(value.row)"
+                  *ngIf="value.row.status === 0 && checkDataStatus() && IsAdmin"
+                >
+                  失效申請
+                </p>
+              </ng-template>
+            </app-table>
+          </app-table-container>
+          <ng-container *ngIf="currentScreenSize === 'small'">
+            <app-mobile-table-container>
+              <app-mobile-table-item
+                *ngFor="
+                  let data of dataSource;
+                  let last = last;
+                  let index = index
+                "
+                [isLast]="last"
+              >
+                <app-status-card>
+                  <ng-template #headerTitle>
+                    {{
+                      tabIndex === 1
+                        ? "公司地址" + (index + 1)
+                        : "寄送地址" + (index + 1)
+                    }}
+                  </ng-template>
+                  <ng-template #headerEnd>
+                    <span class="status_available" *ngIf="data.status === 0"
+                      >啟用</span
+                    >
+                    <span class="status_other" *ngIf="data.status === 1"
+                      >失效申請處理中</span
+                    >
+                    <span class="status_other" *ngIf="data.status === 2"
+                      >新增申請處理中</span
+                    >
+                  </ng-template>
+                  <ng-template [statusItem]="{ isColumn: true }"
+                    >{{ data.fullAddr }}
+                    <span
+                      class="default_tag"
+                      *ngIf="
+                        data.id === addrMange.defaultAddr.defaultShipAddrId
+                      "
+                      >預設</span
+                    ></ng-template
+                  >
+                  <ng-template [statusItem]="{ isColumn: true }">
+                    <p
+                      class="link"
+                      (click)="handleInvalidationApplicationModal(data)"
+                      *ngIf="data.status === 0 && dataSource.length > 1 && IsAdmin"
+                    >
+                      失效申請
+                    </p>
+                  </ng-template>
+                </app-status-card>
+              </app-mobile-table-item>
+            </app-mobile-table-container>
+          </ng-container>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>

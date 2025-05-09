@@ -1,0 +1,20 @@
+.item {
+  display: grid;
+  grid-template-columns: 124px 1fr;
+  font-size: 14px;
+}
+
+.detail-title {
+  color: #333;
+  background: #F5F5F5;
+  padding: 12px 16px;
+}
+
+.content {
+  background: #fff;
+  padding: 12px 16px;
+}
+
+.border {
+  border-bottom: 1px solid #EBEBEB;
+}

@@ -1,0 +1,77 @@
+@import "/src/styles/responsive";
+
+.title {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.product-card {
+  display: flex;
+  background: #fff;
+  padding: 0px 12px;
+}
+
+.img-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.content {
+  flex: 1;
+
+  @include pad {
+    padding: 0 24px;
+  }
+}
+
+.img {
+  max-height: 100px;
+  margin: auto;
+}
+
+.icon-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+::ng-deep div[class~="card-icon-wrapper"] > app-icon {
+  line-height: 0;
+  border: 1px solid #D6D6D6;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+
+  &:last-child {
+    margin-bottom: 15px;
+  }
+}
+
+.title-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.titles {
+  padding-right: 12px;
+
+  @include pad {
+    padding: 0;
+  }
+}
+
+::ng-deep div[class~="card-icon-wrapper"] .mat-icon {
+  width: auto;
+  height: auto;
+}
+
+::ng-deep div[class~="card-icon-wrapper"] svg {
+  width: 24px;
+  max-width: 24px;
+  max-height: 24px;
+}

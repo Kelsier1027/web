@@ -1,0 +1,53 @@
+.input-wrapper {
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+
+  .label_top {
+    display: flex;
+    color: #919eab;
+  }
+  .input {
+    width: 100%;
+  }
+  .error {
+    margin-top: 4px;
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .input-box {
+    width: 100%;
+  }
+  .select {
+    width: 100%;
+  }
+  .account-permissions {
+    padding-left: 6px;
+    cursor: url(../../../../../assets/icons/cursor_click.svg), pointer  !important;;
+    .icon-wrapper {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+    }
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+::ng-deep #body .mat-select-arrow-wrapper {
+  filter: inherit;
+  background: url('../../../../../assets/images/arrow.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 11px;
+  background-position: center;
+  transform: translateY(0);
+
+  & > div {
+    visibility: hidden;
+  }
+}
+::ng-deep .mat-form-field-disabled .mat-form-field-wrapper{
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius : 4px;
+}

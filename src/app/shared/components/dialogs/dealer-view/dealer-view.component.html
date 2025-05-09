@@ -1,0 +1,69 @@
+<app-header-inline-close-layout [data]="data">
+  <form
+    class="create-address-form"
+    [formGroup]="dealerViewForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <ul class="address-layout">
+      <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+        <app-prompt [hint]="error.errorMessage"></app-prompt>
+      </div>
+      <form [formGroup]="dealerViewForm">
+        <p style="color:#5C5C5C">請輸入經銷商公司統編來呈現經銷商頁面。輸入關鍵字以經銷商身分查詢商品；未輸入關鍵字時，{{this.getNoKeywordHint()}}。</p>
+        <app-label-input
+          [field]="{
+            type: 'input',
+            label: '公司統編',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'taxIdNumber',
+            placeholder: '請輸入公司統編',
+            hint: '',
+            class: '',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                {
+                  type: 'pattern',
+                  message: '公司統編格式錯誤'
+                },
+                { type: 'required', message: '必填欄位' },
+
+              ]
+            }
+          }"
+        >
+        </app-label-input>
+        <div *ngIf="error.submitInvalid" class="error-message">
+          {{ error.errorMessage.type }}: {{ error.errorMessage.message }}
+        </div>
+        <app-label-input
+          [field]="{
+            type: 'input',
+            label: '關鍵字（選填）',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'keyword',
+            placeholder: '請輸入關鍵字或品號',
+            hint: '',
+            class: '',
+            validations: {
+              hasErrorMessage: false,
+              errorMessage: []
+            }
+          }"
+        >
+        </app-label-input>
+      </form>
+    </ul>
+    <footer class="dialog-footer">
+      <section class="footer-wrapper">
+        <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+        <button type="submit" class="button" mat-raised-button color="primary">
+          搜尋
+        </button>
+      </section>
+    </footer>
+  </form>
+  </app-header-inline-close-layout>
+  

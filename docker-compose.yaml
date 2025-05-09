@@ -1,0 +1,11 @@
+version: "1"
+
+services:
+  ssr:
+    image: ssr_img_${ENV:-dev}
+    # container_name: ssr_container
+    build:
+      context: .
+      dockerfile: Dockerfile.ssr.${ENV:-dev}
+    ports:
+      - 4000:80

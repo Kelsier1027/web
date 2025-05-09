@@ -1,0 +1,11 @@
+<div class="radio-wrapper" [ngClass]="field['class']">
+  <label class="radio-label" [innerHTML]="field['label']"></label>
+  <mat-radio-group class="radio-button" [formControlName]="field['name']" [disabled]="disabled">
+    <mat-radio-button [ngClass]="{'mat-radio-button-mobile': field['name']==='status'}"
+      *ngFor="let item of field.options"
+      [value]="item.value"
+      [color]="field['color']"
+      >{{ item.label }}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>

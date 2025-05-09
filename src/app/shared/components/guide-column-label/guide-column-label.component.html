@@ -1,0 +1,45 @@
+<ng-container [ngSwitch]="option.type">
+  <a
+    *ngSwitchDefault
+    class="guide-label"
+    [ngClass]="{
+      maintenance: option.theme === 'maintenance',
+      'office-building': option.theme === 'office-building',
+      'i-mac': option.theme === 'i-mac',
+      files: option.theme === 'files',
+      bag: option.theme === 'bag'
+    }"
+    [href]="option.url"
+    target="_blank"
+  >
+    <span class="icon"></span>
+    <div class="content">
+      <p class="title">
+        {{ option.title }}
+        <span class="arrow"></span>
+      </p>
+      <span class="hint">{{ option.hint }}</span>
+    </div>
+  </a>
+  <a
+    *ngSwitchCase="'modal'"
+    class="guide-label"
+    [ngClass]="{
+      maintenance: option.theme === 'maintenance',
+      'office-building': option.theme === 'office-building',
+      'i-mac': option.theme === 'i-mac',
+      files: option.theme === 'files',
+      bag: option.theme === 'bag'
+    }"
+    (click)="openModal()"
+  >
+    <span class="icon"></span>
+    <div class="content">
+      <p class="title">
+        {{ option.title }}
+        <span class="arrow"></span>
+      </p>
+      <span class="hint">{{ option.hint }}</span>
+    </div>
+  </a>
+</ng-container>

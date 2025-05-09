@@ -1,0 +1,53 @@
+<div
+  class="dialog-wrapper"
+  [ngStyle]="{ height: data.contentHeight ?? '100%' }"
+>
+  <header class="dialog-header">
+    <div class="dialog-title">
+      <h2 class="title">{{ data.title }}</h2>
+      <ng-container *ngIf="detailUrl">
+        <span></span>
+        <a class="link" [href]="detailUrl" target="_blank">查看詳情</a>
+      </ng-container>
+    </div>
+    <button mat-icon-button class="close-button icon-outside" mat-dialog-close>
+      <mat-icon class="close-icon material-icons color_white">close</mat-icon>
+    </button>
+  </header>
+  <div
+    class="dialog-content"
+    [ngStyle]="{
+      margin: data?.StyleMargin ?? '0px 36px 36px',
+      padding: data?.StylePadding ?? '50px 0px 0px'
+    }"
+  >
+    <ng-content></ng-content>
+    <footer
+      class="dialog-footer"
+      [ngStyle]="{ display: data?.displayFooter ? 'flex' : 'none' }"
+    >
+      <section
+        class="footer-wrapper"
+        [ngStyle]="{ width: data?.StyleWidthFooter ?? '100%' }"
+      >
+        <button
+          *ngIf="data?.canelButton"
+          class="button"
+          mat-stroked-button
+          mat-dialog-close
+        >
+          {{ data.canelButton }}
+        </button>
+        <button
+          *ngIf="data?.confirmButton"
+          class="button"
+          mat-raised-button
+          color="primary"
+          [mat-dialog-close]="otherData ?? true"
+        >
+          {{ data.confirmButton }}
+        </button>
+      </section>
+    </footer>
+  </div>
+</div>

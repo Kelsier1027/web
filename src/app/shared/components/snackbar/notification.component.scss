@@ -1,0 +1,28 @@
+.custom-notification {
+  display: flex;
+  align-items: center;
+  width: 334px;
+  .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 72, 66, 0.16);
+    color: #ff4842;
+    border-radius: 12px;
+  }
+  .message {
+    display: flex;
+    padding: 0px 12px;
+    width: calc(100% - 68px);
+  }
+  .close {
+    width: 28px;
+    height: 28px;
+    opacity: 0.48;
+    border-radius: 50px;
+    color: #212b36;
+    cursor: url(../../../../assets/icons/cursor_click.svg), pointer  !important;
+  }
+}

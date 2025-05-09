@@ -1,0 +1,263 @@
+<div class="container">
+  <div class="box" *ngIf="isDesktop">
+    <ng-container *ngIf="(savedFilter$ | async) as options">
+      <div class="common-use-filter">
+        <div class="main-title">條件篩選</div>
+        <button class="edit-filter" (click)="editFilter(options)">編輯常用篩選</button>
+      </div>
+      <app-icon-select
+        class="select"
+        [disabled]="isUsingDealerView()"
+        (valueChange)="filterChange($event)"
+        [isBindForm]="false"
+        [field]="{
+          value: selectedFilter,
+          type: 'iconSelect',
+          label: '',
+          inputType: 'text',
+          name: 'select',
+          styleMargin: '0px 0px 0px 0px',
+          options: options | selectOption : 'filterName',
+          class: '',
+          placeholder: '選擇常用篩選'
+        }"
+      >
+      </app-icon-select>
+    </ng-container>
+  </div>
+  <ng-content></ng-content>
+  <div class="box">
+    <ng-container>
+      <div class="common-use-filter">
+        <div class="main-title">主分類</div>
+      </div>
+      <!-- 目前網站沒有不分主分類的館頁，所以只有福利品區時才允許清空主分類 -->
+      <app-icon-select
+        class="select"
+        (valueChange)="onMainCategoryChange($event)"
+        [isBindForm]="false"
+        [hasNone]="isWelfare || isSpecialEvent || isSearchPage"
+        noneText="全部主分類"
+        [field]="{
+          value: selectedMainFilter,
+          type: 'iconSelect',
+          label: '',
+          inputType: 'text',
+          name: 'select',
+          styleMargin: '0px 0px 0px 0px',
+          options: mainCategory | selectOption : 'type1Name',
+          class: '',
+          placeholder: '選擇主分類'
+        }"
+      >
+      </app-icon-select>
+    </ng-container>
+  </div>
+  <div class="box">
+    <ng-container>
+      <div class="common-use-filter">
+        <div class="main-title">次分類</div>
+      </div>
+      <app-icon-select
+        class="select"
+        (valueChange)="onSubCategoryChange($event)"
+        [isBindForm]="false"
+        [hasNone]="true"
+        noneText="全部次分類"
+        [field]="{
+          value: selectedSubFilter,
+          type: 'iconSelect',
+          label: '',
+          inputType: 'text',
+          name: 'select',
+          styleMargin: '0px 0px 0px 0px',
+          options:  SubCategory | selectOption : 'type2Name',
+          class: '',
+          placeholder: '選擇次分類'
+        }"
+      >
+      </app-icon-select>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="(mobileMenu$ | async) as mobileMenu">
+    <ng-container *ngIf="!isDesktop">
+      <mat-accordion class="line">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="expansion-panel-header">
+            <mat-panel-title class="expansion-title">商品類型</mat-panel-title>
+          </mat-expansion-panel-header>
+          <a
+            *ngFor="let menu of mobileMenu; let index=index"
+            routerLink="/ProductList"
+            class="block"
+            [ngClass]="{ highlight: filterForm.type2 && +filterForm.type2 === menu.id }"
+            [queryParams]="{ type1Id: filterForm.type1, type2Id: menu.id }"
+          >
+            {{ menu.name }}
+          </a>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="brandsData?.length">
+    <div class="box line" *ngIf="isDesktop else brandMobile">
+      <div class="sub-title">品牌</div>
+
+      <mat-checkbox
+        *ngFor="let brand of brandsData"
+        class="block"
+        color="primary"
+        [(ngModel)]="currentBrands[brand.brandId].selected"
+        (change)="brandsChangeDesktop($event, brand.brandId, brand.brandName)"
+      >{{ brand.brandName }}</mat-checkbox>
+    </div>
+  </ng-container>
+
+  <ng-template #brandMobile>
+    <mat-accordion class="line">
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="expansion-panel-header">
+          <mat-panel-title class="expansion-title">品牌</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-checkbox
+        *ngFor="let brand of brandsData"
+        class="block"
+        color="primary"
+        [(ngModel)]="currentBrands[brand.brandId].selected"
+        (change)="brandsChange($event, brand.brandId, brand.brandName)"
+      >{{ brand.brandName }}</mat-checkbox>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-template>
+
+  <div class="box line" *ngIf="isDesktop else activityMobile">
+    <div class="sub-title">活動</div>
+    <mat-checkbox
+      *ngFor="let activity of activityData"
+      class="block"
+      color="primary"
+      (change)="activityChangeDesktop($event, activity)"
+      [checked]="activityStatus.includes(activity)"
+    >{{ activity }} </mat-checkbox>
+  </div>
+
+  <ng-template #activityMobile>
+    <mat-accordion class="line">
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="expansion-panel-header">
+          <mat-panel-title class="expansion-title">活動</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-checkbox
+        *ngFor="let activity of activityData"
+        class="block"
+        color="primary"
+        (change)="activityChange($event, activity)"
+        [checked]="activityStatus.includes(activity)"
+      >{{ activity }}</mat-checkbox>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-template>
+
+  <div class="box line" *ngIf="isDesktop else subInventoryMobile">
+    <div class="sub-title">有貨</div>
+    <mat-checkbox
+      *ngFor="let subInventory of subInventoryData"
+      class="block"
+      color="primary"
+      (change)="subInventoryChangeDesktop($event, subInventory)"
+      [checked]="subInventoryStatus.includes(subInventory)"
+    >{{ subInventory }}</mat-checkbox>
+  </div>
+
+  <ng-template #subInventoryMobile>
+    <mat-accordion class="line">
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="expansion-panel-header">
+          <mat-panel-title class="expansion-title">有貨</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-checkbox
+        *ngFor="let subInventory of subInventoryData"
+        class="block"
+        color="primary"
+        (change)="subInventoryChange($event, subInventory)"
+        [checked]="subInventoryStatus.includes(subInventory)"
+      >{{ subInventory }}</mat-checkbox>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-template>
+
+  <mat-accordion class="line" [multi]="true" *ngIf="!isSearchPage && !isWelfare">
+    <mat-expansion-panel
+      *ngFor="let filter of filterData; let index=index"
+      >
+      <mat-expansion-panel-header class="expansion-panel-header">
+        <mat-panel-title class="expansion-title">{{ filter.name }}</mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-checkbox
+        *ngFor="let spData of getOrderedSpData(filter)"
+        class="block"
+        color="primary"
+        [(ngModel)]="filters[index]?.spDatas[spData.spId].selected"
+        (change)="isDesktop ? submitForm() : null"
+      >
+        {{ spData.typeName }}
+      </mat-checkbox>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div class="box line" *ngIf="isDesktop else priceMobile">
+    <div class="sub-title">價格</div>
+    <div class="input-wrapper">
+      <input class="search-input" [(ngModel)]="filterForm.lowestPrice" placeholder="最低價格" type="number">
+      <span class="tilde">~</span>
+      <input class="search-input" [(ngModel)]="filterForm.highestPrice" placeholder="最高價格" type="number">
+    </div>
+    <button class="submit-button" (click)="submitForm()">
+      搜尋價格
+    </button>
+  </div>
+
+  <ng-template #priceMobile>
+    <mat-accordion class="line">
+      <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="expansion-panel-header">
+          <mat-panel-title class="expansion-title">價格</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="input-wrapper-mobile">
+          <input class="search-input" [(ngModel)]="filterForm.lowestPrice" placeholder="最低價格" type="text">
+          <span class="tilde">~</span>
+          <input class="search-input" [(ngModel)]="filterForm.highestPrice" placeholder="最高價格" type="text">
+          <span class="space"></span>
+          <button class="submit-button mobile" (click)="confirm()">
+            搜尋
+          </button>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-template>
+
+  <div class="confirm">
+    <button (click)="resetForm({ submit: true })" class="reset-button">
+      <app-icon class="refresh-icon" iconName="refresh"></app-icon>
+      重設預設值
+    </button>
+    <button (click)="confirm()" class="confirm-button">確認</button>
+  </div>
+  <div class="box line"  *ngIf="isDesktop">
+    <ng-container *ngIf="(currentSavedFilterCount$ | async) as count">
+      <button (click)="count === 5 ? filterLimited() : saveFilter()" class="keep-button">
+        暫存常用篩選
+      </button>
+    </ng-container>
+
+    <div class="refresh-button-wrapper">
+      <button (click)="resetForm({ submit: true })" class="refresh-button">
+        <img class="refresh" src="../../../../assets/icons/refresh.svg" alt="" />
+        清除全部
+      </button>
+    </div>
+  </div>
+</div>
+
+

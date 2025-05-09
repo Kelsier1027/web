@@ -1,0 +1,212 @@
+<app-member-layout>
+  <div class="member-wrapper">
+    <main>
+      <div class="layout">
+        <app-home-header-action
+          class="header-action"
+          *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "
+        ></app-home-header-action>
+        <app-home-header-search
+          class="header-search"
+          *ngIf="
+            (!isHomePage && currentScreenSize !== 'small') ||
+            (isHomePage && !isCategoryLayout)
+          "
+        ></app-home-header-search>
+        <app-home-header-product
+          [isCategoryLayout]="isCategoryLayout"
+          (layoutChange)="toggleMenuType($event)"
+          [hidden]="!isHomePage && currentScreenSize === 'small'"
+        ></app-home-header-product>
+      </div>
+
+      <div class="container">
+        <div class="topHeader">
+          <button mat-button (click)="lastPage()">
+            <mat-icon>arrow_back</mat-icon>
+            返回
+          </button>
+        </div>
+        <div class="pageHeader">
+          <span class="product-title">商品</span>
+          <span class="product-comparison-title">商品比較</span>
+          <button class="refresh-button" (click)="clearDialog()">
+            全部清除
+          </button>
+        </div>
+        <div class="row compare compare1" *ngIf="isCompareHidden">
+          <div class="col-12">
+            <div
+              class="col-md-3 col-6 compare-col-3"
+              *ngFor="let item of limitedCompare(compare); let index = index"
+            >
+              <a
+                class="compare-delete"
+                (click)="removeProduct(index)"
+                *ngIf="limitedCompare(compare).length > 2"
+              >
+                <img src="../../../assets/icons/Clear_Mobile.png" alt="" />
+              </a>
+              <div class="compare-image">
+                <a
+                  class="link"
+                  routerLink="/Product"
+                  [queryParams]="{ itemId: item.itemId }"
+                >
+                  <img [src]="item.imgUrl" alt="" />
+                </a>
+              </div>
+              <div class="compare-detail">
+                <div class="compare-name">
+                  <span>{{ item.name }}</span>
+                  <a class="compare-heart" (click)="toggleFavorite(item)">
+                    <img
+                      [src]="
+                        item.favorite
+                          ? '../../../assets/icons/heart_red.svg'
+                          : '../../../assets/icons/heart.svg'
+                      "
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div class="compare-name">
+                  {{ item.itemNumber }}
+                </div>
+                <div class="compare-price">
+                  {{ item.price | tax : true }}
+                </div>
+              </div>
+              <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+              <button
+                type="submit"
+                class="button"
+                mat-raised-button
+                color="primary"
+                routerLink="/Product"
+                [queryParams]="{ itemId: item.itemId }"
+                *ngIf="item.price != '暫不提供'"
+              >
+                <mat-icon>shopping_cart</mat-icon>我要訂購
+              </button>
+              <!--  Added by Kelsier on 2025/01/24 for AR:20250020 -->
+              <button
+              type="submit"
+              class="button"
+              mat-raised-button
+              style="background-color: #eff2f4;"
+              routerLink="/Product"
+              [queryParams]="{ itemId: item.itemId }"
+              *ngIf="item.price == '暫不提供'"
+            >
+              <mat-icon>search</mat-icon>查看詳情
+            </button>
+            </div>
+          </div>
+        </div>
+        <div class="row compare compare2" *ngIf="!isCompareHidden">
+          <div class="col-12">
+            <div
+              class="col-md-3 col-6 sticky-col-3"
+              *ngFor="let item of limitedCompare(compare); let index = index"
+            >
+              <a
+                class="compare-delete"
+                (click)="removeProduct(index)"
+                *ngIf="limitedCompare(compare).length > 2"
+              >
+                <img src="../../../assets/icons/close.svg" alt="" />
+              </a>
+              <div class="compare-image">
+                <img [src]="item.imgUrl" alt="" />
+              </div>
+              <div class="compare-detail">
+                <div class="compare-name">
+                  <span>{{ item.name }}</span>
+                </div>
+                <div class="compare-price">
+                  {{ item.price | tax : true }}
+                </div>
+              </div>
+              <a class="compare-cart"
+                 routerLink="/Product"
+                 [queryParams]="{ itemId: item.itemId }">
+                <img src="../../../assets/icons/cart_blue.png" alt="" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec">
+          <div class="specHeader">
+            商品規格
+            <span>|</span>
+            <mat-slide-toggle [(ngModel)]="isChecked">
+              顯示差異
+            </mat-slide-toggle>
+          </div>
+          <div class="product-spec">
+            <ng-container *ngFor="let item of compareItem">
+              <div class="spec-name">{{ item.title }}</div>
+              <ng-container *ngIf="item.title === '原廠詳規連結'">
+                <div
+                  class="col-12"
+                  [ngClass]="{ different: isDifferent(item.values) }"
+                >
+                  <div
+                    class="col-md-3 col-6"
+                    *ngFor="let i of limitedCompare(item.values)"
+                  >
+                    <div [innerHTML]="i" class="spec-detail"></div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="item.title != '原廠詳規連結'">
+                <div
+                  class="col-12"
+                  [ngClass]="{ different: isDifferent(item.values) }"
+                >
+                  <div
+                    class="col-md-3 col-6"
+                    *ngFor="let i of limitedCompare(item.values)"
+                  >
+                    <div class="spec-detail">
+                      {{ i }}
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div class="excel-button">
+            <button (click)="exportExcel(limitedCompare(compare))">
+              匯出Excel表單
+            </button>
+          </div>
+        </div>
+        <app-recommended-likes-products
+          headerText="推薦商品"
+          *ngIf="recommended.length > 0 && !isMobile"
+          [products]="recommended"
+          source="recommended"
+        ></app-recommended-likes-products>
+        <div class="section-guess-you-like">
+          <app-recommended-likes-products
+            headerText="猜你喜歡"
+            *ngIf="guessYouLikes.length > 0 && !isMobile"
+            [products]="guessYouLikes"
+            source="guess-you-like"
+          ></app-recommended-likes-products>
+        </div>
+      </div>
+      <app-fixed-nav
+        class="fixed-nav"
+        *ngIf="currentScreenSize !== 'small'"
+      ></app-fixed-nav>
+    </main>
+  </div>
+</app-member-layout>

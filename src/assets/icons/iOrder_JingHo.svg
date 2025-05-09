@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_圖層_1" data-name="圖層 1" xmlns="http://localhost/2000/svg" version="1.1" xmlns:xlink="http://localhost/1999/xlink" viewBox="0 0 118.7 105.5">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#radial-gradient-7);
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke: #fff;
+        stroke-width: .1px;
+      }
+
+      .cls-2 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-3 {
+        fill: url(#radial-gradient-3);
+      }
+
+      .cls-4 {
+        fill: url(#radial-gradient-4);
+      }
+
+      .cls-5 {
+        fill: url(#radial-gradient-8);
+      }
+
+      .cls-9 {
+        fill: #004ea2;
+        stroke-width: 0px;
+      }
+
+      .cls-6 {
+        fill: url(#radial-gradient-5);
+      }
+
+      .cls-7 {
+        fill: url(#radial-gradient-6);
+      }
+
+      .cls-8 {
+        fill: url(#radial-gradient);
+      }
+    </style>
+    <radialGradient id="radial-gradient" cx="38.3" cy="14" fx="38.3" fy="14" r="27" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ead05c"/>
+      <stop offset="1" stop-color="#c08618"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="66.1" cy="13.3" fx="66.1" fy="13.3" r="51.3" gradientTransform="translate(12.5) scale(1 1)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-3" cx="82.7" cy="23.6" fx="82.7" fy="23.6" r="51.8" gradientTransform="translate(0 -.6) scale(1 1)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-4" cx="39.5" cy="24.2" fx="39.5" fy="24.2" r="91.6" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-5" cx="52.9" cy="53.7" fx="52.9" fy="53.7" r="91.5" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-6" cx="63" cy="52.8" fx="63" fy="52.8" r="67.1" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-7" cx="48.1" cy="60.6" fx="48.1" fy="60.6" r="145.9" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-8" cx="73.5" cy="50.5" fx="73.5" fy="50.5" r="80.3" xlink:href="#radial-gradient"/>
+  </defs>
+  <polygon class="cls-8" points="60.3 57.3 16.4 44.8 16.4 29.4 60.3 16.4 60.3 57.3"/>
+  <polygon class="cls-2" points="60.4 58.1 102.9 36.7 102.9 30.2 60.4 16.4 60.4 58.1"/>
+  <polygon class="cls-3" points="60.1 16.4 103.5 30.7 115.3 29.7 71.9 15.5 60.1 16.4"/>
+  <polygon class="cls-4" points="60.1 16.4 16.6 30.4 4.8 29.5 48.3 15.5 60.1 16.4"/>
+  <polygon class="cls-6" points="60.4 104 19 80.3 19 33.5 60.4 50.1 60.4 104"/>
+  <polygon class="cls-7" points="60.5 104 98.4 80.3 102 33.5 60.5 50.1 60.5 104"/>
+  <polygon class="cls-1" points="60.4 49.9 16.3 30.8 .5 42.8 42.2 64.9 60.4 49.9"/>
+  <polygon class="cls-5" points="60.5 49.8 102.9 30.7 118.7 40.9 78.8 63 60.5 49.8"/>
+  <path class="cls-9" d="M42.8,17.4c0-2.6.8-4.5,2.3-5.5,1.5-1,4.1-1.6,7.7-1.6h11.8c3.5,0,6.1.5,7.6,1.6,1.5,1,2.3,2.9,2.3,5.5v25.9l11.1-5V15.1c0-8.6-6.1-12.9-18.3-12.9h-17.1c-5.9,0-10.3,1-13.2,2.9-3.6,2.4-5.4,5.7-5.4,10v22.1l11.2,4.9v-24.7Z"/>
+</svg>

@@ -1,0 +1,238 @@
+<ng-container>
+  <app-loading-mask
+    [showIf]="isLoading > 0"
+  >
+  </app-loading-mask>
+  <main>
+    <mat-toolbar class="header">
+      <a routerLink="/">
+        <div class="business-logo">
+          <div class="logo"></div>
+        </div>
+      </a>
+      <button mat-button routerLink="/">
+        <div class="home"></div>
+      </button>
+    </mat-toolbar>
+
+    <div class="main">
+      <section class="banner">
+        <div class="container">
+          <div class="row">
+            <div class="bannerWord">
+              <div class="onSale">
+                <div class="sale">
+                  <img src="../../../assets/images/sale1.png" alt="" />
+                </div>
+                <div class="title">破盤特賣</div>
+              </div>
+              <div class="subTitle">{{subTitle}}</div>
+            </div>
+            <div class="col-md-12">
+              <swiper
+                [navigation]="{
+                  prevEl: '.swiper-navigation-prev',
+                  nextEl: '.swiper-navigation-next'
+                }"
+                [pagination]="paginationShow"
+                [slidesPerView]="slideShowAmt"
+                [spaceBetween]="100"
+                [loop]="true"
+              >
+                <ng-template
+                  swiperSlide
+                  let-data
+                  *ngFor="let card of productImg; index as i"
+                >
+                  <div class="card-img" [routerLink]="[ '/Product' ]" [queryParams]="{ itemId: card.itemId, source: 'breaking-good', soruceId: card.promoId }">
+                    <img [src]="card.imageUrl" alt="{{ card.name }}" />
+                    <div class="card-content">
+                      <div class="product-text">
+                        <div class="product-tag">
+                          <div *ngFor="let item of card.promoMethods" [class]="'style-' + item" class="promo-methods">
+                            {{showPromoMethods(item)}}
+                          </div>
+                        </div>
+                        <div class="card-name">{{ card.name }}</div>
+                        <div class="card-introduce">{{ card.introduce }}</div>
+                      </div>
+
+                      <div class="product-price">
+                        <div class="price">
+                          <div class="card-grayPrice">
+                            {{ card.grayPrice | tax : true}}
+                          </div>
+                          <div class="card-redPrice">
+                            <span class="money"></span>{{ card.redPrice | tax }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </swiper>
+              <div class="card-button">
+                  <button>
+                      <mat-icon class="large-icon swiper-navigation-prev">keyboard_arrow_left</mat-icon>
+                  </button>
+                  <button>
+                      <mat-icon class="large-icon swiper-navigation-next">keyboard_arrow_right</mat-icon>
+                  </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="product-detail">
+        <div class="container">
+          <div class="daily-picks">
+            <div class="item">🏆 每日精選獎勵活動</div>
+          </div>
+          <div class="filter">
+            <div class="item">共有{{ productList.length }}項</div>
+            <span class="filter-border">|</span>
+            <div class="filter-text" (click)="toggleDialog()">
+              <img src="../../../assets/images/Filter.png" />
+              <span>篩選</span>
+            </div>
+          </div>
+          <div
+            class="product-list"
+            *ngFor="let item of productList"
+            (click)="navigateToProduct(item.itemId, item.promoId)"
+          >
+            <div class="product-img">
+              <img [src]="item.picUrl" />
+            </div>
+            <div class="product-info">
+              <div class="product-tag-mobile">
+                <img *ngIf="item.tag1" [src]="getPromoTextIcon(item.promoMethods[0])" />
+                <img *ngIf="item.tag2" [src]="getPromoTextIcon(item.promoMethods[1])" />
+                <img *ngIf="item.tag3" [src]="getPromoTextIcon(item.promoMethods[2])" />
+              </div>
+              <div class="product-name">{{ item.name }}</div>
+              <div class="product-introduce">{{ item.introduce }}</div>
+              <div class="product-tag" *ngIf="item.tag1">
+                <img [src]="getPromoIcon(item.promoMethods[0])" /> {{ item.tag1 }}
+              </div>
+              <div class="product-tag" *ngIf="item.tag2">
+                <img [src]="getPromoIcon(item.promoMethods[1])" /> {{ item.tag2 }}
+              </div>
+              <div class="product-tag" *ngIf="item.tag3">
+                <img [src]="getPromoIcon(item.promoMethods[2])" /> {{ item.tag3 }}
+              </div>
+            </div>
+            <div class="limit-group">
+              <div class="limit-price">
+                <div class="limited-time-sale">破盤特價</div>
+                <div class="price">
+                  <div class="amt-original">
+                    <div class="original-price" style="white-space: nowrap;">{{ item.price | tax : true }}</div>
+                  </div>
+                  <div class="amt-discount">
+                    <div class="discount-price">{{ item.sales | tax }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="limit-number">
+                <img src="../../../assets/images/sale2.png" />
+                <div class="limited-time-sale-mobile">破盤特價</div>
+                <div class="number">
+                  {{
+                     getItemCountText(item)
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="spacer"></div>
+    </div>
+
+    <button class="gototop" *ngIf="isShow" (click)="gotoTop()">
+      <mat-icon>vertical_align_top</mat-icon>
+    </button>
+
+    <ng-container *ngIf="isDialogVisible">
+      <div class="dialog">
+        <div class="dialog-bg" (click)="toggleDialog()"></div>
+        <div class="dialog-content">
+          <header>
+            <p>篩選</p>
+            <button mat-icon-button (click)="toggleDialog()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </header>
+          <div class="dialog-main">
+            <select [(ngModel)]="option1" (change)="onType1Change()">
+              <option value="所有主分類">所有主分類</option>
+              <option *ngFor="let type1 of type1Options" [value]="type1.name">
+                {{ type1.name }}
+              </option>
+            </select>
+          </div>
+          <div class="dialog-main">
+            <select [(ngModel)]="option2" (change)="onType2Change()">
+              <option value="所有次分類">所有次分類</option>
+              <option *ngFor="let type2 of type2Options" [value]="type2.name">
+                {{ type2.name }}
+              </option>
+            </select>
+          </div>
+          <div class="dialog-main">
+            <select [(ngModel)]="option3">
+              <option value="所有品牌">所有品牌</option>
+              <option *ngFor="let brand of type3Options" [value]="brand.name">
+                {{ brand.name }}
+              </option>
+            </select>
+          </div>
+          <div class="dialog-condition">
+            <span>貨況</span>
+            <label>
+              <input type="checkbox" [(ngModel)]="isChecked1" />
+              林口倉 有貨
+            </label>
+            <label>
+              <input type="checkbox" [(ngModel)]="isChecked2" />
+              高雄倉 有貨
+            </label>
+          </div>
+          <div class="dialog-condition">
+            <span>價格</span>
+            <div class="dialog-price">
+              <input
+                type="number"
+                placeholder="最低價格"
+                [(ngModel)]="minPrice"
+              />
+              ~
+              <input
+                type="number"
+                placeholder="最高價格"
+                [(ngModel)]="maxPrice"
+              />
+            </div>
+          </div>
+          <footer>
+            <button (click)="resetForm({ submit: true })">
+              <mat-icon>refresh</mat-icon>重設預設值
+            </button>
+            <button
+              (click)="sumitFilterForm({ submit: true })"
+              class="dialog-blue"
+            >
+              確認
+            </button>
+          </footer>
+        </div>
+      </div>
+    </ng-container>
+  </main>
+
+  <footer>
+    優惠商品數量有限，售完為止。本廣告活動頁商品規格、顏色、價位、贈品如與購物車不符，以購物車標示為準。
+  </footer>
+</ng-container>

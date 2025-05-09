@@ -1,0 +1,30 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <form class="form" [formGroup]="form" (ngSubmit)="submit()">
+    <app-header-layout [data]="data" *ngIf="currentScreenSize !== 'small'">
+      <div class="content">
+        <div class="description-wrapper">
+          <div class="description">{{ data.description }}</div>
+          <app-label-input
+            [field]="{
+              count: 10,
+              showCount: true,
+              type: 'input',
+              label: '篩選名稱',
+              labelPosition: 'top',
+              inputType: 'text',
+              name: 'name',
+              placeholder: '請輸入篩選名稱',
+              hint: '',
+              class: '',
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [{ type: 'required', message: '必填欄位' }]
+              }
+            }"
+          >
+          </app-label-input>
+        </div>
+      </div>
+    </app-header-layout>
+  </form>
+</ng-container>

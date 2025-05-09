@@ -1,0 +1,10 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon>{{icon}}</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <ng-container *ngFor="let option of config.options">
+    <button mat-menu-item (click)='onClick(option.key)'>
+      <span>{{option['title']}}</span>
+    </button>
+  </ng-container>
+</mat-menu>

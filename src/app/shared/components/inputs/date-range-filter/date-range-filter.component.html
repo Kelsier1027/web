@@ -1,0 +1,110 @@
+<div
+  class="radio-wrapper"
+  class="datepicker-wrapper"
+  [ngClass]="field['class']"
+>
+  <mat-form-field
+    appearance="outline"
+    [ngClass]="{
+      'date-invalid':
+        field.validations?.hasErrorMessage &&
+        group.get(field.start!)?.invalid &&
+        group.get(field.start!)?.touched
+    }"
+  >
+    <mat-datetimepicker-toggle
+      [for]="startDatePicker"
+      matSuffix
+    ></mat-datetimepicker-toggle>
+    <mat-datetimepicker
+      #startDatePicker
+      [openOnFocus]="false"
+      mode="portrait"
+      type="date"
+      [multiYearSelector]="true"
+    ></mat-datetimepicker>
+    <input
+      class="date-input"
+      [placeholder]="(field.placeholder || '搜尋') + '起日'"
+      [matDatetimepicker]="startDatePicker"
+      [formControlName]="field.start!"
+      autocomplete="false"
+      (dateChange)="onDataChange()"
+      [min]="minCreateDate"
+    />
+    <input matInput style="display: none" />
+  </mat-form-field>
+  <ng-container *ngFor="let valids of field.validations?.errorMessage">
+    <div
+      *ngIf="
+        field.validations?.hasErrorMessage &&
+        group.get(field.start!)?.invalid &&
+        group.get(field.start!)?.touched
+      "
+    >
+      <mat-error
+        class="error"
+        *ngIf="
+          (group.get(field['start']!)?.hasError(valids['type']) &&
+            !group.get(field['start']!)?.hasError('matDatepickerParse')) ||
+          (group.get(field['start']!)?.hasError('matDatepickerParse') &&
+            valids['type'] === 'matDatepickerParse')
+        "
+      >
+        {{ valids["message"] }}
+      </mat-error>
+    </div>
+  </ng-container>
+  <mat-form-field
+    appearance="outline"
+    [ngClass]="{
+      'date-invalid':
+        field.validations?.hasErrorMessage &&
+        group.get(field.end!)?.invalid &&
+        group.get(field.end!)?.touched
+    }"
+  >
+    <mat-datetimepicker-toggle
+      [for]="endDatePicker"
+      matSuffix
+    ></mat-datetimepicker-toggle>
+    <mat-datetimepicker
+      #endDatePicker
+      [openOnFocus]="false"
+      mode="portrait"
+      type="date"
+      [multiYearSelector]="true"
+    ></mat-datetimepicker>
+    <input
+      class="date-input"
+      [placeholder]="(field.placeholder || '搜尋') + '迄日'"
+      [matDatetimepicker]="endDatePicker"
+      [formControlName]="field.end!"
+      autocomplete="false"
+      (dateChange)="onDataChange()"
+      [min]="minCreateDate"
+    />
+    <input matInput style="display: none" />
+  </mat-form-field>
+  <ng-container *ngFor="let valids of field.validations?.errorMessage">
+    <div
+      *ngIf="
+        field.validations?.hasErrorMessage &&
+        group.get(field.end!)?.invalid &&
+        group.get(field.end!)?.touched
+      "
+    >
+      <mat-error
+        class="error"
+        *ngIf="
+          (group.get(field['end']!)?.hasError(valids['type']) &&
+            !group.get(field['end']!)?.hasError('matDatepickerParse')) ||
+          (group.get(field['end']!)?.hasError('matDatepickerParse') &&
+            valids['type'] === 'matDatepickerParse')
+        "
+      >
+        {{ valids["message"] }}
+      </mat-error>
+    </div>
+  </ng-container>
+</div>

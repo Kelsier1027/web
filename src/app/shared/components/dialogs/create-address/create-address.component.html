@@ -1,0 +1,185 @@
+<app-header-inline-close-layout [data]="data">
+  <form
+    class="create-address-form"
+    [formGroup]="createAddressForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <ul class="address-layout">
+      <!-- authorization -->
+      <div class="prompt-wrapper" [class]="{ show: error.submitInvalid }">
+        <app-prompt [hint]="error.errorMessage"></app-prompt>
+      </div>
+      <form [formGroup]="createAddressForm">
+        <app-count-input
+          [field]="{
+            type: 'input',
+            label: '送貨公司',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'addrName',
+            placeholder: '請輸入送貨公司',
+            hint: '',
+            class: '',
+            count: 15,
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [{ type: 'required', message: '必填欄位' }]
+            }
+          }"
+        >
+        </app-count-input>
+        <div>
+          <p>送貨地址</p>
+          <div class="create-address">
+            <div class="address-item">
+              <app-icon-select
+                [field]="{
+                  type: 'iconSelect',
+                  label: '',
+                  inputType: 'text',
+                  name: 'addrCity',
+                  styleMargin: '0px 0px 0px 0px',
+                  options: cities,
+                  class: '',
+                  placeholder: '縣市',
+                  validations: {
+                    hasErrorMessage: true,
+                    errorMessage: [{ type: 'required', message: '必填欄位' }]
+                  }
+                }"
+                (valueChange)="cityChange()"
+              >
+              </app-icon-select>
+            </div>
+            <div class="address-item">
+              <app-icon-select
+                [disabled]="disabledarea"
+                [field]="{
+                  type: 'iconSelect',
+                  label: '',
+                  inputType: 'text',
+                  name: 'addrCityArea',
+                  styleMargin: '0px 0px 0px 0px',
+                  options: areas,
+                  class: '',
+                  placeholder: '鄉鎮市區',
+                  validations: {
+                    hasErrorMessage: true,
+                    errorMessage: [{ type: 'required', message: '必填欄位' }]
+                  }
+                }"
+              >
+              </app-icon-select>
+            </div>
+          </div>
+          <app-label-input
+            [field]="{
+              type: 'input',
+              label: '',
+              labelPosition: 'top',
+              inputType: 'text',
+              name: 'addr',
+              placeholder: '請輸入詳細地址',
+              hint: '',
+              class: '',
+              isaddr: true,
+              count: 15,
+              showCount: true,
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [
+                  {
+                    type: 'pattern',
+                    message: '請輸入中文字元'
+                  },
+                  { type: 'required', message: '必填欄位' },
+                  { type: 'tooLong', message: '地址長度不可超過 15 個中文字'}
+                ]
+              }
+            }"
+            (addrLength)="checkAddrLength($event)"
+          >
+          </app-label-input>
+        </div>
+        <app-count-input
+          [field]="{
+            type: 'input',
+            label: '收貨人',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'receiver',
+            placeholder: '請輸入收貨人全名',
+            hint: '',
+            class: '',
+            count: 10,
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                {
+                  type: 'pattern',
+                  message: '請輸入中文字元'
+                },
+                { type: 'required', message: '必填欄位' }
+              ]
+            }
+          }"
+        >
+        </app-count-input>
+        <app-label-input
+          [field]="{
+            type: 'input',
+            label: '聯絡電話',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'contactNo',
+            placeholder: '範例 (02)2796-2345#800',
+            hint: '',
+            class: '',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                {
+                  type: 'pattern',
+                  message: '聯絡電話格式錯誤'
+                },
+                { type: 'required', message: '必填欄位' }
+              ]
+            }
+          }"
+        >
+        </app-label-input>
+        <app-label-input
+          [field]="{
+            type: 'input',
+            label: '行動電話 (選填)',
+            labelPosition: 'top',
+            inputType: 'text',
+            name: 'phoneNo',
+            placeholder: '09xx-xxx-xxx',
+            hint: '',
+            class: '',
+            validations: {
+              hasErrorMessage: true,
+              errorMessage: [
+                {
+                  type: 'pattern',
+                  message: '行動電話格式錯誤'
+                },
+                { type: 'required', message: '必填欄位' }
+              ]
+            }
+          }"
+        >
+        </app-label-input>
+      </form>
+    </ul>
+    <footer class="dialog-footer">
+      <section class="footer-wrapper">
+        <button class="button" mat-stroked-button mat-dialog-close>取消</button>
+        <button type="submit" class="button" mat-raised-button color="primary">
+          確認
+        </button>
+      </section>
+    </footer>
+  </form>
+</app-header-inline-close-layout>

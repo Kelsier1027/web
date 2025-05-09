@@ -1,0 +1,29 @@
+.mat-dialog-container {
+  padding: 0px;
+}
+.product-list-filter-mobile-radio-group{
+  display: flex;
+  flex-direction: column;
+  &-item{
+    padding: 14px 20px 14px 0px;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    &::before{
+    content: '';
+    position: absolute;
+    top: 0px;
+    left: -24px;
+    width: 260px;
+    height: 1px;
+    background-color: #EBEBEB;
+    }
+  }
+  &-item:last-child{
+    padding-bottom: 0px;
+  }
+  .mat-radio-checked{
+    color: #0972E3;
+  }
+
+}

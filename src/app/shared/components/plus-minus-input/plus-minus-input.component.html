@@ -1,0 +1,40 @@
+<div class="input-box">
+  <mat-label class="label">{{ _label }}</mat-label>
+  <mat-form-field appearance="outline">
+    <button
+      type="button"
+      mat-button
+      mat-icon-button
+      matPrefix
+      aria-label="Remove"
+      [color]="getColor()"
+      (click)="incrementValue(-_step || -1)"
+      [disabled]="shouldDisableDecrement(_value)"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+    <input
+      matInput
+      type="string"
+      [(ngModel)]="_value"
+      #box
+      (keyup)="typing(box.value)"
+      (focus)="setColor('primary')"
+      (blur)="setColor('default')"
+      (keyup.enter)="onKey(box.value)"
+      (blur)="onKey(box.value)"
+    />
+    <button
+      type="button"
+      mat-button
+      mat-icon-button
+      matSuffix
+      aria-label="Add"
+      [color]="getColor()"
+      (click)="incrementValue(_step || 1)"
+      [disabled]="shouldDisableIncrement(_value)"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-form-field>
+</div>

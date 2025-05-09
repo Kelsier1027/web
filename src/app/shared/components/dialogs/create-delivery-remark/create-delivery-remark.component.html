@@ -1,0 +1,72 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-header-inline-close-layout [data]="data">
+    <form
+      class="create-delivery-address-form"
+      [formGroup]="createDeliveryAddressForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <ul class="address-layout">
+        <!-- authorization -->
+        <div class="prompt-wrapper" *ngIf="error.submitInvalid">
+          <app-prompt [hint]="error.errorMessage"></app-prompt>
+        </div>
+        <form [formGroup]="createDeliveryAddressForm">
+          <app-count-input
+            [field]="{
+              type: 'input',
+              label: '備註名稱',
+              labelPosition: 'top',
+              inputType: 'text',
+              name: 'title',
+              placeholder: '請輸入備註名稱',
+              hint: '',
+              class: '',
+              count: 10,
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [{ type: 'required', message: '必填欄位' }]
+              }
+            }"
+          >
+          </app-count-input>
+
+          <app-textarea-input
+            [field]="{
+              type: 'textareaInput',
+              label: '備註說明',
+              inputType: 'text',
+              name: 'comment',
+              labelPosition: 'top',
+              hint: '',
+              class: 'inline',
+              value: '',
+              placeholder: '請輸入出貨備註說明',
+              isModal: false,
+              count: 60,
+              validations: {
+                hasErrorMessage: true,
+                errorMessage: [{ type: 'required', message: '必填欄位' }]
+              }
+            }"
+          >
+          </app-textarea-input>
+        </form>
+      </ul>
+      <footer class="dialog-footer">
+        <section class="footer-wrapper">
+          <button class="button" mat-stroked-button mat-dialog-close>
+            取消
+          </button>
+          <button
+            type="submit"
+            class="button"
+            mat-raised-button
+            color="primary"
+          >
+            確認
+          </button>
+        </section>
+      </footer>
+    </form>
+  </app-header-inline-close-layout>
+</ng-container>

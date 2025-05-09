@@ -1,0 +1,49 @@
+<ng-container *ngIf="productService.typeList$ | async as list">
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="type-list" [ngClass]="{ 'all-type': isCategoryLayout }">
+      <div class="container">
+        <div class="item" *ngFor="let item of list">
+          <div class="title-wrapper" (click)="ProductListChecked()">
+            <div class="icon">
+              <img [src]="item.prodImg" />
+            </div>
+            <a
+              class="title"
+              (click)="analyticsProductType(parentId,item.id); changeRoute(parentId, item.id)"
+            >
+              {{ item.name }}
+            </a>
+            <app-icon
+              class="arrow"
+              *ngIf="currentScreenSize === 'small'"
+              [iconName]="'arrow_right'"
+            ></app-icon>
+          </div>
+          <div
+            class="brand-wrapper"
+            [ngClass]="{ 'all-type': isCategoryLayout }"
+          >
+            <a
+              class="brand"
+              (click)="ProductListChecked(parentId,item.id); changeRoute(parentId, item.id, brand.id)"
+              *ngFor="let brand of item.brandList"
+            >
+              {{ brand.name }}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="banner" *ngIf="adString || adStringUrl">
+        <div class="text-wrapper">
+          <span>{{adString}}</span>
+          <a [href]="adStringUrl" target="_blank" class="link" *ngIf="adStringUrl !== ''">
+            <span>前往購買</span>
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

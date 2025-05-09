@@ -1,0 +1,242 @@
+<app-member-layout>
+  <ng-container
+    *ngIf="layoutService.layoutChanges$ | async as currentScreenSize"
+  >
+    <div class="member-wrapper">
+      <app-member-menu></app-member-menu>
+      <main class="content">
+        <p class="back" (click)="goBack()">
+          <mat-icon>keyboard_backspace</mat-icon>
+          回上一頁
+        </p>
+        <ng-container *ngIf="apiResponse | async as billDetail">
+          <div class="bill-title">
+            <div>
+              <span class="bill-no-title">訂單編號</span> {{ bill.orderNumber }}
+              <!-- 3/20 隱藏列印帳單按鈕
+              <button
+                (click)="handleCreateModal()"
+                type="submit"
+                class="print-button"
+                mat-raised-button
+                color="primary"
+              >
+                列印帳單
+              </button> -->
+            </div>
+            <div class="sub-title">
+              <p class="sub-item">
+                <span class="sub-name">採購單號</span>
+                <span class="sub-text">{{ bill.purchaseNo }}</span>
+              </p>
+              <p class="sub-item">
+                <span class="sub-name">交易日期</span>
+                <span class="sub-text">{{
+                  bill.trxDate | date : "yyyy/MM/dd"
+                }}</span>
+              </p>
+            </div>
+          </div>
+
+          <section class="bill-info">
+            <div class="bill-info-left">
+              <div class="bill-info-item">
+                <span class="info-title">收款日</span>
+                <span class="info-text">{{
+                  bill.payableDate | date : "yyyy/MM/dd"
+                }}</span>
+              </div>
+              <div class="bill-info-item">
+                <span class="info-title">到期日</span>
+                <span class="info-text">{{
+                  bill.payableDate | date : "yyyy/MM/dd"
+                }}</span>
+              </div>
+            </div>
+            <div class="bill-info-right">
+              <div class="bill-info-item">
+                <span class="info-title">金額小計</span>
+                <span class="info-text">${{ bill.sumAmount | number }}</span>
+              </div>
+              <div class="bill-info-item">
+                <span class="info-title">稅金</span>
+                <span class="info-text">${{ bill.taxAmount | number }}</span>
+              </div>
+              <div class="bill-info-item">
+                <span class="info-title">總金額</span>
+                <span class="info-text blue"
+                  >${{ bill.trxAmount | number }}</span
+                >
+              </div>
+              <div class="bill-info-item">
+                <span class="info-title">待繳金額</span>
+                <span class="info-text red"
+                  >${{ bill.trxRemaining | number }}</span
+                >
+              </div>
+            </div>
+          </section>
+
+          <app-table-container *ngIf="currentScreenSize !== 'small'">
+            <app-table [dataSource]="billDetail">
+              <ng-template
+                [column]="{
+                  key: 'brand',
+                  title: '品牌',
+                  width: 120,
+                  headerAlign: 'center',
+                  cellAlign: 'center'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'itemDesc',
+                  title: '品名/規格',
+                  headerAlign: 'center',
+                  cellAlign: 'left'
+                }"
+                let-value
+              >
+                {{ value.cell }}
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'itemNumber',
+                  title: '品號',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 200
+                }"
+                let-value
+              >
+                <p class="link">{{ value.cell }}</p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'quantityInvoiced',
+                  title: '數量',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 70
+                }"
+                let-value
+              >
+                <p>{{ value.cell }}</p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'unitSellingPrice',
+                  title: '經銷價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 100
+                }"
+                let-value
+              >
+                <p>
+                  {{
+                    value.cell > 0
+                      ? "$" + (value.cell | number)
+                      : "-$" + (value.cell * -1 | number)
+                  }}
+                </p>
+              </ng-template>
+              <ng-template
+                [column]="{
+                  key: 'total',
+                  title: '總價 (未)',
+                  headerAlign: 'center',
+                  cellAlign: 'center',
+                  width: 100
+                }"
+                let-value
+              >
+                <p>
+                  {{
+                    value.cell > 0
+                      ? "$" + (value.cell | number)
+                      : "-$" + (value.cell * -1 | number)
+                  }}
+                </p>
+              </ng-template>
+            </app-table>
+          </app-table-container>
+          <ng-container *ngIf="currentScreenSize === 'small'">
+            <app-mobile-table-container>
+              <app-mobile-table-item
+                *ngFor="let data of billDetail; let last = last"
+                [isLast]="last"
+              >
+                <app-status-card>
+                  <ng-template #headerTitle>
+                    <app-status-type color="blue">品號</app-status-type
+                    >{{ data.itemNumber }}
+                  </ng-template>
+                  <ng-template [statusItem]="{ title: '品牌' }">{{
+                    data.brand
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '品名/規格' }">{{
+                    data.itemDesc
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '數量' }">{{
+                    data.quantityInvoiced
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '經銷價 (未)' }">{{
+                    data.unitSellingPrice > 0
+                      ? "$" + (data.unitSellingPrice | number)
+                      : "-$" + (data.unitSellingPrice * -1 | number)
+                  }}</ng-template>
+                  <ng-template [statusItem]="{ title: '總價 (未)' }">{{
+                    data.total > 0
+                      ? "$" + (data.total | number)
+                      : "-$" + (data.total * -1 | number)
+                  }}</ng-template>
+                </app-status-card>
+              </app-mobile-table-item>
+            </app-mobile-table-container>
+          </ng-container>
+          <div class="shipping-wrapper">
+            <div class="shipping-detail">
+              <div class="bill-no-title">送貨資訊</div>
+              <app-table-container>
+                <div class="wrapper">
+                  <app-detail-item [title]="'收貨人'">{{
+                    bill.shipToContact
+                  }}</app-detail-item>
+                  <app-detail-item [title]="'聯絡電話'">{{
+                    bill.shipToPhone
+                  }}</app-detail-item>
+                  <app-detail-item [title]="'出貨備註'">{{
+                    bill.shipMessage
+                  }}</app-detail-item>
+                  <app-detail-item [title]="'送貨地址'">{{
+                    bill.shipToAddress
+                  }}</app-detail-item>
+                  <app-detail-item [title]="'採購人'">{{
+                    bill.purchaseName
+                  }}</app-detail-item>
+                  <app-detail-item [title]="'聯絡電話'">{{
+                    bill.purchasePhone
+                  }}</app-detail-item>
+                  <app-detail-item
+                    [border]="currentScreenSize === 'small' ? true : false"
+                    [title]="'Email'"
+                    >{{ bill.purchaseEmail }}</app-detail-item
+                  >
+                  <app-detail-item
+                    [border]="currentScreenSize === 'small' ? true : false"
+                    [title]="'Po No.'"
+                    >{{ bill.poNo }}</app-detail-item
+                  >
+                </div>
+              </app-table-container>
+            </div>
+          </div>
+        </ng-container>
+      </main>
+    </div>
+  </ng-container>
+</app-member-layout>

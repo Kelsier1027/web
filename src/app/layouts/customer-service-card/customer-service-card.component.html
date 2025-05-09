@@ -1,0 +1,20 @@
+<section class="card-container">
+  <header>客服中心</header>
+  <div class="card-menu-item" [routerLink]="['/CustomerService/CommonProblom']">
+    <span>
+      <app-icon class="icon" iconName="help"></app-icon>
+      <span>iOrder小幫手</span>
+    </span>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div
+    class="card-menu-item"
+    [routerLink]="['/CustomerService/ImportantNotice']"
+  >
+    <span>
+      <app-icon class="icon" iconName="vector_stroke"></app-icon>
+      <span>重要公告</span>
+    </span>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</section>

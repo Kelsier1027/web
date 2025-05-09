@@ -1,0 +1,12 @@
+<header class="header">
+  <div class="business">
+    <div [ngClass]="isJingHo() ? 'logo jing-ho' : 'logo'"></div>
+  </div>
+  <ul class="info-links">
+    <li class="link-item" *ngFor="let option of options">
+      <a>
+        <app-guide-column-label [option]="option"> </app-guide-column-label>
+      </a>
+    </li>
+  </ul>
+</header>

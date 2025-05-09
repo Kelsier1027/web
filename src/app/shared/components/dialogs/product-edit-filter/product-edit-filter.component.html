@@ -1,0 +1,58 @@
+<ng-container *ngIf="layoutService.layoutChanges$ | async as currentScreenSize">
+  <app-header-inline-close-layout
+    [data]="data"
+    *ngIf="currentScreenSize !== 'small'"
+  >
+    <div class="wrapper">
+      <ng-container *ngIf="filterList | async as list">
+        <app-table-container>
+          <app-table [dataSource]="list">
+            <ng-template
+              [column]="{
+                key: 'filterName',
+                title: '篩選名稱',
+                width: 106,
+                cellAlign: 'center',
+                headerAlign: 'center'
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'filterDescription',
+                title: '篩選條件',
+                width: 514
+              }"
+              let-value
+            >
+              {{ value.cell }}
+            </ng-template>
+            <ng-template
+              [column]="{
+                key: 'action',
+                title: '操作',
+                width: 110,
+                headerAlign: 'center',
+                cellAlign: 'center'
+              }"
+              let-value
+            >
+              <button (click)="modifyFilter(value.row)" class="action-button">
+                修改
+              </button>
+              <button (click)="deleteFilter(value.row)" class="action-button">
+                刪除
+              </button>
+            </ng-template>
+          </app-table>
+        </app-table-container>
+      </ng-container>
+      <div class="info">
+        <app-icon class="info-icon" iconName="info"></app-icon>
+        本網站至多呈現五筆
+      </div>
+    </div>
+  </app-header-inline-close-layout>
+</ng-container>

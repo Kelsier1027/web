@@ -1,0 +1,168 @@
+@import "/src/styles/responsive";
+
+.wrapper {
+  position: absolute;
+  top: -15px;
+  width: 40px;
+  height: 40px;
+
+  @include pad {
+    top: -10px;
+    right: -10px;
+  }
+
+  &.left {
+    left: -15px;
+  }
+
+  &.right {
+    right: -15px;
+  }
+
+  &.blue > app-icon {
+    color: transparent;
+    stroke: #0972E3;
+  }
+
+  &.blue > .text {
+    color: #0972E3;
+    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    @include pad {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+    }
+    border-color: #0972E3;
+
+  }
+
+  &.cyan > app-icon {
+    color: transparent;
+    stroke: #0893C1;
+  }
+
+  &.cyan > .text {
+    color: #0893C1;
+    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    @include pad {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+    }
+    border-color: #0893C1;
+
+  }
+
+  &.yellow > .text {
+    color: #B78103;
+    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    @include pad {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+    }
+    border-color: #B78103;
+  }
+  &.green > .text {
+    color: #229A16;
+    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    @include pad {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+    }
+    border-color: #229A16;
+  }
+
+  &.red > app-icon {
+    color: transparent;
+    stroke: #ED1C24;
+  }
+
+  &.red > .text {
+    color: #ED1C24;
+    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    @include pad {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+    }
+    border-color: #ED1C24;
+  }
+
+  &.purple > app-icon {
+    color: transparent;
+    stroke: #7653BC;
+  }
+
+  &.purple > .text {
+    color: #7653BC;
+    font-size: 13px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    @include pad {
+      font-size: 14px;
+      border: none;
+      padding: 0;
+    }
+    border-color: #7653BC;
+  }
+
+  &.gray {
+    width: 66px;
+    height: 28px;
+  }
+
+  &.gray > .text {
+    color: #FFF;
+    background: #A2A9B1;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 5px;
+    font-size: 13px;
+
+    @include pad {
+      padding: 0;
+      background: transparent;
+      border-radius: none;
+      font-size: 14px;
+    }
+  }
+
+  & > .text.keep-icon {
+    font-size: 14px;
+    border: none;
+    padding: 0;
+  }
+}
+
+.text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
